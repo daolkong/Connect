@@ -29,7 +29,7 @@ struct HomeGroupView: View {
                                 .font(.system(size: 13))
                                 .fontWeight(.bold)
                                 .foregroundColor(Color.white)
-                                .frame(width: 48)
+                                .frame(width: 49)
                         }
                         
                         ForEach(0..<12, id: \.self) { _ in
