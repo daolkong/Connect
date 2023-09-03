@@ -140,23 +140,37 @@ struct LoginView: View {
 }
 
 struct CustomTextField: UIViewRepresentable {
-    @Binding var text: String
-    var placeholder: String
-    
-    func makeUIView(context: Context) -> UITextField {
-        let textField = UITextField()
-        textField.textColor = UIColor.white // Text color
-        textField.attributedPlaceholder = NSAttributedString(string: placeholder,
-                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.white]) // Placeholder color
-        return textField
+  @Binding var text: String
+  var placeholder: String
+
+  func makeUIView(context: Context) -> UITextField {
+    let textField = UITextField()
+    textField.textColor = UIColor.white // Text color
+    textField.attributedPlaceholder = NSAttributedString(string: placeholder,
+                                                         attributes: [NSAttributedString.Key.foregroundColor: UIColor.white]) // Placeholder color
+    textField.delegate = context.coordinator
+    return textField
+  }
+
+  func updateUIView(_ uiView: UITextField, context: Context) {
+    uiView.text = text
+  }
+
+  class Coordinator: NSObject {
+    var text: Binding<String>
+
+    init(_ text: Binding<String>) {
+      self.text = text
     }
-    
-    func updateUIView(_ uiView: UITextField, context: Context) {
-        uiView.text = text
-    }
+  }
+
+  func makeCoordinator() -> Coordinator {
+    Coordinator($text)
+  }
 }
 
 struct CustomTextField1: UIViewRepresentable {
+    // TODO: - 지금은 text만 쓰이는 걸로 보여요! text1, text2, text3 도 밖에 뷰랑 바인딩 되어야 한다면 이것도 `class Coordinator: NSObject` 아래에서 text한 것처럼 똑같이 바인딩 해주셔야 합니다!
     @Binding var text: String
     @Binding var text1: String
     @Binding var text2: String
@@ -169,12 +183,37 @@ struct CustomTextField1: UIViewRepresentable {
         textField.textColor = UIColor.black // Text color
         textField.attributedPlaceholder = NSAttributedString(string: placeholder,
                                                              attributes: [NSAttributedString.Key.foregroundColor: UIColor.black]) // Placeholder color
+        textField.delegate = context.coordinator
         return textField
     }
     
     func updateUIView(_ uiView: UITextField, context: Context) {
         uiView.text = text
     }
+
+    class Coordinator: NSObject {
+      var text: Binding<String>
+
+      init(_ text: Binding<String>) {
+        self.text = text
+      }
+    }
+
+    func makeCoordinator() -> Coordinator {
+      Coordinator($text)
+    }
+}
+
+extension CustomTextField.Coordinator: UITextFieldDelegate {
+  func textFieldDidChangeSelection(_ textField: UITextField) {
+    text.wrappedValue = textField.text ?? ""
+  }
+}
+
+extension CustomTextField1.Coordinator: UITextFieldDelegate {
+  func textFieldDidChangeSelection(_ textField: UITextField) {
+    text.wrappedValue = textField.text ?? ""
+  }
 }
 
 struct LoginView_Previews: PreviewProvider {
