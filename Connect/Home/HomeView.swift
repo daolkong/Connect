@@ -10,6 +10,8 @@ import SwiftUI
 let numberOfItems1 = 50 // 표시할 아이템 수에 따라 값을 조정하세요
 
 struct HomeView: View {
+
+    
     var body: some View {
         NavigationView {
             VStack(spacing: 10) {
@@ -190,5 +192,7 @@ struct HomeView: View {
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
         HomeView()
+           
+
     }
 }
