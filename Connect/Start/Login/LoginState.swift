@@ -9,6 +9,7 @@
 import Foundation
 
 enum LoginState {
+    case firstLaunch
     case loggedIn
     case loggedOut
     case notSigned

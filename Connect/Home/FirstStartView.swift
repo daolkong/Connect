@@ -15,15 +15,18 @@ struct FirstStartView: View {
         NavigationStack {
             Group {
                 switch authViewModel.loginState {
+                case .firstLaunch:
+                    StartView()
                 case .loggedIn:
-                    HomeView()
+                    MainTabbedView()
                 case .loggedOut:
                     LoginView()
                 case .notSigned:
                     SigninView()
                 }
             }
-        }    }
+        }
+    }
 }
 
 struct FirstStartView_Previews: PreviewProvider {

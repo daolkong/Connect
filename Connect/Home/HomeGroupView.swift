@@ -10,11 +10,29 @@ import SwiftUI
 let numberOfItems = 50 // 표시할 아이템 수에 따라 값을 조정하세요
 
 struct HomeGroupView: View {
+    @Environment(\.presentationMode) var presentationMode
+
     var body: some View {
         NavigationView {
             VStack(spacing: 10) {
                 
-                HomeTopNavigationBar(imageLogo: "users", TextLogo: "align-left", AlarmItem: "Connect")
+                HStack(spacing: 120) {
+                    Button(action: {
+                        // Dismiss the view when the button is tapped
+                        presentationMode.wrappedValue.dismiss()
+                    }) {
+                        Image("back1")
+                            .resizable()
+                            .frame(width: 10, height: 16)
+                    }
+               
+                    
+                    Text("Connect")
+                        .font(.system(size: 25))
+                        .fontWeight(.semibold)
+            
+                }
+                .padding(.trailing,130)
                 
                 // 그룹 스크롤
                 ScrollView(.horizontal) {

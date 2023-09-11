@@ -8,22 +8,55 @@
 import SwiftUI
 
 struct FriendProfileView: View {
+    @StateObject var authViewModel = AuthViewModel() // 'private' 제거
+    @StateObject var userDataModel = UserDataModel() // 'private' 제거
+    
+    let user : User
+    var uid: String? // 'uid'의 접근 제어 수준을 변경
+    
+    func addFriend(_ friendUser: User) {
+        guard let currentUser = authViewModel.currentUser else {
+            print("Error: No current user found")
+            return
+        }
+
+        // Add friendUser's uid to currentUser's friends list
+        userDataModel.addFriend(currentUser.uid , friendUser.uid) { result in
+            switch result {
+            case .success():
+                print("Successfully added friend to current user's friends list")
+            case .failure(let error):
+                print("Error adding friend to current user's friends list: \(error)")
+            }
+        }
+
+        // Add currentUser's uid to friendUser's friends list
+        userDataModel.addFriend(friendUser.uid, authViewModel.uid) { result in  // <-- Here
+            switch result {
+            case .success():
+                print("Successfully added current user to friend's friends list")
+            case .failure(let error):
+                print("Error adding current user to friend's friends list: \(error)")
+            }
+        }
+    }
+    
     var body: some View {
         ZStack {
-            Rectangle()
-              .foregroundColor(.clear)
-              .frame(width: 390, height: 844)
-              .background(
-                LinearGradient(
-                  stops: [
-                    Gradient.Stop(color: .white, location: 0.00),
-                    Gradient.Stop(color: Color(red: 0.7, green: 0.8, blue: 0.96), location: 1.00),
-                  ],
-                  startPoint: UnitPoint(x: 0.87, y: 0.98),
-                  endPoint: UnitPoint(x: 0.21, y: 0.08)
+            Image("Rectangle 19")
+                .resizable()
+                .frame(width: 394, height: 844)
+                .background(
+                    LinearGradient(
+                        stops: [
+                            Gradient.Stop(color: Color(red: 0.96, green: 0.67, blue: 0.45), location: 0.00),
+                            Gradient.Stop(color: .white, location: 1.00),
+                        ],
+                        startPoint: UnitPoint(x: -0.09, y: -0.13),
+                        endPoint: UnitPoint(x: 1.07, y: 1.02)
+                    )
                 )
-              )
-
+            
             
             VStack(spacing: 30) {
                 Image("back1")
@@ -36,28 +69,13 @@ struct FriendProfileView: View {
                     .frame(width: 195, height: 195)
                     .shadow(color: .black.opacity(0.25), radius: 3.5, x: 0, y: 0)
                 VStack(spacing: 10) {
-                    Text("susun_hit")
+                    Text(user.fullid ?? "No Full ID")
                         .font(.system(size: 45))
                         .fontWeight(.bold)
                     
-                    // 해시태그 4개
-                    HStack {
-                        Text("# 논어")
-                            .font(.system(size: 17))
-                            .fontWeight(.regular)
-                        
-                        Text("# 재즈 사랑")
-                            .font(.system(size: 17))
-                            .fontWeight(.regular)
-                        
-                        Text("# 유튜버")
-                            .font(.system(size: 17))
-                            .fontWeight(.regular)
-                        
-                        Text("# 국어교사")
-                            .font(.system(size: 17))
-                            .fontWeight(.regular)
-                    }
+                    Text(user.hastags ?? "No Full ID")
+                        .font(.system(size: 17))
+                    
                 }
                 
                 VStack {
@@ -79,7 +97,7 @@ struct FriendProfileView: View {
                             .resizable()
                             .frame(width: 34, height: 4)
                         
-                        Text("18")
+                        Text("\(userDataModel.currentUser?.friends.count ?? 0)") // 수정된 부분
                             .font(.system(size: 30))
                             .fontWeight(.semibold)
                         
@@ -112,10 +130,11 @@ struct FriendProfileView: View {
                     // 정보수정 버튼
                     Button(action: {
                         // Add your action here when the button is tapped
+                        addFriend(user)
                     }) {
                         ZStack {
                             Rectangle()
-                                .foregroundColor(Color(red: 0.52, green: 0.69, blue: 0.94).opacity(0.4))
+                                .foregroundColor(Color(red: 0.96, green: 0.75, blue: 0.58))
                                 .frame(width: 244, height: 65)
                                 .cornerRadius(40)
                             
@@ -135,21 +154,34 @@ struct FriendProfileView: View {
                                 .font(.system(size: 20))
                                 .foregroundColor(Color(red: 0.13, green: 0.14, blue: 0.14))
                                 .fontWeight(.bold)
-                                .padding(.leading, 30)
+                                .padding(.leading,30)
                             
                         }
                     }
+                    
+                    
+                    
                     .padding(.top, 30)
                     
                 }
                 .padding(.top,30)
             }
+            .onAppear() {
+                       userDataModel.fetchUser()
+                       userDataModel.getCurrentUser(uid: authViewModel.uid)
+                   }
+            .padding(.bottom, 30)
         }
     }
-}
+    
+    init(user: User) {
+            self.user = user
+            userDataModel.getCurrentUser(uid: authViewModel.uid)
+        }
+  }
 
 struct FriendProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        FriendProfileView()
+        FriendProfileView(user: User(email: "test@test.com", fullid:"TestFullID", hastags:"TestHashtags", uid:"TestUID", profileImageURL:"", uploadedImagesURLs:[], friends: []))
     }
 }

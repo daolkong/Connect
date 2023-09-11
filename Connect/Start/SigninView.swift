@@ -15,12 +15,11 @@ struct SigninView: View {
     @State var fullid: String = ""
     @State var email: String = ""
     @State var password: String = ""
-    @State var hastag1: String = ""
-    @State var hastag2: String = ""
-    @State var hastag3: String = ""
-    @State var hastag4: String = ""
+    @State var hastags: String = ""
     @State var errorMessage = ""
     @State var retrySignUp = false
+    @State private var isLoginSuccessful = false
+
     
     
     
@@ -53,94 +52,96 @@ struct SigninView: View {
                     }
                     
                     
-                    VStack(spacing: 20) {
+                    VStack(spacing: 45) {
                         // 아이디
-                        ZStack() {
-                            Rectangle()
-                                .foregroundColor(.clear)
-                                .frame(width: 323, height: 48)
-                                .cornerRadius(50)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 50)
-                                        .inset(by: 0.75)
-                                        .stroke(Color(red: 0.95, green: 0.95, blue: 0.95), lineWidth: 1.5)
+                        ZStack(alignment: .leading) {
+                            if fullid.isEmpty {
+                                Text("아이디")
+                                    .foregroundColor(.white)  // Change color here
+                            }
+                            TextField("", text: $fullid)
+                                .foregroundColor(.white)  // Change color here
+                                .overlay( Rectangle()
+                                    .foregroundColor(.clear)
+                                    .frame(width: 323, height: 48)
+                                    .cornerRadius(50)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 50)
+                                            .inset(by: 0.75)
+                                            .stroke(Color(red: 0.95, green: 0.95, blue: 0.95), lineWidth: 1.5)
+                                    )
                                 )
                             
-                            CustomTextField(text: $fullid, placeholder:"아이디")
-                                .font(.system(size: 16))
-                                .fontWeight(.light)
-                                .padding(.horizontal)
-                                .textFieldStyle(PlainTextFieldStyle())
-                                .textInputAutocapitalization(.never)
-                            
                         }
-                        .frame(width: 50, height: 48)
-                        
-                        
+                        .padding(.horizontal,50)
+
                         // 이메일
-                        ZStack() {
-                            Rectangle()
-                                .foregroundColor(.clear)
-                                .frame(width: 323, height: 48)
-                                .cornerRadius(50)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 50)
-                                        .inset(by: 0.75)
-                                        .stroke(Color(red: 0.95, green: 0.95, blue: 0.95), lineWidth: 1.5)
+                        ZStack(alignment: .leading) {
+                            if email.isEmpty {
+                                Text("이메일")
+                                    .foregroundColor(.white)  // Change color here
+                            }
+                            TextField("", text: $email)
+                                .foregroundColor(.white)  // Change color here
+                                .overlay( Rectangle()
+                                    .foregroundColor(.clear)
+                                    .frame(width: 323, height: 48)
+                                    .cornerRadius(50)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 50)
+                                            .inset(by: 0.75)
+                                            .stroke(Color(red: 0.95, green: 0.95, blue: 0.95), lineWidth: 1.5)
+                                    )
                                 )
                             
-                            CustomTextField(text: $email, placeholder:"이메일")
-                                .font(.system(size: 16))
-                                .fontWeight(.light)
-                                .padding(.horizontal)
-                                .textFieldStyle(PlainTextFieldStyle())
-                                .textInputAutocapitalization(.never)
-                            
                         }
-                        .frame(width: 50, height: 48)
+                        .padding(.horizontal,50)
                         
-                        
-                        // 아이디
-                        ZStack() {
-                            Rectangle()
-                                .foregroundColor(.clear)
-                                .frame(width: 323, height: 48)
-                                .cornerRadius(50)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 50)
-                                        .inset(by: 0.75)
-                                        .stroke(Color(red: 0.95, green: 0.95, blue: 0.95), lineWidth: 1.5)
+                        // 비밀번호
+                        ZStack(alignment: .leading) {
+                            if password.isEmpty {
+                                Text("비밀번호")
+                                    .foregroundColor(.white)  // Change color here
+                            }
+                            TextField("", text: $password)
+                                .foregroundColor(.white)  // Change color here
+                                .overlay( Rectangle()
+                                    .foregroundColor(.clear)
+                                    .frame(width: 323, height: 48)
+                                    .cornerRadius(50)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 50)
+                                            .inset(by: 0.75)
+                                            .stroke(Color(red: 0.95, green: 0.95, blue: 0.95), lineWidth: 1.5)
+                                    )
                                 )
                             
-                            CustomTextField(text: $password, placeholder:"비밀번호")
-                                .font(.system(size: 16))
-                                .fontWeight(.light)
-                                .padding(.horizontal)
-                                .textFieldStyle(PlainTextFieldStyle())
-                                .textInputAutocapitalization(.never)
-                            
                         }
-                        .frame(width: 50, height: 48)
-                        
-                        
+                        .padding(.horizontal,50)
+
                         // 해시태그
-                        ZStack() {
-                            Rectangle()
-                                .foregroundColor(.clear)
-                                .frame(width: 323, height: 48)
-                                .background(.white)
-                                .cornerRadius(50)
+                        ZStack(alignment: .leading) {
+                            if hastags.isEmpty {
+                                Text("나를 나타내는 해시태그 4개(쉼표로 구분)")
+                                    .foregroundColor(.white)  // Change color here
+                            }
+                            TextField("", text: $hastags)
+                                .foregroundColor(.white)  // Change color here
+                                .overlay( Rectangle()
+                                    .foregroundColor(.clear)
+                                    .frame(width: 323, height: 48)
+                                    .cornerRadius(50)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 50)
+                                            .inset(by: 0.75)
+                                            .stroke(Color(red: 0.95, green: 0.95, blue: 0.95), lineWidth: 1.5)
+                                    )
+                                )
                             
-                            CustomTextField1(text: $hastag1, text1: $hastag2, text2: $hastag3, text3: $hastag4 ,placeholder: "나를 나타내는 해시태그 4개(쉼표로 표시)")
-                                .font(.system(size: 16))
-                                .fontWeight(.light)
-                                .padding(.horizontal)
-                                .textFieldStyle(PlainTextFieldStyle())
-                                .textInputAutocapitalization(.never)
                             
                         }
-                        .frame(width: 50, height: 48)
-                        
+                        .padding(.horizontal,50)
+
                     }
                     
                     // 회원가입 버튼
@@ -153,8 +154,8 @@ struct SigninView: View {
                         }
                         Task {
                             do {
-                                try await authViewModel.registerUser(fullid: fullid, withEmail: email, password: password, hastag1: hastag1, hastag2: hastag2, hastag3: hastag3, hastag4: hastag4)
-                                presentationMode.wrappedValue.dismiss()
+                                try await authViewModel.registerUser(fullid: fullid, withEmail: email, password: password, hastags: hastags)
+                                isLoginSuccessful = true // <- 여기에 추가
                             } catch {
                                 retrySignUp = true
                                 errorMessage = error.localizedDescription
@@ -164,6 +165,17 @@ struct SigninView: View {
                         
                     } label: {
                         ZStack {
+                            // Add this NavigationLink:
+                                 if isLoginSuccessful {
+                                     NavigationLink(destination: ProfileImageView(), isActive: $isLoginSuccessful) { EmptyView() }
+                                         .hidden()
+                                         .frame(width: 0, height: 0)
+                                         .disabled(true)
+                                         .allowsHitTesting(false)
+                                         .opacity(0.00001) // Make it invisible but still active.
+                                  }
+                            
+                            
                             Rectangle()
                                 .foregroundColor(Color(red: 0.1, green: 0.1, blue: 0.1))
                                 .frame(width: 323, height: 69)
@@ -178,20 +190,20 @@ struct SigninView: View {
                     }
                     
                 }
-                .padding(.bottom,40)
+                .padding(.bottom,50)
             }
         }
-        .alert(isPresented: $retrySignUp) {
-            Alert(title: Text("회원가입 실패"),
-                  message: Text("\(errorMessage)"),
-                  dismissButton: .default(Text("다시 시도하기")) {
+        .alert("회원가입 실패", isPresented: $retrySignUp) {
+            Button {
                 retrySignUp = false
-            })
+            } label: {
+                Text("다시 시도하기")
+            }
+        } message: {
+            Text("\(errorMessage)")
+            
         }
-        
-        
     }
-    
 }
 
 struct SigninView_Previews: PreviewProvider {

@@ -18,14 +18,14 @@ struct MainView: View {
                     HomeView()
                         .tag(1)
 
-                    ConnectTodayView()
+                    Time_sellectView()
                         .tag(2)
 
                     MyprofileView()
                         .tag(3)
                     
                 }
-                CustomTabBar(TabSelection: $TabSelection, selectedTab: $selectedTab)
+//                CustomTabBar(TabSelection: $TabSelection, selectedTab: $selectedTab)
             }
             
         }

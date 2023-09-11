@@ -6,30 +6,101 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct MyprofileView: View {
+    @EnvironmentObject var authViewModel: AuthViewModel
+    @State var isImageSelected: Bool = false
+    @State var selectedItem: PhotosPickerItem? = nil
+    @State var selectedImageData: Data? = nil
+    
     var body: some View {
         ZStack {
-            Image("Rectangle 19")
-                .frame(width: 394, height: 844)
-                .background(
-                    LinearGradient(
-                        stops: [
-                            Gradient.Stop(color: Color(red: 0.95, green: 0.67, blue: 0.45), location: 0.00),
-                            Gradient.Stop(color: .white, location: 1.00),
-                        ],
-                        startPoint: UnitPoint(x: -0.09, y: -0.13),
-                        endPoint: UnitPoint(x: 1.07, y: 1.02)
-                    )
+            Rectangle()
+              .foregroundColor(.clear)
+              .frame(width: 390, height: 844)
+              .background(
+                LinearGradient(
+                  stops: [
+                    Gradient.Stop(color: .white, location: 0.00),
+                    Gradient.Stop(color: Color(red: 0.7, green: 0.8, blue: 0.96), location: 1.00),
+                  ],
+                  startPoint: UnitPoint(x: 0.87, y: 0.98),
+                  endPoint: UnitPoint(x: 0.21, y: 0.08)
                 )
+              )
+           
             
-            VStack(spacing: 30) {
-                ProfileTopNavigationBar(imageLogo: "Search2", TextLogo: "back1", AlarmItem: "Profile")
+            VStack(spacing: 25) {
+                ZStack {
+                    Circle()
+                        .frame(width: 44, height: 44)
+                        .foregroundColor(.white.opacity(0.6))
+                    
+                    Image("pen")
+                        .resizable()
+                        .frame(width: 17, height: 17)
+                }
+                .padding(.leading, 280)
                 
-                Image("profile")
-                    .resizable()
-                    .frame(width: 195, height: 195)
-                    .shadow(color: .black.opacity(0.25), radius: 3.5, x: 0, y: 0)
+                PhotosPicker(
+                    selection: $selectedItem,
+                    matching: .images,
+                    photoLibrary: .shared()) {
+                        if isImageSelected == false {
+                            ZStack {
+                                Circle()
+                                    .frame(width: 180, height: 180)
+                                    .foregroundColor(Color(red: 0.5, green: 0.49, blue: 0.49))
+                                
+                                Image("whitechain")
+                                    .resizable()
+                                    .frame(width: 96, height: 96)
+                                
+                                Image("Plus")
+                                    .resizable()
+                                    .frame(width: 30, height: 30)
+                                    .padding(.top, 80)
+                                    .padding(.leading, 90)
+                            }
+                        } else {
+                            if selectedImageData != nil,
+                               let uiImage = UIImage(data: selectedImageData!) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .clipShape(Circle())
+                                    .frame(width: 180, height: 180)
+                                    .background {
+                                        Circle().fill(
+                                            LinearGradient(
+                                                gradient: Gradient(colors: [.yellow, .orange]),
+                                                startPoint: .top,
+                                                endPoint: .bottom))
+                                    }
+                                    .task {
+                                        do {
+                                            _ = try await authViewModel.saveProfileImage(uiImage)
+                                        } catch {
+                                            print("Failed to save profile image: \(error)")
+                                        }
+                                    }
+                            }
+                        }
+                    }
+                    .onChange(of: selectedItem) { newValue in
+                        Task {
+                            if newValue != nil {
+                                do {
+                                    selectedImageData = try await newValue!.loadTransferable(type: Data.self)
+                                    isImageSelected = true
+                                } catch {
+                                    print(error.localizedDescription)
+                                }
+                            }
+                        }
+                    }
+                
                 VStack(spacing: 10) {
                     Text("susun_hit")
                         .font(.system(size: 45))
@@ -53,12 +124,11 @@ struct MyprofileView: View {
                             .font(.system(size: 17))
                             .fontWeight(.regular)
                     }
-                    
                 }
                 
                 VStack {
                     // 친구 수
-                    HStack(spacing: 20){
+                    HStack(spacing: 20) {
                         ZStack {
                             Rectangle()
                                 .foregroundColor(.clear)
@@ -104,43 +174,10 @@ struct MyprofileView: View {
                             .fontWeight(.semibold)
                         
                     }
-                    
-                    // 정보수정 버튼
-                    Button(action: {
-                        // Add your action here when the button is tapped
-                    }) {
-                        ZStack {
-                            Rectangle()
-                                .foregroundColor(Color(red: 0.97, green: 0.7, blue: 0.49).opacity(0.77))
-                                .frame(width: 244, height: 65)
-                                .cornerRadius(40)
-                            
-                            // 펜 모양
-                            ZStack {
-                                Circle()
-                                    .foregroundColor(Color.white)
-                                    .frame(width: 35, height: 35)
-                                
-                                Image("pen")
-                                    .resizable()
-                                    .frame(width: 17, height: 17)
-                            }
-                            .padding(.trailing, 130)
-                            
-                            Text("정보수정")
-                                .font(.system(size: 20))
-                                .foregroundColor(Color(red: 0.13, green: 0.14, blue: 0.14))
-                                .fontWeight(.bold)
-                                .padding(.leading, 30)
-                            
-                        }
-                    }
-                    .padding(.top, 30)
-                    
                 }
-                .padding(.top,60)
+                .padding(.top, 60)
             }
-            .padding(.bottom,30)
+            .padding(.bottom, 80)
         }
     }
 }

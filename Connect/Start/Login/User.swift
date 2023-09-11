@@ -10,15 +10,16 @@ import Foundation
 struct User: Codable {
     let email: String
     let fullid: String
-    let hastag1: String
-    let hastag2: String
-    let hastag3: String
-    let hastag4: String
+    let hastags: String
     let uid: String
+    var profileImageURL: String?  // Add this line.
+    var uploadedImagesURLs: [String]? // Add this line.
+    var friends: [String]
 }
 
 extension User {
     static let sample: User = User(
-        email: "", fullid: "", hastag1: "", hastag2: "", hastag3: "", hastag4: "", uid: "")
+        email: "", fullid: "", hastags: "", uid: "", friends: [])
 }
+
 

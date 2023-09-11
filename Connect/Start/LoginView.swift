@@ -20,7 +20,7 @@ struct LoginView: View {
             ZStack {
                 Image("back")
                     .resizable()
-                    .frame(width: 395, height: 900)
+                    .frame(width: 395, height: 1000)
                 
                 VStack(spacing: 60) {
                     
@@ -36,46 +36,52 @@ struct LoginView: View {
                             .fontWeight(.black)
                     }
                     
-                    VStack(spacing: 20) {
+                    VStack(spacing: 45) {
                         
                         // 이메일 입력
-                        ZStack() {
-                            Rectangle()
-                                .foregroundColor(.clear)
-                                .frame(width: 323, height: 48)
-                                .cornerRadius(50)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 50)
-                                        .inset(by: 0.75)
-                                        .stroke(Color(red: 0.95, green: 0.95, blue: 0.95), lineWidth: 1.5)
+                        ZStack(alignment: .leading) {
+                            if email.isEmpty {
+                                Text("이메일을 입력해주세요")
+                                    .foregroundColor(.white)  // Change color here
+                            }
+                            TextField("", text: $email)
+                                .foregroundColor(.white)  // Change color here
+                                .overlay( Rectangle()
+                                    .foregroundColor(.clear)
+                                    .frame(width: 323, height: 48)
+                                    .cornerRadius(50)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 50)
+                                            .inset(by: 0.75)
+                                            .stroke(Color(red: 0.95, green: 0.95, blue: 0.95), lineWidth: 1.5)
+                                    )
                                 )
                             
-                            CustomTextField(text: $email, placeholder:"이메일을 입력해주세요")
-                                .font(.system(size:16))
-                                .fontWeight(.light)
-                                .padding(.horizontal)
-                            
-                            
                         }
-                        .frame(width: 50, height: 48)
+                        .padding(.horizontal,20)
+
                         
                         //비밀번호 입력
-                        ZStack {
-                            Rectangle()
-                                .foregroundColor(.clear)
-                                .frame(width: 323, height: 48)
-                                .cornerRadius(50)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 50)
-                                        .inset(by: 0.75)
-                                        .stroke(Color(red: 0.95, green: 0.95, blue: 0.95), lineWidth: 1.5)
+                        ZStack(alignment: .leading) {
+                            if password.isEmpty {
+                                Text("비밀번호를 입력해주세요")
+                                    .foregroundColor(.white)  // Change color here
+                            }
+                            TextField("", text: $password)
+                                .foregroundColor(.white)  // Change color here
+                                .overlay( Rectangle()
+                                    .foregroundColor(.clear)
+                                    .frame(width: 323, height: 48)
+                                    .cornerRadius(50)
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 50)
+                                            .inset(by: 0.75)
+                                            .stroke(Color(red: 0.95, green: 0.95, blue: 0.95), lineWidth: 1.5)
+                                    )
                                 )
-                            CustomTextField(text: $password, placeholder:"비밀번호를 입력해주세요")
-                                .font(.system(size:16))
-                                .fontWeight(.light)
-                                .padding(.horizontal)
+                            
                         }
-                        .frame(width: 50, height: 48)
+                        .padding(.horizontal,20)
                         
                     }
                     
@@ -134,87 +140,12 @@ struct LoginView: View {
                     Text(errorMessage)
                 }
             }
-            .padding(.bottom,70)
+            .padding(.bottom,20)
         }
     }
 }
 
-struct CustomTextField: UIViewRepresentable {
-  @Binding var text: String
-  var placeholder: String
 
-  func makeUIView(context: Context) -> UITextField {
-    let textField = UITextField()
-    textField.textColor = UIColor.white // Text color
-    textField.attributedPlaceholder = NSAttributedString(string: placeholder,
-                                                         attributes: [NSAttributedString.Key.foregroundColor: UIColor.white]) // Placeholder color
-    textField.delegate = context.coordinator
-    return textField
-  }
-
-  func updateUIView(_ uiView: UITextField, context: Context) {
-    uiView.text = text
-  }
-
-  class Coordinator: NSObject {
-    var text: Binding<String>
-
-    init(_ text: Binding<String>) {
-      self.text = text
-    }
-  }
-
-  func makeCoordinator() -> Coordinator {
-    Coordinator($text)
-  }
-}
-
-struct CustomTextField1: UIViewRepresentable {
-    // TODO: - 지금은 text만 쓰이는 걸로 보여요! text1, text2, text3 도 밖에 뷰랑 바인딩 되어야 한다면 이것도 `class Coordinator: NSObject` 아래에서 text한 것처럼 똑같이 바인딩 해주셔야 합니다!
-    @Binding var text: String
-    @Binding var text1: String
-    @Binding var text2: String
-    @Binding var text3: String
-
-    var placeholder: String
-    
-    func makeUIView(context: Context) -> UITextField {
-        let textField = UITextField()
-        textField.textColor = UIColor.black // Text color
-        textField.attributedPlaceholder = NSAttributedString(string: placeholder,
-                                                             attributes: [NSAttributedString.Key.foregroundColor: UIColor.black]) // Placeholder color
-        textField.delegate = context.coordinator
-        return textField
-    }
-    
-    func updateUIView(_ uiView: UITextField, context: Context) {
-        uiView.text = text
-    }
-
-    class Coordinator: NSObject {
-      var text: Binding<String>
-
-      init(_ text: Binding<String>) {
-        self.text = text
-      }
-    }
-
-    func makeCoordinator() -> Coordinator {
-      Coordinator($text)
-    }
-}
-
-extension CustomTextField.Coordinator: UITextFieldDelegate {
-  func textFieldDidChangeSelection(_ textField: UITextField) {
-    text.wrappedValue = textField.text ?? ""
-  }
-}
-
-extension CustomTextField1.Coordinator: UITextFieldDelegate {
-  func textFieldDidChangeSelection(_ textField: UITextField) {
-    text.wrappedValue = textField.text ?? ""
-  }
-}
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {

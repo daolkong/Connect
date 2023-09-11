@@ -8,22 +8,20 @@
 import SwiftUI
 
 struct HomeTopNavigationBar: View {
-    @State var imageLogo: String
-    @State var TextLogo: String
-    @State var AlarmItem: String
+
 
     
     var body: some View {
             HStack(spacing: 98) {
-                Image(TextLogo)
+                Image("align-left")
                     .resizable()
                     .frame(width: 24, height: 24)
                 
-                Text(AlarmItem)
+                Text("Connect")
                     .font(.system(size: 25))
                     .fontWeight(.semibold)
         
-                Image(imageLogo)
+                Image("users")
                     .resizable()
                     .frame(width: 24, height: 24)
             }
@@ -32,6 +30,6 @@ struct HomeTopNavigationBar: View {
 
 struct HomeTopNavigationBar_Previews: PreviewProvider {
     static var previews: some View {
-        HomeTopNavigationBar(imageLogo: "users", TextLogo: "align-left", AlarmItem: "Connect")
+        HomeTopNavigationBar()
     }
 }
