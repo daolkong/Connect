@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct FriendProfileView: View {
-    @StateObject var authViewModel = AuthViewModel() // 'private' 제거
-    @StateObject var userDataModel = UserDataModel() // 'private' 제거
+    @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var userDataModel: UserDataModel
+    @Environment(\.presentationMode) var presentationMode
     
     let user : User
     var uid: String? // 'uid'의 접근 제어 수준을 변경
@@ -19,7 +20,7 @@ struct FriendProfileView: View {
             print("Error: No current user found")
             return
         }
-
+        
         // Add friendUser's uid to currentUser's friends list
         userDataModel.addFriend(currentUser.uid , friendUser.uid) { result in
             switch result {
@@ -29,7 +30,7 @@ struct FriendProfileView: View {
                 print("Error adding friend to current user's friends list: \(error)")
             }
         }
-
+        
         // Add currentUser's uid to friendUser's friends list
         userDataModel.addFriend(friendUser.uid, authViewModel.uid) { result in  // <-- Here
             switch result {
@@ -59,10 +60,14 @@ struct FriendProfileView: View {
             
             
             VStack(spacing: 30) {
-                Image("back1")
-                    .resizable()
-                    .frame(width: 9, height: 15)
-                    .padding(.trailing,320)
+                
+                Button(action: {
+                    // Dismiss the view when the button is tapped
+                    presentationMode.wrappedValue.dismiss()
+                }) {
+                    ProfileTopNavigationBar(TextLogo: "back1")
+                }
+                
                 
                 Image("profile")
                     .resizable()
@@ -97,7 +102,7 @@ struct FriendProfileView: View {
                             .resizable()
                             .frame(width: 34, height: 4)
                         
-                        Text("\(userDataModel.currentUser?.friends.count ?? 0)") // 수정된 부분
+                        Text("\(user.friends.count)") // Show the number of friends of the user.
                             .font(.system(size: 30))
                             .fontWeight(.semibold)
                         
@@ -166,22 +171,25 @@ struct FriendProfileView: View {
                 }
                 .padding(.top,30)
             }
-            .onAppear() {
-                       userDataModel.fetchUser()
-                       userDataModel.getCurrentUser(uid: authViewModel.uid)
-                   }
-            .padding(.bottom, 30)
+            .padding(.bottom,30)
+
+            
         }
-    }
-    
-    init(user: User) {
-            self.user = user
+        .onAppear() {
+            userDataModel.fetchUser()
             userDataModel.getCurrentUser(uid: authViewModel.uid)
         }
-  }
+    }
+        
+        init(user: User) {
+            self.user = user
+        }
+}
 
 struct FriendProfileView_Previews: PreviewProvider {
     static var previews: some View {
         FriendProfileView(user: User(email: "test@test.com", fullid:"TestFullID", hastags:"TestHashtags", uid:"TestUID", profileImageURL:"", uploadedImagesURLs:[], friends: []))
+            .environmentObject(AuthViewModel())
+            .environmentObject(UserDataModel())
     }
 }

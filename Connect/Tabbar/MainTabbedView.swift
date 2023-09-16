@@ -13,13 +13,13 @@ struct MainTabbedView: View {
     var body: some View {
         ZStack(alignment: .bottom){
             TabView(selection: $selectedTab) {
-                HomeView()
+                HomeView(imageUrl:"")
                     .tag(0)
                 
                 Time_sellectView()
                     .tag(1)
                 
-                ConnectTodayView()
+                MainConnectView()
                     .tag(2)
                 
                 MyprofileView()
@@ -31,16 +31,15 @@ struct MainTabbedView: View {
                         Button{
                             selectedTab = item.rawValue
                         } label: {
-                            CustomTabItem(imageName: item.iconName, title: item.title, isActive: (selectedTab == item.rawValue))
+                            CustomTabItem(imageName: item.iconName, isActive: (selectedTab == item.rawValue))
+                                .frame(maxWidth: .infinity)
                         }
                     }
                 }
-                .padding(6)
+                .padding(.horizontal, 30)
+                .frame(height: 40)
+                .background(Color.white)
             }
-            .frame(height: 70)
-            .background(.white)
-            .cornerRadius(35)
-            .padding(.horizontal, 26)
         }
     }
 }
@@ -51,29 +50,21 @@ struct MainTabbedView_Previews: PreviewProvider {
     }
 }
 
-extension MainTabbedView{
-    func CustomTabItem(imageName: String, title: String, isActive: Bool) -> some View{
-        HStack(spacing: 10){
-            Spacer()
+struct CustomTabItem : View {
+    let imageName:String
+    let isActive : Bool
+
+    var body:some View {
+        VStack { // Use VStack instead of HStack.
             Image(imageName)
                 .resizable()
                 .renderingMode(.template)
-                .foregroundColor(isActive ? .black : .gray)
+                .foregroundColor(isActive ? Color.black : (Color(red: 0.74, green: 0.74, blue: 0.74)))
                 .frame(width: 20, height: 20)
-            if isActive{
-                Text(title)
-                    .font(.system(size: 14))
-                    .foregroundColor(isActive ? .black : .gray)
-            }
-            Spacer()
+                .padding(.top,20)
         }
-        .frame(width: isActive ? .infinity : 60, height: 60)
-        .background(isActive ? Color(red: 0.52, green: 0.69, blue: 0.93) : .clear)
-        .cornerRadius(30)
     }
 }
-
-
 
 
 enum TabbedItems: Int, CaseIterable{
@@ -82,18 +73,6 @@ enum TabbedItems: Int, CaseIterable{
     case connect
     case profile
     
-    var title: String{
-        switch self {
-        case .home:
-            return "Home"
-        case .search:
-            return "search"
-        case .connect:
-            return "connect"
-        case .profile:
-            return "Profile"
-        }
-    }
     
     var iconName: String{
         switch self {
@@ -108,3 +87,6 @@ enum TabbedItems: Int, CaseIterable{
         }
     }
 }
+
+
+

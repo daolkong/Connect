@@ -7,9 +7,12 @@
 
 import SwiftUI
 import PhotosUI
+import FirebaseAuth
+import FirebaseFirestore
 
 struct MyprofileView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var userDataModel: UserDataModel
     @State var isImageSelected: Bool = false
     @State var selectedItem: PhotosPickerItem? = nil
     @State var selectedImageData: Data? = nil
@@ -17,19 +20,19 @@ struct MyprofileView: View {
     var body: some View {
         ZStack {
             Rectangle()
-              .foregroundColor(.clear)
-              .frame(width: 390, height: 844)
-              .background(
-                LinearGradient(
-                  stops: [
-                    Gradient.Stop(color: .white, location: 0.00),
-                    Gradient.Stop(color: Color(red: 0.7, green: 0.8, blue: 0.96), location: 1.00),
-                  ],
-                  startPoint: UnitPoint(x: 0.87, y: 0.98),
-                  endPoint: UnitPoint(x: 0.21, y: 0.08)
+                .foregroundColor(.clear)
+                .frame(width: 390, height: 844)
+                .background(
+                    LinearGradient(
+                        stops: [
+                            Gradient.Stop(color: .white, location: 0.00),
+                            Gradient.Stop(color: Color(red: 0.7, green: 0.8, blue: 0.96), location: 1.00),
+                        ],
+                        startPoint: UnitPoint(x: 0.87, y: 0.98),
+                        endPoint: UnitPoint(x: 0.21, y: 0.08)
+                    )
                 )
-              )
-           
+            
             
             VStack(spacing: 25) {
                 ZStack {
@@ -80,12 +83,30 @@ struct MyprofileView: View {
                                     }
                                     .task {
                                         do {
-                                            _ = try await authViewModel.saveProfileImage(uiImage)
+                                            // Fetch user data from Firestore.
+                                            guard let userId = Auth.auth().currentUser?.uid else { return }
+                                            
+                                            let docRef = Firestore.firestore().collection("users").document(userId)
+                                            
+                                            let docSnapshot = try await docRef.getDocument()
+                                            
+                                            if docSnapshot.exists {
+                                                // Deserialize the document snapshot into a User object.
+                                                if let user = try? docSnapshot.data(as: User.self),
+                                                   let profileImageURLString = user.profileImageURL,
+                                                   let profileImageURL = URL(string: profileImageURLString),
+                                                   let imageData = try? Data(contentsOf: profileImageURL) {
+                                                    selectedImageData = imageData
+                                                    isImageSelected = true
+                                                }
+                                            }
                                         } catch {
-                                            print("Failed to save profile image: \(error)")
+                                            print("Failed to load profile image:", error.localizedDescription)
                                         }
                                     }
                             }
+                            
+                            
                         }
                     }
                     .onChange(of: selectedItem) { newValue in

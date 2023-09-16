@@ -36,3 +36,4 @@ struct ConnectTopNavigationBar_Previews: PreviewProvider {
         ConnectTopNavigationBar(imageLogo: "alarm", TextLogo: "align-left", AlarmItem: "Connect Gallery")
     }
 }
+

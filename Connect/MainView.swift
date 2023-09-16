@@ -14,8 +14,8 @@ struct MainView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 0) {
-                TabView (selection: $TabSelection){
-                    HomeView()
+                TabView (selection: $TabSelection) {
+                    HomeView(imageUrl:"")
                         .tag(1)
 
                     Time_sellectView()
@@ -24,13 +24,15 @@ struct MainView: View {
                     MyprofileView()
                         .tag(3)
                     
+                        
+                    }
                 }
 //                CustomTabBar(TabSelection: $TabSelection, selectedTab: $selectedTab)
             }
             
         }
     }
-}
+
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {

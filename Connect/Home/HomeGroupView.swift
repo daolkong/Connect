@@ -140,7 +140,7 @@ struct HomeGroupView: View {
                                     Button(action: {
                                         // 버튼이 클릭되었을 때 실행될 액션
                                     }) {
-                                        Image("heart button")
+                                        Image("heart button1")
                                             .resizable()
                                             .frame(width: 33, height: 33)
                                     }
@@ -214,7 +214,7 @@ struct HomeGroupView: View {
                                         Button(action: {
                                             // 버튼이 클릭되었을 때 실행될 액션
                                         }) {
-                                            Image("heart button")
+                                            Image("heart button1")
                                                 .resizable()
                                                 .frame(width: 33, height: 33)
                                         }
