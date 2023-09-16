@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct User: Codable {
+struct User: Codable, Identifiable, Hashable {
     let email: String
     let fullid: String
     let hastags: String
@@ -15,6 +15,9 @@ struct User: Codable {
     var profileImageURL: String?  // Add this line.
     var uploadedImagesURLs: [String]? // Add this line.
     var friends: [String]
+    
+    var id: String { uid }
+
 }
 
 extension User {

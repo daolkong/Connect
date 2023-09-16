@@ -103,7 +103,7 @@ struct SigninView: View {
                                 Text("비밀번호")
                                     .foregroundColor(.white)  // Change color here
                             }
-                            TextField("", text: $password)
+                            SecureField("", text: $password)
                                 .foregroundColor(.white)  // Change color here
                                 .overlay( Rectangle()
                                     .foregroundColor(.clear)

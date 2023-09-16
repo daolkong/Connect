@@ -13,13 +13,13 @@ struct MainTabbedView: View {
     var body: some View {
         ZStack(alignment: .bottom){
             TabView(selection: $selectedTab) {
-                HomeView()
+                HomeView(imageUrl:"").environmentObject(ImageLoader())
                     .tag(0)
                 
                 Time_sellectView()
                     .tag(1)
                 
-                ConnectTodayView()
+                MainConnectView()
                     .tag(2)
                 
                 MyprofileView()

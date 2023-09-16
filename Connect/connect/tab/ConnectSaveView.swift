@@ -13,35 +13,7 @@ struct ConnectSaveView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 35) {
-                ConnectTopNavigationBar(imageLogo: "alarm", TextLogo: "align-left", AlarmItem: "Connect Gallery")
-                // 스위치
-                ZStack {
-                    Rectangle()
-                        .frame(width: 185, height: 64)
-                        .background(Color(red: 0.12, green: 0.14, blue: 0.14))
-                        .cornerRadius(35)
-                    ZStack {
-                        Circle()
-                            .frame(width: 46, height: 46)
-                            .foregroundColor(Color(red: 0.52, green: 0.69, blue: 0.94))
-                        
-                        Text("오늘")
-                            .font(.system(size: 14))
-                            .fontWeight(.bold)
-                            .foregroundColor(Color.white)
-                        
-                    }
-                    .padding(.trailing,110)
-                    
-                    Text("보관함")
-                        .font(.system(size: 14))
-                        .fontWeight(.bold)
-                        .foregroundColor(Color.white)
-                        .padding(.leading,110)
-                    
-                    
-                }
-                
+    
                 // 검색 바
                 ZStack {
                     Rectangle()

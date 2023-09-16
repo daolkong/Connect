@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FirstStartView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var userDataModel: UserDataModel
     @State var isSignIn = true
     
     var body: some View {
@@ -33,5 +34,7 @@ struct FirstStartView_Previews: PreviewProvider {
     static var previews: some View {
         FirstStartView()
             .environmentObject(AuthViewModel())
+            .environmentObject(UserDataModel())
+        
     }
 }

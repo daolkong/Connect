@@ -67,7 +67,7 @@ struct LoginView: View {
                                 Text("비밀번호를 입력해주세요")
                                     .foregroundColor(.white)  // Change color here
                             }
-                            TextField("", text: $password)
+                            SecureField("", text: $password)
                                 .foregroundColor(.white)  // Change color here
                                 .overlay( Rectangle()
                                     .foregroundColor(.clear)

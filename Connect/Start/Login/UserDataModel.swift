@@ -14,24 +14,22 @@ class UserDataModel: ObservableObject {
     @Published var user: User?
     @Published var users = [User]() // Array to store all users
     @Published var currentUser: User?
-
+    
     public var uid: String {
-        Auth.auth().currentUser?.uid ?? ""
-    }
+          Auth.auth().currentUser?.uid ?? ""
+      }
 
 
-    init() {
-        fetchUser()
-        fetchUsers() // Fetch all users on initialization
-    }
+    init() {}
 
     func fetchUser() {
-        let db = Firestore.firestore()
         
-        guard !uid.isEmpty else {
+        guard let uid = Auth.auth().currentUser?.uid, !uid.isEmpty else {
                print("Error: No current user")
                return
            }
+        
+        let db = Firestore.firestore()
 
         db.collection("users").document(uid).getDocument { document, error in
             
@@ -53,30 +51,32 @@ class UserDataModel: ObservableObject {
     }
 
     func fetchUsers() {
-        
-        guard !uid.isEmpty else {
-               print("Error: No current user")
-               return
-           }
+        guard let uid = Auth.auth().currentUser?.uid, !uid.isEmpty else {
+                print("Error: No current user")
+                return
+            }
         
         let db = Firestore.firestore()
 
         db.collection("users").getDocuments { (querySnapshot, err) in
-            if let err = err {
-                print("Error getting documents: \(err)")
-            } else if querySnapshot!.documents.isEmpty{
-                print("No documents found")
-            }else{
-                for document in querySnapshot!.documents{
-                    do{
-                        if let user = try? document.data(as: User.self){
-                            self.users.append(user)
-                        }
-                    }
-                }
-            }
-        }
-    }
+               if let err = err {
+                   print("Error getting documents: \(err)")
+               } else if querySnapshot!.documents.isEmpty{
+                   print("No documents found")
+               }else{
+                   for document in querySnapshot!.documents{
+                       do{
+                           if let user = try? document.data(as: User.self){
+                               // Check if the user's uid is already in the users array.
+                               if !self.users.contains(where: { $0.uid == user.uid }) {
+                                   self.users.append(user)
+                               }
+                           }
+                       }
+                   }
+               }
+           }
+       }
     
     func addFriend(_ currentUserId : String , _ friendUserId : String, completion: @escaping (Result<Void, Error>) -> Void ) {
        let db = Firestore.firestore()
@@ -128,6 +128,11 @@ class UserDataModel: ObservableObject {
     func getCurrentUser(uid: String) {
         let db = Firestore.firestore()
 
+        guard !uid.isEmpty else {
+            print("Error: No current user")
+            return
+        }
+        
         db.collection("users").document(uid).getDocument { document, error in
             if let error = error {
                 print("Error fetching user: \(error)")

@@ -9,7 +9,8 @@ import SwiftUI
 import PhotosUI
 
 struct MyprofileView: View {
-    @EnvironmentObject var authViewModel: AuthViewModel
+    @StateObject var authViewModel = AuthViewModel() // 'private' 제거
+    @StateObject var userDataModel = UserDataModel() // 'private' 제거
     @State var isImageSelected: Bool = false
     @State var selectedItem: PhotosPickerItem? = nil
     @State var selectedImageData: Data? = nil

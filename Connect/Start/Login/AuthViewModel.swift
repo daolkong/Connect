@@ -18,7 +18,7 @@ import FirebaseStorage  // Add this line at the top of the file.
 @MainActor
 final class AuthViewModel: ObservableObject {
     private var authStateDidChangeListenerHandle: AuthStateDidChangeListenerHandle?
-
+    
     
     @Published var currentUser: User? // add this line
     
@@ -33,8 +33,8 @@ final class AuthViewModel: ObservableObject {
     
     // 현재 로그인한 사용자의 UID를 가져오는 computed property입니다. 만약 로그인한 사용자가 없다면 빈 문자열을 반환합니다.
     public var uid: String {
-          Auth.auth().currentUser?.uid ?? ""
-      }
+        Auth.auth().currentUser?.uid ?? ""
+    }
     
     // 생성자에서는 현재 로그인 상태를 확인하여 loginState 변수에 할당합니다.
     
@@ -44,13 +44,21 @@ final class AuthViewModel: ObservableObject {
     }
     
     
-   
     func addAuthListener() {
         if authStateDidChangeListenerHandle == nil {
             authStateDidChangeListenerHandle = Auth.auth().addStateDidChangeListener { (auth, firebaseUser) in
                 if let firebaseUser = firebaseUser {
                     // Here we create a new user with the info from the FirebaseAuth user
                     self.currentUser = User(email: firebaseUser.email ?? "", fullid:"", hastags:"", uid:firebaseUser.uid, friends: [])
+
+                    // Fetch user information immediately after setting currentUser.
+                    Task {
+                        do {
+                            try await self.fetchUser()
+                        } catch {
+                            print("Error fetching user: \(error)")
+                        }
+                    }
                 } else {
                     self.currentUser = nil
                 }
@@ -59,14 +67,14 @@ final class AuthViewModel: ObservableObject {
     }
     
     func removeAuthListener() {
-           if let handle = authStateDidChangeListenerHandle {
-               Auth.auth().removeStateDidChangeListener(handle)
-               authStateDidChangeListenerHandle = nil
-           }
-       }
-
+        if let handle = authStateDidChangeListenerHandle {
+            Auth.auth().removeStateDidChangeListener(handle)
+            authStateDidChangeListenerHandle = nil
+        }
+    }
     
-
+    
+    
     // 새로운 사용자를 등록하는 함수입니다. 입력받은 정보와 함께 Firebase Authentication에 요청을 보냅니다.
     func registerUser(fullid: String, withEmail email: String, password: String, hastags: String)
     async throws {
@@ -94,7 +102,7 @@ final class AuthViewModel: ObservableObject {
         guard let user = try? await Firestore.firestore().collection("users").document(uid).getDocument(as: User.self) else {
             return
         }
-        self.user=user
+        self.user = user
     }
     
     func saveProfileImage(_ image: UIImage) async throws -> String {
@@ -117,41 +125,76 @@ final class AuthViewModel: ObservableObject {
         return urlStr
     }
     
-    func saveImage(_ image: UIImage) async throws -> String {
-        guard let data = image.jpegData(compressionQuality: 0.5) else {
-            throw NSError(domain: "Failed to convert image to data", code: -1, userInfo: nil)
+    // 이미지를 저장하고 이미지와 관련된 정보를 Firestore에 함께 저장
+    func saveImage(_ image: UIImage, fullid: String, captureTime: Date) {
+        let storage = Storage.storage()
+        let storageRef = storage.reference()
+        
+        // Convert the image to Data
+        guard let imageData = image.jpegData(compressionQuality: 0.4) else {
+            print("Could not convert image to Data")
+            return
         }
         
-        let storageRef = Storage.storage().reference()
-        let filename = UUID().uuidString + ".jpg"
-        let fileRef = storageRef.child("images/\(filename)")
+        // Create a unique identifier for the image
+        let imageName = UUID().uuidString
         
-        _ = try await fileRef.putDataAsync(data, metadata: nil)
+        // Create a reference to the file you want to upload
+        let imagesRef = storageRef.child("images/\(imageName).jpg")
         
-        // 직접 URL을 가져오기
-        let url = fileRef.fullPath // 또는 fileRef.name을 사용할 수도 있음
-        let urlStr = url
-        
-        return urlStr
+        // Upload the file to the path "images/[imageName].jpg"
+        imagesRef.putData(imageData, metadata: nil) { (metadata, error) in
+            guard metadata != nil else {
+                print("Error uploading image")
+                return
+            }
+            
+            // Metadata contains file metadata such as size, content-type.
+            imagesRef.downloadURL { (url, error) in
+                guard let downloadURL = url else {
+                    print("Error getting download URL")
+                    return
+                }
+                
+                // Create a new post object with imageURL set as downloadURL.absoluteString,
+                var post = Post(id: "", fullid: fullid,
+                                imageUrl: downloadURL.absoluteString,
+                                timestamp: captureTime)
+                
+                // Get a reference to Firestore Database
+                let db = Firestore.firestore()
+                
+                db.collection("posts").addDocument(data: post.asDictionary()) { err in
+                    if let err = err {
+                        print("Error writing document \(err)")
+                    } else {
+                        print("Document successfully written!")
+                    }
+                }
+            }
+        }
     }
-    
     func saveAndStoreImage(_ image: UIImage) async throws -> String {
-        // Save the image and get its url.
-        let urlStr = try await saveImage(image)
-
+        // Save the image and get its URL.
+        let urlStr = try await saveProfileImage(image)
+        
+        // Save the image to Firebase Storage and store its info in Firestore.
+        saveImage(image, fullid: uid, captureTime: Date())
+        
         // Update the user object in memory.
         if user?.uploadedImagesURLs == nil {
             user?.uploadedImagesURLs = [urlStr]  // If it's nil, initialize it with the new URL.
         } else {
             user?.uploadedImagesURLs?.append(urlStr)  // If it's not nil, append the new URL.
         }
-
+        
         // Update the user object in Firestore database.
-       try await Firestore.firestore().collection("users").document(uid).updateData(["uploadedImagesURLs": FieldValue.arrayUnion([urlStr])])
-
-       return urlStr
+        try await Firestore.firestore().collection("users").document(uid).updateData(["uploadedImagesURLs": FieldValue.arrayUnion([urlStr])])
+        
+        return urlStr
     }
-
+    
+    
 }
 
 extension AuthViewModel {
