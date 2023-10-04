@@ -5,16 +5,25 @@
 //  Created by Daol on 2023/09/16.
 //
 
+//
+//  AllowConnectView.swift
+//  Connect
+//
+//  Created by Daol on 2023/09/16.
+//
+
 import SwiftUI
+import FirebaseAuth
+import FirebaseFirestore
 
 struct AlarmConnectView: View {
     
+    @EnvironmentObject var notificationViewModel : NotificationViewModel
     @State private var isButtonPressed = false
-    @EnvironmentObject var imageLoader: ImageLoader  // Add this line
-
+    
     var body: some View {
         ScrollView {
-            ForEach(imageLoader.notifications.indices, id: \.self) { index in
+            ForEach(notificationViewModel.notifications, id: \.id) { notification in
                 // 알림창 1
                 ZStack {
                     Rectangle()
@@ -33,7 +42,9 @@ struct AlarmConnectView: View {
                             Image("profile")
                                 .resizable()
                                 .frame(width: 44, height: 44)
-                            Text("\(imageLoader.notifications[index].fromUserName)님이 회원님과 일상을 connect 하고 싶어 합니다.")
+                            
+                            Text("\(notification.fromUserName)님이 회원님과 일상을 connect 하고 싶어 합니다.")
+                                .foregroundColor(Color.black)
                                 .font(.system(size: 15))
                                 .fontWeight(.medium)
                         }
@@ -69,11 +80,11 @@ struct AlarmConnectView: View {
                 }
             }
         }
-        .onAppear() {
-                 imageLoader.loadNotifications()
-        }
+        .onAppear(perform: notificationViewModel.loadNotifications)
+        
     }
 }
+
 
 struct AlarmConnectView_Previews: PreviewProvider {
     static var previews: some View {

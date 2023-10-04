@@ -23,6 +23,7 @@ struct ConnectApp: App {
     @StateObject var authViewModel = AuthViewModel()
     @StateObject var userDataModel = UserDataModel()
     @StateObject var sharedImageLoader = ImageLoader()
+    @StateObject var notificationViewModel = NotificationViewModel()
     
     var body: some Scene {
         WindowGroup {
@@ -30,6 +31,8 @@ struct ConnectApp: App {
                 .environmentObject(authViewModel)
                 .environmentObject(userDataModel)
                 .environmentObject(sharedImageLoader)
+                .environmentObject(notificationViewModel)
+
         }
         
     }

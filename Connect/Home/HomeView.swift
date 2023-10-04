@@ -13,6 +13,7 @@ import FirebaseStorage
 import FirebaseAuth
 
 struct HomeView: View {
+    
     @State private var isCameraPresented = true
     @State private var isNavigatingToMyPage = false
     @State private var isNavigatingToHomeGroup = false
@@ -20,10 +21,13 @@ struct HomeView: View {
     @State private var uiImage : UIImage?
     @State private var lastImageCaptureDate: Date?
     @State private var posts: [Post] = []
+    @State private var lastDocumentSnapshot: DocumentSnapshot? // 마지막으로 가져온 DocumentSnapshot 저장
+    @State private var isLoading = false
+    @State private var isUploaded = false
     
     @EnvironmentObject var authViewModel: AuthViewModel
     @EnvironmentObject var userDataModel: UserDataModel
-    @EnvironmentObject var imageLoader: ImageLoader
+    @EnvironmentObject var notificationViewModel : NotificationViewModel
     
     @AppStorage("lastImageCaptureDate") var lastImageCaptureDateString: String = ""
     
@@ -68,147 +72,65 @@ struct HomeView: View {
                             isNavigatingToHomeGroup = true
                         }
                     
-                    NavigationLink(destination: HomeGroupView()   .navigationBarBackButtonHidden(true), isActive: $isNavigatingToHomeGroup) {
-                        EmptyView()
-                    }
+                    NavigationLink(destination: HomeGroupView()
+                        .navigationBarBackButtonHidden(true), isActive: $isNavigatingToHomeGroup) {
+                            EmptyView()
+                        }
                 }
                 
                 ScrollView {
-                    VStack(spacing: 1) {
+                    LazyVStack(spacing :1){
                         // 아래 게시물
-                        ForEach(posts, id: \.id) { post in // id 파라미터 추가
-                            VStack(spacing: -19) {
-                                // 프로필 상단
-                                ZStack {
-                                    Rectangle()
-                                        .foregroundColor(Color(red: 0.85, green: 0.85, blue: 0.85).opacity(0.3))
-                                        .frame(width: 390, height: 65)
-                                    
-                                    HStack {
-                                        Image("profile")
-                                            .resizable()
-                                            .frame(width: 44, height: 44)
-                                        
-                                        VStack(alignment: .leading) {
-                                            
-                                            Text(post.fullid)   // Use the fullId of the post directly
-                                                .font(.system(size: 20))
-                                                .fontWeight(.semibold)
-                                            
-                                            Text(dateFormatter.string(from: post.timestamp))
-                                                .font(.system(size: 12))
-                                                .fontWeight(.regular)
-                                            
-                                        }
-                                        .onAppear(){
-                                            userDataModel.fetchUser()
-                                        }
-                                        
-                                        Spacer()
-                                    }
-                                }
-                                .padding()
-                                
-                                // 사진 넘기는 영역
-                                if let imageUrl = URL(string: post.imageUrl) {
-                                    AsyncImage(url: imageUrl) { phase in
-                                        if let image = phase.image {
-                                            image.resizable()
-                                        } else if phase.error != nil {
-                                            Text("An error occurred")
-                                        } else {
-                                            Rectangle().frame(width :390,height :390)
-                                        }
-                                    }
-                                    .frame(width :390,height :390)
-                                }
-                   
-                                // 공감과 커넥트 칸
-                                HStack(spacing: 36) {
-                                    HStack {
-                                        Button(action: {
-                                            // 버튼이 클릭되었을 때 실행될 액션
-                                        }) {
-                                            Image("heart button1")
-                                                .resizable()
-                                                .frame(width: 33, height: 33)
-                                        }
-                                        
-                                        Text("Like")
-                                            .font(.system(size:20))
-                                            .fontWeight(.semibold)
-                                    }
-                                    HStack {
-                                        Button(action: {
-                                            self.imageLoader.sendRequest(imageId: post.id) 
-                                        }) {
-                                            Image("Connect button")
-                                                .resizable()
-                                                .frame(width: 33, height: 33)
-                                        }
-                                        Text("Connect (15)")
-                                            .font(.system(size: 20))
-                                            .fontWeight(.semibold)
-                                            .foregroundColor(Color.black)
-                                        
-                                    }
-                                }
-                                .padding(.top,30)
-                            }
-                        }
-                    }
-                    .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                            fetchImages()
-                            self.isCameraPresented = true
+                        ForEach(posts) { post in
+                            PostRow(postData: post)
                             
-                            Task.init {
-                                do {
-                                    try await self.authViewModel.fetchUser()
-                                } catch {
-                                    print("Error fetching user: \(error)")
-                                    
-                                }
-                            }
+//                            if index == posts.count - 1 {
+//                                fetchImages()
+//                            }
+                            
                         }
-                    }
+
+                    }.onAppear(perform:{
+//                        if posts.isEmpty {
+                            fetchImages()
+//                        }
+                    })
+                    
                     .sheet(isPresented:$isCameraPresented){
-                        CameraView(isShown: $isCameraPresented, image: $uiImage)
-                            .environmentObject(authViewModel)
-                            .onDisappear {
-                                // CameraView 가 사라질 때 (사용자가 사진을 찍고 닫았을 때) 이미지 업로드 및 저장
-                                if let image = uiImage {
-                                    uploadImageToFirestore(image: image)
-                                    saveImageCaptureDate()
-                                }
-                                
-                                
-                                // 사진이 성공적으로 업로드되고 저장된 후에는 isCameraPresented 를 false 로 설정하여 모달 닫기
-                                self.isCameraPresented = false
-                                
-                                // 다음날 카메라를 다시 표시하기 위해 이미지 캡처 날짜 저장
-                                if shouldShowCamera() {
-                                    self.isCameraPresented = true
-                                }
-                            }
+                        CameraView(isShown:$isCameraPresented,image:$uiImage).environmentObject(authViewModel)
+                    }
+                    
+                    /* onDisappear */
+                }
+            }
+            
+            .onDisappear(perform:{
+                if let image = uiImage, isUploaded == false {
+                    uploadImageToFirestore(image:image)
+                    saveImageCaptureDate()
+                }
+                
+                guard let fullId = authViewModel.user?.fullid else {
+                    // Instead of 'return', set isCameraPresented to true and exit.
+                    self.isCameraPresented = true
+                    return
+                }
+                
+                fetchLatestPostTimestamp(forUser : fullId) { date in
+                    if let lastCaptureDate = date {
+                        DispatchQueue.main.async {
+                            self.isCameraPresented =
+                            !Calendar.current.isDate(lastCaptureDate,inSameDayAs : Date())
+                        }
+                    } else {
+                        DispatchQueue.main.async{
+                            self.isCameraPresented = true
+                        }
                     }
                 }
-               
-                
-            }
+            })
+            
         }
-    }
-    
-    private func shouldShowCamera() -> Bool {
-        
-        let todayDate = Calendar.current.startOfDay(for: Date())
-        
-        if let lastCaptureDate = lastImageCaptureDate {
-            return !Calendar.current.isDate(lastCaptureDate, inSameDayAs: todayDate)
-            // 이미지를 마지막으로 찍은 날짜와 오늘 날짜를 비교하여 같으면 false를 반환하여 카메라를 열지 않습니다.
-        }
-        // 날짜를 비교할 수 없으면 true를 반환하여 카메라를 엽니다.
-        return true
     }
     
     private func saveImageCaptureDate() {
@@ -219,7 +141,9 @@ struct HomeView: View {
     
     private func uploadImageToFirestore(image: UIImage) {
         // Firestore에 업로드할 이미지 데이터
-        guard let imageData = image.jpegData(compressionQuality: 0.1) else {
+        guard let resizedImage = image.resized(toWidth : 500),
+              let imageData = resizedImage.jpegData(compressionQuality : 1) else{
+            print("Failed to convert image to data.")
             return
         }
         
@@ -231,91 +155,157 @@ struct HomeView: View {
                     print("No Full ID found")
                     return
                 }
-                                
+                
                 let timestamp = Date() // 현재 시간을 타임스탬프로 사용
                 let imageName = UUID().uuidString
                 
                 if imageName.isEmpty {
-                             print("Error generating imageName.")
-                             return
-                         }
-                         
+                    print("Error generating imageName.")
+                    return
+                }
+                
                 let storageRef = Storage.storage().reference()
                 let imagesRef = storageRef.child("images/\(imageName).jpg")
                 
-                _ = imagesRef.putData(imageData, metadata: nil) { (metadata, error) in
+                imagesRef.putData(imageData, metadata: nil) { (metadata, error) in
+                    guard let _ = metadata else {
+                        // Uh-oh, an error occurred!
+                        print("Error uploading image: \(error?.localizedDescription ?? "Unknown error")")
+                        return
+                    }
+                    
                     guard metadata != nil else {
-                        print("Error uploading image.")
+                        print("Metadata is nil.")
                         return
                     }
                     
                     imagesRef.downloadURL { (url, error) in
                         guard let downloadURL = url else {
-                            print("Error getting download URL.")
+                            // Uh-oh, an error occurred!
+                            print("Error getting download URL: \(error?.localizedDescription ?? "Unknown error")")
                             return
                         }
                         
                         // Firestore에 업로드할 데이터 구성 및 Post 객체 생성 후 사전 변환
                         let postObject = Post(id: imageName, fullid: fullId , imageUrl:downloadURL.absoluteString , timestamp :timestamp)
-
+                        
                         // Post 객체를 사전으로 변환합니다.
                         let postDict = postObject.asDictionary()
                         
                         // Firestore에 데이터 추가
                         
-                         Firestore.firestore().collection("posts").addDocument(data: postDict){ error in
-                             if error != nil {
-                                 print(error!.localizedDescription)
-                             } else {
-                                 print("Document added successfully!")
-                             }
-                         }
-
+                        Firestore.firestore().collection("posts").addDocument(data: postDict){ error in
+                            if let err = error {
+                                print(err.localizedDescription)
+                            } else {
+                                print("Document added successfully!")
+                            }
+                        }
+                        
                     }
                     
-                 }
-
+                    isUploaded = true
+                    
+                }
+                
             } catch {
-                 print(error.localizedDescription)
-             }
-
-         }
-
+                print(error.localizedDescription)
+            }
+            
+        }
+        
     }
-
-    private func fetchImages() {
+    
+    func fetchImages() {
+        guard !isLoading else { return }  // 이미 데이터를 불러오고 있다면 중복해서 불러오기 방지
+        
+        isLoading = true
+        
         let db = Firestore.firestore()
-
-        db.collection("posts").order(by: "timestamp", descending: true).getDocuments() { (querySnapshot, err) in
+        
+        var query: Query = db.collection("posts").order(by: "timestamp", descending: true)
+        
+//        if let lastSnapshot = lastDocumentSnapshot {
+//            query = query.start (afterDocument: lastSnapshot)
+//            print("Starting from the next document after the last snapshot.")
+//        } else {
+//            print("Fetching documents from the beginning.")
+//        }
+//
+        query.addSnapshotListener { (querySnapshot, err) in
+//        query.limit(to: 10).addSnapshotListener { (querySnapshot, err) in
+            defer { self.isLoading = false }  // 데이터 로딩이 끝났음을 표시
+            
             if let err = err {
-                print(err.localizedDescription)
+                print("Error fetching documents:", err.localizedDescription)
                 return
+                
             } else if querySnapshot?.documents.isEmpty ?? true {
+                
                 print("No documents found in the posts collection.")
                 return
+                
             } else {
-                DispatchQueue.main.async { // 메인 스레드에서 UI 업데이트 수행
+                
+                DispatchQueue.main.async {
+                    
                     self.posts = querySnapshot!.documents.compactMap { document in
-                        // Document exists check 추가
+                        
                         guard document.exists else {
                             print("Document does not exist")
                             return nil
                         }
                         
                         if let fullid = document.data()["fullid"] as? String,
-                           let url = document.data()["imageUrl"] as? String,
-                           let timestampData = document.data()["timestamp"] as? Timestamp {
-
-                            // Create a new post and add it to the array.
-                            return Post(id: document.documentID, fullid: fullid, imageUrl:url, timestamp: timestampData.dateValue())
+                           let urlStrigValueOfURLFieldFromFirestoreDatabaseAndConvertItIntoURLObject =
+                            document.data()["imageUrl"] as? String,
+                           let timestampData =
+                            document.data()["timestamp"] as? Timestamp {
+                            
+                            return Post(id: document.documentID, fullid: fullid,
+                                        imageUrl:urlStrigValueOfURLFieldFromFirestoreDatabaseAndConvertItIntoURLObject, timestamp: timestampData.dateValue())
                         } else {
+                            print("Failed to create a Post object from the data of Document ID \(document.documentID). Check whether all necessary fields are present and in correct format.")
                             return nil
-
                         }
                     }
+                    
+//                    self.lastDocumentSnapshot = querySnapshot!.documents.last
+//                    
+//                    print("\(querySnapshot!.documents.count) documents have been fetched and added to 'posts'. Total count of 'posts': \(self.posts.count)")
                 }
             }
         }
+    }
+    
+    private func fetchLatestPostTimestamp(forUser fullId: String, completion: @escaping (Date?) -> Void) {
+        let db = Firestore.firestore()
+        
+        db.collection("posts")
+            .whereField("fullid", isEqualTo: fullId)
+            .order(by: "timestamp", descending: true)
+            .limit(to: 1)
+            .getDocuments { (querySnapshot, err) in
+                if let err = err {
+                    print(err.localizedDescription)
+                    completion(nil)
+                    return
+                } else if querySnapshot?.documents.isEmpty ?? true {
+                    print("No documents found for the user.")
+                    completion(nil)
+                    return
+                } else {
+                    if let document = querySnapshot?.documents.first,
+                       let timestampData = document.data()["timestamp"] as? Timestamp {
+                        // Return the timestamp of the latest post.
+                        completion(timestampData.dateValue())
+                        return
+                    }
+                    
+                    print("Failed to get timestamp from document.")
+                    completion(nil)
+                }
+            }
     }
 }
 
@@ -384,12 +374,28 @@ struct CameraView: UIViewControllerRepresentable {
         }
         
     }
-    
 }
 
+extension UIImage {
+    func resized(withPercentage percentage: CGFloat) -> UIImage? {
+        let canvasSize = CGSize(width: size.width * percentage, height: size.height * percentage)
+        UIGraphicsBeginImageContextWithOptions(canvasSize, false, scale)
+        defer { UIGraphicsEndImageContext() }
+        draw(in: CGRect(origin: .zero, size: canvasSize))
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }
+    
+    func resized(toWidth width: CGFloat) -> UIImage? {
+        let canvasSize = CGSize(width: width, height: CGFloat(ceil(width/size.width * size.height)))
+        UIGraphicsBeginImageContextWithOptions(canvasSize, false, scale)
+        defer { UIGraphicsEndImageContext() }
+        draw(in: CGRect(origin: .zero, size: canvasSize))
+        return UIGraphicsGetImageFromCurrentImageContext()
+    }
+}
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(imageUrl:"").environmentObject(ImageLoader())
+        HomeView(imageUrl:"")
     }
 }
