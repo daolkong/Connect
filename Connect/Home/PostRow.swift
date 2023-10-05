@@ -54,24 +54,13 @@ struct PostRow: View {
                 if let imageUrl = URL(string: postData.imageUrl) {
                     KFImage(imageUrl)
                         .resizable()
+                        .frame(width: 390, height: 390) // 사진 크기 설정
+                        .scaledToFill() // 추가된 코드
                         .aspectRatio(contentMode: .fit)
-                    
-                    //                    AsyncImage(url: imageUrl) { phase in
-//                        switch phase {
-//                        case .success(let image):
-//                            image.resizable()
-//                                .aspectRatio(contentMode: .fit)
-//                        case .failure(_):
-//                            Image(systemName: "photo")
-//                                .resizable()
-//                                .aspectRatio(contentMode: .fit)
-//                        @unknown default:
-//                            ProgressView()
-//                        }
-//                    }
-                    .frame(width :390,height :390)
                 } else {
                     Text("Invalid URL string.")
+                        .font(.system(size: 20))
+                        .foregroundColor(Color.black)
                 }
             }
             
@@ -85,8 +74,11 @@ struct PostRow: View {
                         Image("heart button1")
                             .resizable()
                             .frame(width :33,height :33)
+                        
                         Text("Like(31)")
                             .font(.system(size: 20))
+                            .foregroundColor(Color.black)
+
                     }
                     
                 }
@@ -108,6 +100,8 @@ struct PostRow: View {
             }.padding(.top ,30)
             
         }
+        .frame(maxWidth: .infinity) // 추가된 코드
+
     }
 }
 

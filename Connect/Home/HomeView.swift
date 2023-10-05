@@ -83,26 +83,35 @@ struct HomeView: View {
                         // 아래 게시물
                         ForEach(posts) { post in
                             PostRow(postData: post)
-                            
-//                            if index == posts.count - 1 {
-//                                fetchImages()
-//                            }
-                            
                         }
-
-                    }.onAppear(perform:{
-//                        if posts.isEmpty {
-                            fetchImages()
-//                        }
-                    })
-                    
+                    }
                     .sheet(isPresented:$isCameraPresented){
                         CameraView(isShown:$isCameraPresented,image:$uiImage).environmentObject(authViewModel)
                     }
-                    
-                    /* onDisappear */
                 }
             }
+            
+            .onAppear(perform:{
+                fetchImages()
+                
+                guard let fullId = authViewModel.user?.fullid else {
+                    self.isCameraPresented = true
+                    return
+                }
+                
+                fetchLatestPostTimestamp(forUser : fullId) { date in
+                    if let lastCaptureDate = date {
+                        DispatchQueue.main.async {
+                            let timeInterval = Date().timeIntervalSince(lastCaptureDate)
+                            self.isCameraPresented = timeInterval < 24 * 60 * 60 ? false : true
+                        }
+                    } else {
+                        DispatchQueue.main.async{
+                            self.isCameraPresented = true
+                        }
+                    }
+                }
+            })
             
             .onDisappear(perform:{
                 if let image = uiImage, isUploaded == false {
@@ -192,6 +201,7 @@ struct HomeView: View {
                         // Post 객체를 사전으로 변환합니다.
                         let postDict = postObject.asDictionary()
                         
+                        
                         // Firestore에 데이터 추가
                         
                         Firestore.firestore().collection("posts").addDocument(data: postDict){ error in
@@ -225,15 +235,8 @@ struct HomeView: View {
         
         var query: Query = db.collection("posts").order(by: "timestamp", descending: true)
         
-//        if let lastSnapshot = lastDocumentSnapshot {
-//            query = query.start (afterDocument: lastSnapshot)
-//            print("Starting from the next document after the last snapshot.")
-//        } else {
-//            print("Fetching documents from the beginning.")
-//        }
-//
         query.addSnapshotListener { (querySnapshot, err) in
-//        query.limit(to: 10).addSnapshotListener { (querySnapshot, err) in
+            //        query.limit(to: 10).addSnapshotListener { (querySnapshot, err) in
             defer { self.isLoading = false }  // 데이터 로딩이 끝났음을 표시
             
             if let err = err {
@@ -250,29 +253,24 @@ struct HomeView: View {
                 DispatchQueue.main.async {
                     
                     self.posts = querySnapshot!.documents.compactMap { document in
-                        
-                        guard document.exists else {
-                            print("Document does not exist")
-                            return nil
-                        }
-                        
-                        if let fullid = document.data()["fullid"] as? String,
-                           let urlStrigValueOfURLFieldFromFirestoreDatabaseAndConvertItIntoURLObject =
-                            document.data()["imageUrl"] as? String,
-                           let timestampData =
-                            document.data()["timestamp"] as? Timestamp {
-                            
-                            return Post(id: document.documentID, fullid: fullid,
-                                        imageUrl:urlStrigValueOfURLFieldFromFirestoreDatabaseAndConvertItIntoURLObject, timestamp: timestampData.dateValue())
+                        if document.exists {
+                            if let fullid = document.data()["fullid"] as? String,
+                               let urlStrigValueOfURLFieldFromFirestoreDatabaseAndConvertItIntoURLObject =
+                                document.data()["imageUrl"] as? String,
+                               let timestampData =
+                                document.data()["timestamp"] as? Timestamp {
+                                
+                                return Post(id: document.documentID, fullid: fullid, imageUrl: urlStrigValueOfURLFieldFromFirestoreDatabaseAndConvertItIntoURLObject, timestamp: timestampData.dateValue())
+                            } else {
+                                print("Failed to create a Post object from the data of Document ID \(document.documentID). Check whether all necessary fields are present and in correct format.")
+                            }
                         } else {
-                            print("Failed to create a Post object from the data of Document ID \(document.documentID). Check whether all necessary fields are present and in correct format.")
-                            return nil
+                            print("Document does not exist for Document ID \(document.documentID)")
                         }
+                        
+                        return nil
                     }
                     
-//                    self.lastDocumentSnapshot = querySnapshot!.documents.last
-//                    
-//                    print("\(querySnapshot!.documents.count) documents have been fetched and added to 'posts'. Total count of 'posts': \(self.posts.count)")
                 }
             }
         }
@@ -304,8 +302,8 @@ struct HomeView: View {
                     
                     print("Failed to get timestamp from document.")
                     completion(nil)
-                }
             }
+        }
     }
 }
 

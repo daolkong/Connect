@@ -25,6 +25,7 @@ final class AuthViewModel: ObservableObject {
     // 로그인 상태를 나타내는 Published 프로퍼티입니다. 이 프로퍼티의 값이 변경될 때마다 SwiftUI 뷰는 자동으로 업데이트됩니다.
     @Published var loginState: LoginState
     
+    
     // 현재 로그인한 사용자 정보를 저장하는 Published 프로퍼티입니다.
     @Published var user: User?
     

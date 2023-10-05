@@ -26,21 +26,23 @@ struct MainTabbedView: View {
                     .tag(3)
             }
             ZStack{
-                HStack{
+                HStack(spacing: 0){ // spacing을 0으로 설정하여 아이콘 사이의 공간을 제거합니다.
                     ForEach((TabbedItems.allCases), id: \.self){ item in
+                        Spacer() // Spacer 추가
                         Button{
                             selectedTab = item.rawValue
                         } label: {
-                            CustomTabItem(imageName: item.iconName, title: item.title, isActive: (selectedTab == item.rawValue))
+                            CustomTabItem(imageName: item.iconName, isActive: (selectedTab == item.rawValue))
+                                .padding(.horizontal,10) // 버튼에 가로 방향 패딩 추가
+
                         }
+                        Spacer() // Spacer 추가
                     }
                 }
-                .padding(6)
+                .padding(.horizontal, 6) // 아이콘과 탭바의 가장자리 사이에 패딩 추가
             }
             .frame(height: 70)
-            .background(.white)
-            .cornerRadius(35)
-            .padding(.horizontal, 26)
+            .background(Color.white)
         }
     }
 }
@@ -52,59 +54,35 @@ struct MainTabbedView_Previews: PreviewProvider {
 }
 
 extension MainTabbedView{
-    func CustomTabItem(imageName: String, title: String, isActive: Bool) -> some View{
-        HStack(spacing: 10){
-            Spacer()
+    func CustomTabItem(imageName:String, isActive :Bool)->some View{
+        HStack(spacing :15){
             Image(imageName)
-                .resizable()
-                .renderingMode(.template)
-                .foregroundColor(isActive ? .black : .gray)
-                .frame(width: 20, height: 20)
-            if isActive{
-                Text(title)
-                    .font(.system(size: 14))
-                    .foregroundColor(isActive ? .black : .gray)
-            }
-            Spacer()
-        }
-        .frame(width: isActive ? .infinity : 60, height: 60)
-        .background(isActive ? Color(red: 0.52, green: 0.69, blue: 0.93) : .clear)
-        .cornerRadius(30)
+               .resizable()
+               .renderingMode(.template)
+               .foregroundColor(isActive ? Color.black : Color.gray )
+               .frame(width :20,height :20)
+        }.frame(width:.infinity ,height :60)// width 값을 infinity로 설정하여 동일한 크기를 가지도록 합니다.
+         //.cornerRadius(30)
     }
+
 }
-
-
-
-
-enum TabbedItems: Int, CaseIterable{
+enum TabbedItems:Int , CaseIterable{
     case home = 0
     case search
     case connect
     case profile
     
-    var title: String{
+    var iconName:String{
         switch self {
-        case .home:
+        case.home:
             return "Home"
-        case .search:
-            return "search"
-        case .connect:
-            return "connect"
-        case .profile:
-            return "Profile"
-        }
-    }
-    
-    var iconName: String{
-        switch self {
-        case .home:
-            return "Home"
-        case .search:
+        case.search:
             return "searchh"
-        case .connect:
+        case.connect:
             return "Connect"
-        case .profile:
+        case.profile:
             return "Mypage"
+   
         }
     }
 }
