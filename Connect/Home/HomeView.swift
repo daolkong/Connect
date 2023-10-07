@@ -31,6 +31,7 @@ struct HomeView: View {
     
     @AppStorage("lastImageCaptureDate") var lastImageCaptureDateString: String = ""
     
+    
     let imageUrl: String
     
     let dateFormatter: DateFormatter = {
@@ -90,7 +91,6 @@ struct HomeView: View {
                     }
                 }
             }
-            
             .onAppear(perform:{
                 fetchImages()
                 
@@ -203,18 +203,32 @@ struct HomeView: View {
                         
                         
                         // Firestore에 데이터 추가
-                        
-                        Firestore.firestore().collection("posts").addDocument(data: postDict){ error in
+    
+
+                        Firestore.firestore().collection("posts").addDocument(data: postDict){ error in  // Removed [weak self]
                             if let err = error {
                                 print(err.localizedDescription)
                             } else {
                                 print("Document added successfully!")
+                                
+                                isUploaded = true   // <- 이곳으로 옮김.
+                                
+                                fetchLatestPostTimestamp(forUser : fullId) { date in  // Fetch the latest timestamp after upload.
+                                    if let lastCaptureDate = date {
+                                        DispatchQueue.main.async {
+                                            self.isCameraPresented =
+                                            !Calendar.current.isDate(lastCaptureDate,inSameDayAs : Date())
+                                        }
+                                    } else {
+                                        DispatchQueue.main.async{
+                                            self.isCameraPresented = true  // If no posts are found for the user after upload.
+                                        }
+                                    }
+                                }
                             }
                         }
-                        
                     }
                     
-                    isUploaded = true
                     
                 }
                 
@@ -302,8 +316,8 @@ struct HomeView: View {
                     
                     print("Failed to get timestamp from document.")
                     completion(nil)
+                }
             }
-        }
     }
 }
 

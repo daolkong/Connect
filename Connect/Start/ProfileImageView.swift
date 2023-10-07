@@ -13,6 +13,7 @@ struct ProfileImageView: View {
     @State var isImageSelected: Bool = false
     @State var selectedItem: PhotosPickerItem? = nil
     @State var selectedImageData: Data? = nil
+    @EnvironmentObject var authViewModel: AuthViewModel
 
 
     var body: some View {
@@ -50,22 +51,15 @@ struct ProfileImageView: View {
 
                                 }
                             } else {
-                                if let selectedImageData,
-                                   let uiImage = UIImage(data: selectedImageData) {
-                                    Image(uiImage: uiImage)
-                                        .resizable()
-                                        .scaledToFill()
-                                        .clipShape(Circle())
-                                        .frame(width: 166, height: 166)
-                                        .background {
-                                            Circle().fill(
-                                                LinearGradient(
-                                                    colors: [.yellow, .orange],
-                                                    startPoint: .top,
-                                                    endPoint: .bottom
-                                                )
-                                            )
-                                        }
+                                if let urlStr = authViewModel.user?.profileImageURL,
+                                   let url = URL(string: urlStr) {
+                                    AsyncImage(url: url) { image in
+                                        image.resizable()
+                                            .scaledToFill()
+                                            .clipShape(Circle())
+                                    } placeholder:{
+                                        ProgressView()  // 로딩 중일 때 보여줄 뷰
+                                    }
                                 }
                             }
                         }
@@ -83,25 +77,8 @@ struct ProfileImageView: View {
                                 }
                             }
                         })
-                 
-                    
-                    
+              
 // ---------------------------------------------------------------------------------------
-                    Text("프로필 사진을 등록해 주세요!")
-                        .font(.system(size: 28))
-                        .foregroundColor(Color.white)
-                        .fontWeight(.bold)
-                    
-                    ZStack {
-                        Rectangle()
-                            .foregroundColor(Color.white)
-                            .frame(width: 214, height: 61)
-                            .cornerRadius(50)
-                        
-                        Text("건너뛰기")
-                            .font(.system(size: 30))
-                            .fontWeight(.bold)
-                    }
                 }
             
             .padding(.bottom,80)

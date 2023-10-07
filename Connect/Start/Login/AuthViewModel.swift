@@ -107,7 +107,7 @@ final class AuthViewModel: ObservableObject {
     }
     
     func saveProfileImage(_ image: UIImage) async throws -> String {
-        guard let data = image.jpegData(compressionQuality: 0.5) else {
+        guard let data = image.jpegData(compressionQuality: 1) else {
             throw NSError(domain: "Failed to convert image to data", code: -1, userInfo: nil)
         }
         
@@ -118,14 +118,18 @@ final class AuthViewModel: ObservableObject {
         _ = try await fileRef.putDataAsync(data, metadata: nil)
         
         // 직접 URL을 가져오기
-        let url = fileRef.fullPath // 또는 fileRef.name을 사용할 수도 있음
-        let urlStr = url
-        
-        try await Firestore.firestore().collection("users").document(uid).updateData(["profileImageURL": urlStr])
-        
-        return urlStr
+        do {
+            let url = try await fileRef.downloadURL()
+            let urlStr = url.absoluteString
+            
+            try await Firestore.firestore().collection("users").document(uid).updateData(["profileImageURL": urlStr])
+
+            return urlStr
+        } catch {
+            throw NSError(domain: "Failed to get download URL", code: -1, userInfo: nil)
+         }
     }
-    
+
     // 이미지를 저장하고 이미지와 관련된 정보를 Firestore에 함께 저장
     func saveImage(_ image: UIImage, fullid: String, captureTime: Date) {
         let storage = Storage.storage()

@@ -20,9 +20,7 @@ struct SigninView: View {
     @State var retrySignUp = false
     @State private var isLoginSuccessful = false
 
-    
-    
-    
+   
     var body: some View {
         NavigationView {
             ZStack {
@@ -167,7 +165,7 @@ struct SigninView: View {
                         ZStack {
                             // Add this NavigationLink:
                                  if isLoginSuccessful {
-                                     NavigationLink(destination: ProfileImageView(), isActive: $isLoginSuccessful) { EmptyView() }
+                                     NavigationLink(destination: MyprofileView(), isActive: $isLoginSuccessful) { EmptyView() }
                                          .hidden()
                                          .frame(width: 0, height: 0)
                                          .disabled(true)
