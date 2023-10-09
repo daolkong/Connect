@@ -175,7 +175,7 @@ struct FriendProfileView: View {
                 userDataModel.fetchUser()
                 userDataModel.getCurrentUser(uid: authViewModel.uid)
             }
-            .padding(.bottom, 30)
+            .padding(.bottom, 50)
         }
     }
     

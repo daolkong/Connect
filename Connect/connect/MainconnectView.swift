@@ -12,8 +12,6 @@ struct MainConnectView: View {
     @State private var gotoalarm = false
     @State private var gotosetting = false
 
-
-    
     var body: some View {
         VStack(spacing: 30) {
             

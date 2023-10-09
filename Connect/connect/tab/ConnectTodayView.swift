@@ -168,7 +168,8 @@ class ImageLoader : ObservableObject {
                             // Notification 객체 생성 후 사전 변환
                             var notificationObject = Notification(id: UUID().uuidString,
                                                                   fromUserId: fromUserId,
-                                                                  fromUserName: fromUserName)
+                                                                  fromUserName: fromUserName,
+                                                                  fromUserProfileImageUrl: nil)
 
                             var notificationDict:[String:Any] = [:]
                             notificationDict["from"]  = notificationObject.fromUserId
@@ -219,7 +220,9 @@ class ImageLoader : ObservableObject {
                            let fromUserName = document.data()["fromUserName"] as? String {
                             let newNotification = Notification(id: document.documentID,
                                                               fromUserId: fromUserId,
-                                                              fromUserName: fromUserName)
+                                                               fromUserName: fromUserName,
+                                                               fromUserProfileImageUrl: nil)
+
                             self.notifications.append(newNotification)
                         }
                     }

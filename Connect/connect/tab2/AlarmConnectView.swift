@@ -15,6 +15,7 @@
 import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
+import Kingfisher
 
 struct AlarmConnectView: View {
     
@@ -39,9 +40,17 @@ struct AlarmConnectView: View {
                     
                     HStack {
                         HStack {
-                            Image("profile")
-                                .resizable()
-                                .frame(width: 44, height: 44)
+                            if let profileImageUrl = notification.fromUserProfileImageUrl,
+                                 let url = URL(string: profileImageUrl) {
+                                    KFImage(url)
+                                        .resizable()
+                                        .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
+                                        .frame(width: 44, height: 44)
+                                } else {
+                                    Image("nonpro") // Replace this with your default image
+                                        .resizable()
+                                        .frame(width: 44, height: 44)
+                                }                            
                             
                             Text("\(notification.fromUserName)님이 회원님과 일상을 connect 하고 싶어 합니다.")
                                 .foregroundColor(Color.black)
