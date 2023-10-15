@@ -13,7 +13,7 @@ struct MainTabbedView: View {
     var body: some View {
         ZStack(alignment: .bottom){
             TabView(selection: $selectedTab) {
-                HomeView(imageUrl:"").environmentObject(ImageLoader())
+                HomeView(imageUrl:"")
                     .tag(0)
                 
                 Time_sellectView()

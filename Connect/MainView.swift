@@ -15,7 +15,7 @@ struct MainView: View {
         ZStack {
             VStack(spacing: 0) {
                 TabView (selection: $TabSelection) {
-                    HomeView(imageUrl:"").environmentObject(ImageLoader())
+                    HomeView(imageUrl:"")
                         .tag(1)
 
                     Time_sellectView()

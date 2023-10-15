@@ -74,7 +74,7 @@ struct FriendProfileView: View {
                     .frame(width: 195, height: 195)
                     .shadow(color: .black.opacity(0.25), radius: 3.5, x: 0, y: 0)
                 VStack(spacing: 10) {
-                    Text(user.fullid ?? "No Full ID")
+                    Text(user.userId ?? "No Full ID")
                         .font(.system(size: 45))
                         .fontWeight(.bold)
                     
@@ -187,7 +187,7 @@ struct FriendProfileView: View {
 
 struct FriendProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        FriendProfileView(user: User(email: "test@test.com", fullid:"TestFullID", hastags:"TestHashtags", uid:"TestUID", profileImageURL:"", uploadedImagesURLs:[], friends: []))
+        FriendProfileView(user: User(email: "test@test.com", userId:"TestFullID", hastags:"TestHashtags", uid:"TestUID", profileImageURL:"", uploadedImagesURLs:[], friends: []))
             .environmentObject(AuthViewModel())
             .environmentObject(UserDataModel())
     }

@@ -12,7 +12,7 @@ struct SigninView: View {
     @State private var text: String = "" // $text를 정의
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var authViewModel: AuthViewModel
-    @State var fullid: String = ""
+    @State var userId: String = ""
     @State var email: String = ""
     @State var password: String = ""
     @State var hastags: String = ""
@@ -53,11 +53,11 @@ struct SigninView: View {
                     VStack(spacing: 45) {
                         // 아이디
                         ZStack(alignment: .leading) {
-                            if fullid.isEmpty {
+                            if userId.isEmpty {
                                 Text("아이디")
                                     .foregroundColor(.white)  // Change color here
                             }
-                            TextField("", text: $fullid)
+                            TextField("", text: $userId)
                                 .foregroundColor(.white)  // Change color here
                                 .overlay( Rectangle()
                                     .foregroundColor(.clear)
@@ -152,7 +152,7 @@ struct SigninView: View {
                         }
                         Task {
                             do {
-                                try await authViewModel.registerUser(fullid: fullid, withEmail: email, password: password, hastags: hastags)
+                                try await authViewModel.registerUser(userId: userId, withEmail: email, password: password, hastags: hastags)
                                 isLoginSuccessful = true // <- 여기에 추가
                             } catch {
                                 retrySignUp = true

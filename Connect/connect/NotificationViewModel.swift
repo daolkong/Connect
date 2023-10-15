@@ -5,6 +5,8 @@
 //  Created by Daol on 10/4/23.
 //
 
+
+
 import Foundation
 import FirebaseAuth
 import FirebaseFirestore
@@ -12,9 +14,17 @@ import FirebaseFirestore
 class NotificationViewModel: ObservableObject {
     
     @Published var notifications = [Notification]()
+    @Published var latestPostImageUrl: String?
     
     func sendRequest(imageId: String) {
         let db = Firestore.firestore()
+        
+        guard let currentUser = Auth.auth().currentUser else {
+            print("No current user found")
+            return
+        }
+        
+        let fromUserId = currentUser.uid
         
         print("sendRequest called with imageId: \(imageId)") // 로그 메시지 추가
         
@@ -24,159 +34,209 @@ class NotificationViewModel: ObservableObject {
                 return
             }
             
-            guard let documentSnapshot = documentSnapshot else {
-                print("Failed to retrieve document")
-                return
-            }
-            
-            guard let data = documentSnapshot.data() else {
-                print("Document data is empty")
-                return
-            }
-            
-            guard let fromUserId = Auth.auth().currentUser?.uid else { // 버튼을 누른 사용자 ID
-                print("No current user ID found")
-                return
-            }
-            
-            // Fetch the name of the user who sent the request.
-            db.collection("users").document(fromUserId).getDocument { (userDocSnapshot, error) in
-                if let error = error {
-                    print("Error fetching user:", error.localizedDescription)
-                    return
-                }
-                
-                guard let userDocSnapshot = userDocSnapshot,
-                      let userData = userDocSnapshot.data(),
-                      let fromUserName = userData["fullid"] as? String,
-                      let profileImageUrl = userData["profileImageURL"] as? String else {
-                    print("Failed to load sender's info")
-                    return
-                }
-                
-                print("Loaded sender's info: fullid=\(fromUserName), profileImageUrl=\(profileImageUrl)")  // Log loaded sender's info.
-                
-                guard let toFullId = data["fullid"] as? String else {
-                    print("Failed to load recipient's fullid")
-                    return
-                }
-                
-                // Notification 객체 생성 후 사전 변환
-                var notificationObject = Notification(id: UUID().uuidString,
-                                                      fromUserId: fromUserId,
-                                                      fromUserName: fromUserName,
-                                                      fromUserProfileImageUrl: profileImageUrl)
-                
-                var notificationDict: [String: Any] = [:]
-                notificationDict["from"] = notificationObject.fromUserId
-                notificationDict["fromUserName"] = notificationObject.fromUserName
-                
-                // 'to' 필드에는 게시물 작성자의 fullid를 사용합니다.
-                notificationDict["to"]     = toFullId
-                
-                notificationDict["fromUserProfileImageUrl"] = notificationObject.fromUserProfileImageUrl
-                
-                db.collection("notifications").document(notificationObject.id).setData(notificationDict) {
-                    error in
+            guard
+                let documentSnapshot=documentSnapshot,
+                let data=documentSnapshot.data(),
+                var post=try? Firestore.Decoder().decode(Post.self,from:data)
                     
-                    if error != nil {
+            else {
+                print ("Failed to retrieve post or post data")
+                return
+                
+            }
+            
+            // Fetch user information for the notification.
+            db.collection("users").document(fromUserId).getDocument { (userDocSnapshot,error) in
+                if error != nil{
+                    print ("Error loading user document:",error?.localizedDescription ?? "")
+                    return
+                }
+                
+                guard let userData=userDocSnapshot?.data(),
+                        let currentUserId=userData["userId"] as? String else {
+                      print ("Failed to load userId for current user")
+                      return
+                  }
+                
+                let fromUserId = currentUserId
+                
+                guard
+                    var userData=userDocSnapshot?.data(),
+                    var userProfileImageURL=userData["profileImageURL"] as? String
                         
-                        print(error!.localizedDescription)
-                        
-                    } else {
-                        
-                        print("Notification sent successfully!")
-                        
+                else{
+                    print ("Failed to load profileImageUrl for current user")
+                    return
+                    
+                }
+                
+                self.loadLatestPostImage(fromUserId: fromUserId) { latestPostImageUrl in
+                    
+                    // If the user has no posts yet, do not proceed with creating a notification.
+                    if latestPostImageUrl == nil {
+                        print("User has no posts yet. Notification will not be created.")
+                        return
                     }
                     
+                    var newNotification =
+                    Notification(
+                        id : UUID().uuidString,
+                        fromUserId : fromUserId,
+                        toUserId : post.userId,
+                        fromUserProfileImageUrl :
+                            (userProfileImageURL.isEmpty ? nil :
+                                userProfileImageURL),
+                        latestPostImageUrl : latestPostImageUrl)
+                    
+                    self.notifications.append(newNotification)
+                    
+                    // Save notification to Firestore.
+                    do {
+                        _=try db.collection ("notifications").addDocument(from:newNotification)
+                        print ("Notification saved successfully!")
+                        
+                    } catch{
+                        print ("Error saving notification:",error.localizedDescription)
+                        
+                    }
                 }
             }
         }
     }
     
     
+    
     func loadNotifications() {
-        guard let currentUserId = Auth.auth().currentUser?.uid else {
-            print("No current user ID found") // Add log message here
+        
+        guard let currentUser=Auth.auth().currentUser else{
+            
+            print ("No current user found")
+            
             return
+            
         }
         
-        print("Current user ID: \(currentUserId)")  // Log the current user's ID
+        let db=Firestore.firestore()
         
-        // Fetch the user document from Firestore
-        let db = Firestore.firestore()
-        
-        db.collection("users").document(currentUserId).getDocument { (userDocSnapshot, error) in
-            if let error = error {
-                print("Error loading user document: \(error.localizedDescription)")
+        // Get the real userId instead of uid.
+        db.collection("users").document(currentUser.uid).getDocument { (userDocSnapshot,error) in
+            
+            if error != nil{
+                print ("Error loading user document:",error?.localizedDescription ?? "")
                 return
+                
+            }
+            guard
+                let userData=userDocSnapshot?.data(),
+                let currentUserName=userData["userId"] as?String else{
+                print ("Failed to load userId for current user")
+                return
+                
             }
             
-            guard let userData = userDocSnapshot?.data(),
-                  let currentUserFullId = userData["fullid"] as? String else {
-                print("Failed to load fullid for current user")
-                return
-            }
+            print ("Current userId:\(currentUserName)")
             
-            print("Loaded fullid for current user: \(currentUserFullId)")
-            
-            db.collection("notifications").whereField("to", isEqualTo: currentUserFullId).getDocuments { (querySnapshot, error) in
-                if let error = error {
-                    print("Error loading notifications: \(error.localizedDescription)")
+            db.collection("notifications").whereField("to", isEqualTo :currentUserName).getDocuments { (querySnapshot,error) in
+                
+                if error != nil{
+                    print ("Error loading notifications:",error?.localizedDescription ?? "")
                     return
+                    
                 }
                 
-                guard let querySnapshot = querySnapshot else {
-                    print("No QuerySnapshot returned from listener")
+                guard
+                    let querySnapshot=querySnapshot else{
+                    print ("No QuerySnapshot returned from listener")
                     return
+                    
                 }
+                
+                print ("\((querySnapshot.documents.count)) notifications loaded for user \(currentUserName)")
                 
                 self.notifications.removeAll()
                 
-                var addedUserIds: [String] = []  // Keep track of added userIds
-                
+                var loadedNotifications = [Notification]()
+
                 for document in querySnapshot.documents {
-                    print(document.data())  // Print all fetched documents data
-                    
-                    if document.exists,
-                       let fromUserId = document.data()["from"] as? String,
-                       let fromUserName = document.data()["fromUserName"] as? String,
-                       let fromUserProfileImageUrl = document.data()["fromUserProfileImageUrl"] as? String {  // Fetch the profile image url
-                        
-                        print("Loaded notification from user ID: \(fromUserId)")  // Log each loaded notification
-                        
-                        // Check if this userId has already been added.
-                        if !addedUserIds.contains(fromUserId) {
-                            self.notifications.append(Notification(id: document.documentID,
-                                                                   fromUserId: fromUserId,
-                                                                   fromUserName: fromUserName,
-                                                                   fromUserProfileImageUrl: fromUserProfileImageUrl))  // Include the profile image url here
-                            
-                            addedUserIds.append(fromUserId)
-                            
-                            print("\(document.documentID) notification successfully loaded and appended to notifications array")  // Log successful operation
-                            
-                        } else {
-                            print("\(document.documentID) notification is duplicate and not appended to notifications array")  // Log duplicate detection
-                            
-                        }
-                        
-                    } else {
-                        print("Failed to load notification or missing fields in document data for id \(document.documentID): \(document.data())")  // Log failed notifications with more details
-                        
+                    let data = document.data()
+                    guard var newNotification=try? Firestore.Decoder().decode(Notification.self,from:data) else{
+                        print ("Failed to load data from notification")
+                        continue
                     }
                     
+                    loadedNotifications.append(newNotification)
                 }
                 
+                self.notifications = Array(Set(loadedNotifications))
+
                 if self.notifications.isEmpty{
                     print ("No matching notifications found for current user")
-                }else{
+                    
+                } else {
                     for item in self.notifications{
-                        print ("Notification object - Id:\(item.id), From User Id:\(item.fromUserId), From User Name:\(item.fromUserName)")
+                        print ("Notification object - Id:\(item.id), From User Id:\(item.fromUserId)")
                     }
                 }
-                
             }
         }
+    }
+    
+    
+    func addPost(imageUrl: String) {
+        guard let currentUser = Auth.auth().currentUser else {
+            print("No current user found")
+            return
+        }
+        
+        let userId = currentUser.uid
+        
+        let db = Firestore.firestore()
+        
+        let post = Post(id: nil, userId: userId, imageUrl: imageUrl, timestamp: Timestamp(date: Date()))
+        
+        do {
+            _ = try db.collection("posts").addDocument(from: post)
+            print("Post saved successfully!")
+            
+        } catch {
+            print("Error saving post:", error.localizedDescription)
+        }
+    }
+    
+    private func loadLatestPostImage(fromUserId: String, completion: @escaping (String?) -> Void) {
+        let db = Firestore.firestore()
+        
+        db.collection("posts")
+            .whereField("userId", isEqualTo: fromUserId)
+            .order(by: "timestamp", descending: true)
+            .limit(to: 1)
+            .getDocuments { (querySnapshot, error) in
+                if let error = error {
+                    print("Error getting documents:", error.localizedDescription)
+                    return
+                }
+                
+                guard let document = querySnapshot?.documents.first else {
+                    print("No posts found for user \(fromUserId)")
+                    
+                    // Return a default image URL or an empty string.
+                    completion("")
+                    
+                    return
+                }
+                
+                guard let postImageUrl = document.data()["imageUrl"] as? String else {
+                    print("Failed to load imageUrl from post data")
+                    
+                    // Return a default image URL or an empty string.
+                    completion("")
+                    
+                    return
+                }
+                
+                print("Loaded image URL:", postImageUrl)  // Print the loaded image URL
+                
+                completion(postImageUrl)
+            }
     }
 }

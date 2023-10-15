@@ -1,9 +1,4 @@
-//
-//  AllowConnectView.swift
-//  Connect
-//
-//  Created by Daol on 2023/09/16.
-//
+
 
 //
 //  AllowConnectView.swift
@@ -18,9 +13,8 @@ import FirebaseFirestore
 import Kingfisher
 
 struct AlarmConnectView: View {
-    
     @EnvironmentObject var notificationViewModel : NotificationViewModel
-    @State private var isButtonPressed = false
+    @EnvironmentObject var sharedViewModel : SharedViewModel  // 추가된 부분
     
     var body: some View {
         ScrollView {
@@ -40,49 +34,49 @@ struct AlarmConnectView: View {
                     
                     HStack {
                         HStack {
-                            if let profileImageUrl = notification.fromUserProfileImageUrl,
-                                 let url = URL(string: profileImageUrl) {
-                                    KFImage(url)
-                                        .resizable()
-                                        .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
-                                        .frame(width: 44, height: 44)
-                                } else {
-                                    Image("nonpro") // Replace this with your default image
-                                        .resizable()
-                                        .frame(width: 44, height: 44)
-                                }                            
+                            if let profileImageUrl = URL(string: notification.fromUserProfileImageUrl ?? "") {
+                                KFImage(profileImageUrl)
+                                    .resizable()
+                                    .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
+                                    .frame(width: 44, height: 44)
+                            } else {
+                                Image("nonpro") // Replace this with your default image
+                                    .resizable()
+                                    .frame(width: 44, height: 44)
+                            }
                             
-                            Text("\(notification.fromUserName)님이 회원님과 일상을 connect 하고 싶어 합니다.")
-                                .foregroundColor(Color.black)
-                                .font(.system(size: 15))
-                                .fontWeight(.medium)
+                            VStack(alignment:.leading){
+                                Text("\(notification.fromUserId)님이 회원님과 일상을 connect 하고 싶어 합니다.")
+                                    .foregroundColor(Color.black)
+                                    .font(.system(size: 15))
+                                    .fontWeight(.medium)
+                            }
                         }
                         .frame(width: 300)
-                        
                         .padding(.trailing,5)
                         
                         Button(action: {
-                            self.isButtonPressed.toggle()
+                            self.sharedViewModel.userAFullID = notification.fromUserId
                         }) {
                             ZStack {
-                                Rectangle()
-                                    .foregroundColor(Color(red: 0.79, green: 0.78, blue: 0.78))
-                                    .frame(width: 47, height: 45)
-                                    .cornerRadius(6)
-                                
-                                if isButtonPressed {
-                                    Image("ccheck")
+                                if let imageUrlString = notification.latestPostImageUrl, let url = URL(string: imageUrlString) {
+                                    KFImage(url)
                                         .resizable()
-                                        .frame(width: 29, height: 29)
+                                        .frame(width: 47, height: 45)
+                                        .cornerRadius(6)
+                                    
                                 } else {
+                                    Rectangle()
+                                        .foregroundColor(Color(red: 0.79, green: 0.78, blue: 0.78))
+                                        .frame(width: 47, height: 45)
+                                        .cornerRadius(6)
+                                    
                                     Image("whitechain")
                                         .resizable()
                                         .frame(width: 29, height: 29)
                                 }
                             }
                         }
-                        
-                        
                     }
                     .padding(.trailing,20)
                     
@@ -90,13 +84,13 @@ struct AlarmConnectView: View {
             }
         }
         .onAppear(perform: notificationViewModel.loadNotifications)
-        
     }
 }
 
 
 struct AlarmConnectView_Previews: PreviewProvider {
     static var previews: some View {
-        AlarmConnectView().environmentObject(ImageLoader())
+        AlarmConnectView()
+            .environmentObject(SharedViewModel()) // sharedViewModel 인스턴스 생성
     }
 }

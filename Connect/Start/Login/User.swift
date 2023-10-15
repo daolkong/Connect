@@ -9,7 +9,7 @@ import Foundation
 
 struct User: Codable, Identifiable, Hashable {
     let email: String
-    let fullid: String
+    let userId: String   
     let hastags: String
     let uid: String
     var profileImageURL: String?  // Add this line.
@@ -22,7 +22,7 @@ struct User: Codable, Identifiable, Hashable {
 
 extension User {
     static let sample: User = User(
-        email: "", fullid: "", hastags: "", uid: "", friends: [])
+        email: "", userId: "", hastags: "", uid: "", friends: [])
 }
 
 

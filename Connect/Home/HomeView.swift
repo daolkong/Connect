@@ -94,12 +94,12 @@ struct HomeView: View {
             .onAppear(perform:{
                 fetchImages()
                 
-                guard let fullId = authViewModel.user?.fullid else {
+                guard let userId = authViewModel.user?.userId else {
                     self.isCameraPresented = true
                     return
                 }
                 
-                fetchLatestPostTimestamp(forUser : fullId) { date in
+                fetchLatestPostTimestamp(forUser : userId) { date in
                     if let lastCaptureDate = date {
                         DispatchQueue.main.async {
                             let timeInterval = Date().timeIntervalSince(lastCaptureDate)
@@ -119,13 +119,13 @@ struct HomeView: View {
                     saveImageCaptureDate()
                 }
                 
-                guard let fullId = authViewModel.user?.fullid else {
+                guard let userId = authViewModel.user?.userId else {
                     // Instead of 'return', set isCameraPresented to true and exit.
                     self.isCameraPresented = true
                     return
                 }
                 
-                fetchLatestPostTimestamp(forUser : fullId) { date in
+                fetchLatestPostTimestamp(forUser : userId) { date in
                     if let lastCaptureDate = date {
                         DispatchQueue.main.async {
                             self.isCameraPresented =
@@ -160,12 +160,12 @@ struct HomeView: View {
             do {
                 try await self.authViewModel.fetchUser()
                 
-                guard let fullId = self.authViewModel.user?.fullid else {
+                guard let userId = authViewModel.user?.userId else { // Change from 'fullId' to 'userId'
                     print("No Full ID found")
                     return
                 }
                 
-                let timestamp = Date() // 현재 시간을 타임스탬프로 사용
+                let timestamp = Timestamp(date: Date()) // 현재 시간을 타임스탬프로 사용, 수정된 부분입니다.
                 let imageName = UUID().uuidString
                 
                 if imageName.isEmpty {
@@ -196,7 +196,7 @@ struct HomeView: View {
                         }
                         
                         // Firestore에 업로드할 데이터 구성 및 Post 객체 생성 후 사전 변환
-                        let postObject = Post(id: imageName, fullid: fullId , imageUrl:downloadURL.absoluteString , timestamp :timestamp)
+                        let postObject = Post(id: imageName, userId: userId , imageUrl:downloadURL.absoluteString , timestamp :timestamp)
                         
                         // Post 객체를 사전으로 변환합니다.
                         let postDict = postObject.asDictionary()
@@ -213,7 +213,7 @@ struct HomeView: View {
                                 
                                 isUploaded = true   // <- 이곳으로 옮김.
                                 
-                                fetchLatestPostTimestamp(forUser : fullId) { date in  // Fetch the latest timestamp after upload.
+                                fetchLatestPostTimestamp(forUser : userId) { date in  // Fetch the latest timestamp after upload.
                                     if let lastCaptureDate = date {
                                         DispatchQueue.main.async {
                                             self.isCameraPresented =
@@ -268,33 +268,31 @@ struct HomeView: View {
                     
                     self.posts = querySnapshot!.documents.compactMap { document in
                         if document.exists {
-                            if let fullid = document.data()["fullid"] as? String,
-                               let urlStrigValueOfURLFieldFromFirestoreDatabaseAndConvertItIntoURLObject =
-                                document.data()["imageUrl"] as? String,
-                               let timestampData =
-                                document.data()["timestamp"] as? Timestamp {
-                                
-                                return Post(id: document.documentID, fullid: fullid, imageUrl: urlStrigValueOfURLFieldFromFirestoreDatabaseAndConvertItIntoURLObject, timestamp: timestampData.dateValue())
+                            if let userId = document.data()["userId"] as? String,
+                               let imageUrl = document.data()["imageUrl"] as? String,
+                               let timestampData = document.data()["timestamp"] as? Timestamp {
+
+                                return Post(id: document.documentID, userId: userId, imageUrl: imageUrl, timestamp: timestampData)
                             } else {
                                 print("Failed to create a Post object from the data of Document ID \(document.documentID). Check whether all necessary fields are present and in correct format.")
                             }
                         } else {
                             print("Document does not exist for Document ID \(document.documentID)")
                         }
-                        
+
                         return nil
                     }
-                    
+
                 }
             }
         }
     }
     
-    private func fetchLatestPostTimestamp(forUser fullId: String, completion: @escaping (Date?) -> Void) {
+    private func fetchLatestPostTimestamp(forUser userId: String, completion: @escaping (Date?) -> Void) {
         let db = Firestore.firestore()
-        
+
         db.collection("posts")
-            .whereField("fullid", isEqualTo: fullId)
+            .whereField("userId", isEqualTo: userId)
             .order(by: "timestamp", descending: true)
             .limit(to: 1)
             .getDocuments { (querySnapshot, err) in
@@ -303,7 +301,7 @@ struct HomeView: View {
                     completion(nil)
                     return
                 } else if querySnapshot?.documents.isEmpty ?? true {
-                    print("No documents found for the user.")
+                    print("No posts found for user \(userId).")  // Print the user ID as well.
                     completion(nil)
                     return
                 } else {
@@ -314,7 +312,9 @@ struct HomeView: View {
                         return
                     }
                     
-                    print("Failed to get timestamp from document.")
+                    // If 'timestamp' field is not found or not in expected format,
+                    // print an error message and complete with nil.
+                    print("'timestamp' field is missing or not in expected format for user \(userId).")  // Print the user ID as well.
                     completion(nil)
                 }
             }
@@ -334,7 +334,7 @@ struct CameraView: UIViewControllerRepresentable {
     
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
-        picker.sourceType = .photoLibrary // Use the photo library interface
+        picker.sourceType = .camera // Use the photo library interface
         picker.delegate = context.coordinator
         
         return picker

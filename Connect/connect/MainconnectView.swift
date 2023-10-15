@@ -69,7 +69,7 @@ struct MainConnectView: View {
                 
             }
         }
-        .padding(.top,235)
+        .padding(.top,270)
     }
 }
 

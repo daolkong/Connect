@@ -50,7 +50,7 @@ final class AuthViewModel: ObservableObject {
             authStateDidChangeListenerHandle = Auth.auth().addStateDidChangeListener { (auth, firebaseUser) in
                 if let firebaseUser = firebaseUser {
                     // Here we create a new user with the info from the FirebaseAuth user
-                    self.currentUser = User(email: firebaseUser.email ?? "", fullid:"", hastags:"", uid:firebaseUser.uid, friends: [])
+                    self.currentUser = User(email: firebaseUser.email ?? "", userId:"", hastags:"", uid:firebaseUser.uid, friends: [])
 
                     // Fetch user information immediately after setting currentUser.
                     Task {
@@ -77,10 +77,10 @@ final class AuthViewModel: ObservableObject {
     
     
     // 새로운 사용자를 등록하는 함수입니다. 입력받은 정보와 함께 Firebase Authentication에 요청을 보냅니다.
-    func registerUser(fullid: String, withEmail email: String, password: String, hastags: String)
+    func registerUser(userId: String, withEmail email: String, password: String, hastags: String)
     async throws {
         let result = try await Auth.auth().createUser(withEmail: email, password: password)
-        let user = User(email: email, fullid: fullid, hastags: hastags, uid: result.user.uid, friends: [])
+        let user = User(email: email, userId: userId, hastags: hastags, uid: result.user.uid, friends: [])
         try await storeUser(with:user)
         loginState = .loggedIn  // 성공적으로 등록하면 로그인 상태로 전환합니다.
     }
@@ -131,60 +131,61 @@ final class AuthViewModel: ObservableObject {
     }
 
     // 이미지를 저장하고 이미지와 관련된 정보를 Firestore에 함께 저장
-    func saveImage(_ image: UIImage, fullid: String, captureTime: Date) {
+    func saveImage(_ image: UIImage, userId: String, captureTime: Date) {
         let storage = Storage.storage()
         let storageRef = storage.reference()
-        
+
         // Convert the image to Data
         guard let imageData = image.jpegData(compressionQuality: 0.4) else {
             print("Could not convert image to Data")
             return
         }
-        
+
         // Create a unique identifier for the image
         let imageName = UUID().uuidString
-        
+
         // Create a reference to the file you want to upload
         let imagesRef = storageRef.child("images/\(imageName).jpg")
-        
+
         // Upload the file to the path "images/[imageName].jpg"
         imagesRef.putData(imageData, metadata: nil) { (metadata, error) in
             guard metadata != nil else {
                 print("Error uploading image")
                 return
             }
-            
-            // Metadata contains file metadata such as size, content-type.
+
             imagesRef.downloadURL { (url, error) in
                 guard let downloadURL = url else {
                     print("Error getting download URL")
                     return
                 }
-                
-                // Create a new post object with imageURL set as downloadURL.absoluteString,
-                var post = Post(id: "", fullid: fullid,
+
+                var post = Post(userId: userId,
                                 imageUrl: downloadURL.absoluteString,
-                                timestamp: captureTime)
-                
+                                timestamp: Timestamp(date: captureTime))
+
                 // Get a reference to Firestore Database
                 let db = Firestore.firestore()
-                
-                db.collection("posts").addDocument(data: post.asDictionary()) { err in
-                    if let err = err {
-                        print("Error writing document \(err)")
-                    } else {
-                        print("Document successfully written!")
+
+                db.collection("posts").addDocument(data:
+                    post.asDictionary()) { err in
+
+                        if let err = err {
+                            print("Error writing document \(err)")
+                        } else {
+                            print("Document successfully written!")
+                        }
                     }
-                }
             }
-        }
+            
+         }
     }
     func saveAndStoreImage(_ image: UIImage) async throws -> String {
         // Save the image and get its URL.
         let urlStr = try await saveProfileImage(image)
         
         // Save the image to Firebase Storage and store its info in Firestore.
-        saveImage(image, fullid: uid, captureTime: Date())
+        saveImage(image, userId: uid, captureTime: Date())
         
         // Update the user object in memory.
         if user?.uploadedImagesURLs == nil {

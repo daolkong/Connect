@@ -14,37 +14,51 @@ struct PostRow: View {
     @EnvironmentObject var notificationViewModel : NotificationViewModel
     @State private var profileImageURL: String? = nil
     
-    var postData: Post
+
+    let postData: Post  // 이 부분에 추가
        let dateFormatter: DateFormatter = {
            let formatter = DateFormatter()
-           formatter.dateFormat = "hh:mm a"
+           formatter.dateFormat = "hh:mm "
            return formatter
        }()
     
+    init(postData: Post) {
+        self.postData = postData
+    }
+
     func loadProfileImageData(_ uid: String) {
         let db = Firestore.firestore()
-        
-        db.collection("users").whereField("fullid", isEqualTo: uid).getDocuments { (querySnapshot, error) in
+
+        db.collection("users").whereField("userId", isEqualTo: uid).getDocuments { (querySnapshot, error) in
             if let error = error {
                 print("Error fetching user document:", error.localizedDescription)
                 return
             }
-            
+
             guard let document = querySnapshot?.documents.first else {
-                print("User document does not exist for fullid \(uid)")
+                print("No documents found for user \(uid)")
+                return
+            }
+
+            let userData = document.data()
+            
+            if userData.isEmpty {
+                print("User document data is nil for user \(uid)")
                 return
             }
             
-            if let profileUrl = document.get("profileImageURL") as? String {
-                DispatchQueue.main.async{
-                    self.profileImageURL = profileUrl
-                }
-            } else {
-                print("No profile image URL found for user \(uid)")
+            guard let profileImageUrl = userData["profileImageURL"] as? String else {
+                print("No profile image URL found for user \(uid), full data: \(userData)")
+                return
+            }
+
+            DispatchQueue.main.async {
+                self.profileImageURL = profileImageUrl
             }
         }
     }
     
+
     var body: some View {
         
         VStack(spacing: -19) {
@@ -60,25 +74,19 @@ struct PostRow: View {
                             .resizable()
                             .frame(width :44,height :44)
                             .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
-                            .onAppear(perform:{
-                                loadProfileImageData(postData.fullid)   // Load the image when the view appears.
-                            })
                     } else {
                         Image("nonpro")
                             .resizable()
                             .frame(width :44,height :44)
-                            .onAppear(perform:{
-                                loadProfileImageData(postData.fullid)
-                            })
                     }
                     
                     VStack(alignment: .leading) {
                         
-                        Text(postData.fullid)   // Use the fullId of the post directly
+                        Text(postData.userId)   // Use the fullId of the post directly
                             .font(.system(size: 20))
                             .fontWeight(.semibold)
                         
-                        Text(dateFormatter.string(from :postData.timestamp))
+                        Text("\(postData.timestamp.dateValue())") // Use the timestamp of the post directly.
                             .font(.system(size :12))
                             .fontWeight(.regular)
                     }
@@ -88,7 +96,6 @@ struct PostRow: View {
             }
             
             .padding()
-            
             
             // 사진 넘기는 영역
             Group {
@@ -104,7 +111,6 @@ struct PostRow: View {
                         .foregroundColor(Color.black)
                 }
             }
-            
             
             // 공감과 커넥트 칸
             HStack(spacing :36){
@@ -125,7 +131,11 @@ struct PostRow: View {
                 }
                 
                 Button(action:{
-                    notificationViewModel.sendRequest(imageId :postData.id)
+                    if let postId = postData.id {
+                           notificationViewModel.sendRequest(imageId: postId)
+                       } else {
+                           print("Post ID is nil")
+                       }
                 }){
                     HStack {
                         Image("Connect button")
@@ -143,7 +153,7 @@ struct PostRow: View {
                 
             }
             .onAppear(perform:{
-                       loadProfileImageData(postData.fullid)
+                loadProfileImageData(postData.userId)
                    })
             
             .padding(.top ,30)
@@ -155,9 +165,21 @@ struct PostRow: View {
 }
 
 
+struct TempPost: Identifiable {
+    var id: String?
+    let userId: String
+    let imageUrl: String
+    let timestamp: Date
+}
+
 struct PostRow_Previews: PreviewProvider {
     static var previews: some View {
-        let samplePost = Post(id: "1", fullid: "TestUser", imageUrl:"https://example.com/image.jpg", timestamp: Date())
-        PostRow(postData: samplePost)
+
+        let samplePost = TempPost(id: "1", userId: "TestUser", imageUrl:"https://example.com/image.jpg", timestamp: Date())
+
+        // Convert the TempPost object to a Post object.
+        let post = Post(id: samplePost.id, userId: samplePost.userId, imageUrl: samplePost.imageUrl, timestamp: Timestamp(date: samplePost.timestamp))
+
+        PostRow(postData: post)
     }
 }

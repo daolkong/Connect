@@ -47,6 +47,7 @@
 		3356BCD52AA3220300B1EF01 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3356BCD42AA3220300B1EF01 /* User.swift */; };
 		3356BCD82AA36F4E00B1EF01 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 3356BCD72AA36F4E00B1EF01 /* FirebaseAuth */; };
 		3356BCDC2AA4164000B1EF01 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3356BCDB2AA4164000B1EF01 /* FirebaseFirestoreSwift */; };
+		335985B92AD5238E004ACC17 /* SharedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335985B82AD5238E004ACC17 /* SharedViewModel.swift */; };
 		338019432AD15E430030EF86 /* PHPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338019422AD15E430030EF86 /* PHPickerView.swift */; };
 		338019462AD255D60030EF86 /* KingfisherWebP in Frameworks */ = {isa = PBXBuildFile; productRef = 338019452AD255D60030EF86 /* KingfisherWebP */; };
 		338019482AD256380030EF86 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 338019472AD256380030EF86 /* Kingfisher */; };
@@ -98,6 +99,7 @@
 		3356BCCF2AA31FA800B1EF01 /* AuthViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthViewModel.swift; sourceTree = "<group>"; };
 		3356BCD22AA321E100B1EF01 /* LoginState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginState.swift; sourceTree = "<group>"; };
 		3356BCD42AA3220300B1EF01 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		335985B82AD5238E004ACC17 /* SharedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedViewModel.swift; sourceTree = "<group>"; };
 		338019422AD15E430030EF86 /* PHPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHPickerView.swift; sourceTree = "<group>"; };
 		338617832AA45C60008EF610 /* FirstStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstStartView.swift; sourceTree = "<group>"; };
 		338617852AA564A6008EF610 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 			children = (
 				33971C382AC1324D00418442 /* Notification.swift */,
 				33391FF02ACD5126004CAB15 /* NotificationViewModel.swift */,
+				335985B82AD5238E004ACC17 /* SharedViewModel.swift */,
 				338C28212AB00ADB004587CD /* MainConnectView.swift */,
 				3356BCA62AA2C11400B1EF01 /* ConnectAllowView.swift */,
 				338C281C2AAFFE8F004587CD /* tab */,
@@ -410,6 +413,7 @@
 				33A0D4332AAAA99D00FEEDBC /* Time_sellectView.swift in Sources */,
 				3356BC932AA2C08800B1EF01 /* LoginView.swift in Sources */,
 				3356BC952AA2C09300B1EF01 /* SigninView.swift in Sources */,
+				335985B92AD5238E004ACC17 /* SharedViewModel.swift in Sources */,
 				3356BC9D2AA2C0D400B1EF01 /* HomeGroupView.swift in Sources */,
 				3356BC792AA2BEF500B1EF01 /* ConnectApp.swift in Sources */,
 				3356BC9F2AA2C0DF00B1EF01 /* MypageView.swift in Sources */,

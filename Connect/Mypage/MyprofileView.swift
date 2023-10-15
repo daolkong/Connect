@@ -76,7 +76,7 @@ struct MyprofileView: View {
                     
                     // 사용자 아이디
                     VStack(spacing: 10) {
-                        Text(authViewModel.user?.fullid ?? "Loading...")
+                        Text(authViewModel.user?.userId ?? "Loading...")
                             .font(.system(size: 45))
                             .fontWeight(.bold)
                         
@@ -187,18 +187,27 @@ struct MyprofileView: View {
     }
     
     func loadProfileImageData() {
-        Task {
-            do {
-                let docRef = Firestore.firestore().collection("users").document(uid)
-                let docSnap = try await docRef.getDocument()
-                
-                if let profileUrl = docSnap.get("profileImageURL") as? String {
-                    DispatchQueue.main.async {
-                        self.profileImageURL = profileUrl
-                    }
-                }
-            } catch {
-                print(error.localizedDescription)
+        let db = Firestore.firestore()
+
+        guard let currentUserId = Auth.auth().currentUser?.uid else {
+            print("No current user ID found")
+            return
+        }
+
+        db.collection("users").document(currentUserId).getDocument { (userDocSnapshot, error) in
+            if let error = error {
+                print("Error fetching user document:", error.localizedDescription)
+                return
+            }
+            
+            guard let userData = userDocSnapshot?.data(),
+                  let profileImageUrl = userData["profileImageURL"] as? String else {
+                print("No profile image URL found for user \(currentUserId)")
+                return
+            }
+            
+            DispatchQueue.main.async{
+                self.profileImageURL = profileImageUrl
             }
         }
     }

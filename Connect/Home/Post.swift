@@ -5,17 +5,21 @@
 //  Created by Daol on 2023/09/18.
 //
 
+//
+//
+
 import Foundation
+import FirebaseFirestoreSwift
+import FirebaseFirestore
 
 struct Post: Codable, Identifiable {
-    let id: String
-    let fullid: String
+    var id: String?
+    let userId: String
     let imageUrl: String
-    let timestamp: Date
+    let timestamp: Timestamp  // Change from Date to Timestamp
     
     enum CodingKeys: String, CodingKey {
-        case id  // Remove the raw value.
-        case fullid
+        case userId
         case imageUrl
         case timestamp
     }
@@ -24,10 +28,11 @@ struct Post: Codable, Identifiable {
 extension Post {
     func asDictionary() -> [String: Any] {
         return [
-            "fullid": fullid,
+            "userId": userId,
             "imageUrl": imageUrl,
-            "timestamp": timestamp
+            "timestamp": timestamp as Any
         ]
     }
 }
+
 
