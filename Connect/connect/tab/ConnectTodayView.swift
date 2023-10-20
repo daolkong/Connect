@@ -12,254 +12,366 @@ import FirebaseAuth
 import Kingfisher
 
 struct ConnectTodayView: View {
-    @State private var tabSelection = 1
-    @State private var postsA: [Post] = []  // Posts from user A
-    @State private var postsB: [Post] = []  // Posts from user B
     @EnvironmentObject var sharedViewModel : SharedViewModel  // 추가된 부분
+    @EnvironmentObject var notificationViewModel : NotificationViewModel
     
     var body: some View {
         VStack(spacing: 35) {
             ScrollView {
-                VStack(spacing: 90) {
+                VStack(spacing: 70) {
                     
                     //첫번째 게시물 묶음
-                    HStack {
+                    HStack(spacing:20) {
                         VStack(spacing: 13) {
-                            HStack(spacing: 17) {
-                                VStack {
-                                    ZStack {
-                                        TabView(selection: $tabSelection) {
-                                            ForEach(postsA, id:\.id) { post in
-                                                let url = URL(string: post.imageUrl)
-                                                KFImage(url)
-                                                    .setProcessor(RoundCornerImageProcessor(cornerRadius: 20)) // For rounded corners
+                            if sharedViewModel.tabSelection1 == 0 {
+                                Image("non")
+                                      .resizable()
+                                      .frame(width: 159, height: 159)
+                                
+                                Text("서로의 추억을 만들어보세요!")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color.black)
+                                    .frame(width: 100)
+                                
+                            } else {
+                                HStack(spacing: 17) {
+                                    VStack {
+                                        ZStack {
+                                            TabView(selection: $sharedViewModel.tabSelection1) {
+                                                ForEach((sharedViewModel.postsA1 + sharedViewModel.postsB1), id:\.tag) { post in
+                                                    let url = URL(string: post.imageUrl)
+                                                    KFImage(url)
+                                                        .resizable()
+                                                        .frame(width: 159, height: 159)
+                                                        .cornerRadius(10)
+                                                        .aspectRatio(contentMode: .fill)
+                                                        .tag(post.tag)
+                                                }
+                                            }
+                                            .frame(width: 159, height: 159)
+                                            .tabViewStyle(PageTabViewStyle())
+                                            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .never))
+                                            
+                                            if let profileImageUrlString = sharedViewModel.fromUserProfileImageUrls[0],
+                                               let profileImageUrl = URL(string: profileImageUrlString) {
+                                                KFImage(profileImageUrl)
                                                     .resizable()
-                                                    .frame(width: 159, height: 159)
-                                                    .cornerRadius(10)
-                                                    .tag(1)
+                                                    .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
+                                                    .frame(width: 47, height: 47)
+                                                    .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
+                                                    .padding(.leading,50)
+                                                    .padding(.top,40)
+                                            } else {
+                                                Image("nonpro")
+                                                    .resizable()
+                                                    .frame(width: 47, height: 47)
+                                                    .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
+                                                    .padding(.leading,50)
+                                                    .padding(.top,40)
                                             }
                                             
-                                            ForEach(postsB, id:\.id) { post in
-                                                let url = URL(string: post.imageUrl)
-                                                KFImage(url)
+                                            if let currentUserProfileImageUrlString = sharedViewModel.currentUserProfileImageUrl,
+                                               let currentUserProfileImageUrl = URL(string: currentUserProfileImageUrlString) {
+                                                KFImage(currentUserProfileImageUrl)
                                                     .resizable()
-                                                    .frame(width: 159, height: 159)
-                                                    .cornerRadius(10)
-                                                    .tag(2)
+                                                    .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
+                                                    .frame(width: 47, height: 47)
+                                                    .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
+                                                    .padding(.leading,90)
+                                                    .padding(.top,80)
+                                            } else {
+                                                Image("nonpro1") // Replace this with your default image
+                                                    .resizable()
+                                                    .frame(width: 47, height: 47)
+                                                    .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
+                                                    .padding(.leading,90)
+                                                    .padding(.top,80)
                                             }
+                                            
                                         }
-                                        .tabViewStyle(PageTabViewStyle())
-                                        .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .never))
-                                        
-                                        Image("profile")
-                                            .resizable()
-                                            .frame(width: 47, height: 47)
-                                            .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
-                                            .padding(.leading,50)
-                                            .padding(.top,50)
-                                        
-                                        Image("Mask group")
-                                            .resizable()
-                                            .frame(width: 47, height: 47)
-                                            .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
-                                            .padding(.leading,90)
-                                            .padding(.top,90)
                                     }
                                 }
+                                Text("엘범명을 정해주세요")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(Color(red: 0.33, green: 0.53, blue: 0.84))
                             }
-                            Text("엘범명을 정해주세요")
-                                .font(.system(size: 17))
-                                .fontWeight(.semibold)
-                                .foregroundColor(Color(red: 0.33, green: 0.53, blue: 0.84))
                         }
                         VStack(spacing: 13) {
-                            HStack(spacing: 17) {
-                                VStack {
-                                    ZStack {
-                                        TabView(selection: $tabSelection) {
-                                            ForEach(postsA, id:\.id) { post in
-                                                let url = URL(string: post.imageUrl)
-                                                KFImage(url)
+                            if sharedViewModel.tabSelection1 == 0 {
+                                Image("non")
+                                      .resizable()
+                                      .frame(width: 159, height: 159)
+                                
+                                Text("서로의 추억을 만들어보세요!")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color.black)
+                                    .frame(width: 100)
+                                
+                            } else {
+                                HStack(spacing: 17) {
+                                    VStack {
+                                        ZStack {
+                                            TabView(selection: $sharedViewModel.tabSelection2) {
+                                                ForEach((sharedViewModel.postsA2 + sharedViewModel.postsB2), id:\.tag) { post in
+                                                    let url = URL(string: post.imageUrl)
+                                                    KFImage(url)
+                                                        .resizable()
+                                                        .frame(width: 159, height: 159)
+                                                        .cornerRadius(10)
+                                                        .aspectRatio(contentMode: .fill)
+                                                        .tag(post.tag)
+                                                }
+                                            }
+                                            .frame(width: 159, height: 159)
+                                            .tabViewStyle(PageTabViewStyle())
+                                            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .never))
+                                            
+                                            if let profileImageUrlString = sharedViewModel.fromUserProfileImageUrls[1],
+                                               let profileImageUrl = URL(string: profileImageUrlString) {
+                                                KFImage(profileImageUrl)
                                                     .resizable()
-                                                    .frame(width: 159, height: 159)
-                                                    .cornerRadius(10)
-                                                    .tag(1)
+                                                    .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
+                                                    .frame(width: 47, height: 47)
+                                                    .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
+                                                    .padding(.leading,50)
+                                                    .padding(.top,40)
+                                            } else {
+                                                Image("nonpro")
+                                                    .resizable()
+                                                    .frame(width: 47, height: 47)
+                                                    .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
+                                                    .padding(.leading,50)
+                                                    .padding(.top,40)
                                             }
                                             
-                                            ForEach(postsB, id:\.id) { post in
-                                                let url = URL(string: post.imageUrl)
-                                                KFImage(url)
+                                            if let currentUserProfileImageUrlString = sharedViewModel.currentUserProfileImageUrl,
+                                               let currentUserProfileImageUrl = URL(string: currentUserProfileImageUrlString) {
+                                                KFImage(currentUserProfileImageUrl)
                                                     .resizable()
-                                                    .frame(width: 159, height: 159)
-                                                    .cornerRadius(10)
-                                                    .tag(2)
+                                                    .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
+                                                    .frame(width: 47, height: 47)
+                                                    .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
+                                                    .padding(.leading,90)
+                                                    .padding(.top,80)
+                                            } else {
+                                                Image("nonpro1") // Replace this with your default image
+                                                    .resizable()
+                                                    .frame(width: 47, height: 47)
+                                                    .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
+                                                    .padding(.leading,90)
+                                                    .padding(.top,80)
                                             }
+                                            
                                         }
-                                        .tabViewStyle(PageTabViewStyle())
-                                        .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .never))
-                                        
-                                        Image("profile")
-                                            .resizable()
-                                            .frame(width: 47, height: 47)
-                                            .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
-                                            .padding(.leading,50)
-                                            .padding(.top,50)
-                                        
-                                        Image("Mask group")
-                                            .resizable()
-                                            .frame(width: 47, height: 47)
-                                            .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
-                                            .padding(.leading,90)
-                                            .padding(.top,90)
                                     }
                                 }
+                                Text("엘범명을 정해주세요")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(Color(red: 0.33, green: 0.53, blue: 0.84))
                             }
-                            
-                            Text("엘범명을 정해주세요")
-                                .font(.system(size: 17))
-                                .fontWeight(.semibold)
-                                .foregroundColor(Color(red: 0.33, green: 0.53, blue: 0.84))
                         }
                     }
                     
                     //두번째 게시물 묶음
-                    HStack {
+                    HStack(spacing:20) {
                         VStack(spacing: 13) {
-                            HStack(spacing: 17) {
-                                VStack {
-                                    ZStack {
-                                        TabView(selection: $tabSelection) {
-                                            ForEach(postsA, id:\.id) { post in
-                                                let url = URL(string: post.imageUrl)
-                                                KFImage(url)
+                            if sharedViewModel.tabSelection1 == 0 {
+                                Image("non")
+                                    .resizable()
+                                    .frame(width: 159, height: 159)
+                                
+                                Text("서로의 추억을 만들어보세요!")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color.black)
+                                    .frame(width: 100)
+                                
+                            } else {
+                                HStack(spacing: 17) {
+                                    VStack {
+                                        ZStack {
+                                            TabView(selection: $sharedViewModel.tabSelection3) {
+                                                ForEach((sharedViewModel.postsA3 + sharedViewModel.postsB3), id:\.tag) { post in
+                                                    let url = URL(string: post.imageUrl)
+                                                    KFImage(url)
+                                                        .resizable()
+                                                        .frame(width: 159, height: 159)
+                                                        .cornerRadius(10)
+                                                        .tag(post.tag)
+                                                }
+                                                
+                                            }
+                                            .frame(width: 159, height: 159)
+                                            .tabViewStyle(PageTabViewStyle())
+                                            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .never))
+                                            
+                                            if let profileImageUrlString = sharedViewModel.fromUserProfileImageUrls[2],
+                                               let profileImageUrl = URL(string: profileImageUrlString) {
+                                                KFImage(profileImageUrl)
                                                     .resizable()
-                                                    .frame(width: 159, height: 159)
-                                                    .cornerRadius(10)
-                                                    .tag(1)
+                                                    .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
+                                                    .frame(width: 47, height: 47)
+                                                    .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
+                                                    .padding(.leading,50)
+                                                    .padding(.top,40)
+                                            } else {
+                                                Image("nonpro") // Replace this with your default image
+                                                    .resizable()
+                                                    .frame(width: 47, height: 47)
+                                                    .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
+                                                    .padding(.leading,50)
+                                                    .padding(.top,40)
                                             }
                                             
-                                            ForEach(postsB, id:\.id) { post in
-                                                let url = URL(string: post.imageUrl)
-                                                KFImage(url)
+                                            if let currentUserProfileImageUrlString = sharedViewModel.currentUserProfileImageUrl,
+                                               let currentUserProfileImageUrl = URL(string: currentUserProfileImageUrlString) {
+                                                KFImage(currentUserProfileImageUrl)
                                                     .resizable()
-                                                    .frame(width: 159, height: 159)
-                                                    .cornerRadius(10)
-                                                    .tag(2)
+                                                    .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
+                                                    .frame(width: 47, height: 47)
+                                                    .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
+                                                    .padding(.leading,90)
+                                                    .padding(.top,80)
+                                            } else {
+                                                Image("nonpro1") // Replace this with your default image
+                                                    .resizable()
+                                                    .frame(width: 47, height: 47)
+                                                    .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
+                                                    .padding(.leading,90)
+                                                    .padding(.top,80)
                                             }
                                         }
-                                        .tabViewStyle(PageTabViewStyle())
-                                        .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .never))
-                                        
-                                        Image("profile")
-                                            .resizable()
-                                            .frame(width: 47, height: 47)
-                                            .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
-                                            .padding(.leading,50)
-                                            .padding(.top,50)
-                                        
-                                        Image("Mask group")
-                                            .resizable()
-                                            .frame(width: 47, height: 47)
-                                            .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
-                                            .padding(.leading,90)
-                                            .padding(.top,90)
                                     }
                                 }
+                                Text("엘범명을 정해주세요")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(Color(red: 0.33, green: 0.53, blue: 0.84))
                             }
-                            Text("엘범명을 정해주세요")
-                                .font(.system(size: 17))
-                                .fontWeight(.semibold)
-                                .foregroundColor(Color(red: 0.33, green: 0.53, blue: 0.84))
                         }
-                        
                         VStack(spacing: 13) {
-                            HStack(spacing: 17) {
-                                VStack {
-                                    ZStack {
-                                        TabView(selection: $tabSelection) {
-                                            ForEach(postsA, id:\.id) { post in
-                                                let url = URL(string: post.imageUrl)
-                                                KFImage(url)
+                            if sharedViewModel.tabSelection1 == 0 {
+                                Image("non")
+                                    .resizable()
+                                    .frame(width: 159, height: 159)
+                                
+                                Text("서로의 추억을 만들어보세요!")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.bold)
+                                    .foregroundColor(Color.black)
+                                    .frame(width: 100)
+                                
+                            } else {
+                                HStack(spacing: 17) {
+                                    VStack {
+                                        ZStack {
+                                            TabView(selection: $sharedViewModel.tabSelection4) {
+                                                ForEach((sharedViewModel.postsA4 + sharedViewModel.postsB4), id:\.tag) { post in
+                                                    let url = URL(string: post.imageUrl)
+                                                    KFImage(url)
+                                                        .resizable()
+                                                        .frame(width: 159, height: 159)
+                                                        .cornerRadius(10)
+                                                        .tag(post.tag)
+                                                }
+                                            }
+                                            .frame(width: 159, height: 159)
+                                            .tabViewStyle(PageTabViewStyle())
+                                            .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .never))
+                                            
+                                            if let profileImageUrlString = sharedViewModel.fromUserProfileImageUrls[3],
+                                               let profileImageUrl = URL(string: profileImageUrlString) {
+                                                KFImage(profileImageUrl)
                                                     .resizable()
-                                                    .frame(width: 159, height: 159)
-                                                    .cornerRadius(10)
-                                                    .tag(1)
+                                                    .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
+                                                    .frame(width: 47, height: 47)
+                                                    .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
+                                                    .padding(.leading,50)
+                                                    .padding(.top,40)
+                                            } else {
+                                                Image("nonpro") // Replace this with your default image
+                                                    .resizable()
+                                                    .frame(width: 47, height: 47)
+                                                    .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
+                                                    .padding(.leading,50)
+                                                    .padding(.top,40)
                                             }
                                             
-                                            ForEach(postsB, id:\.id) { post in
-                                                let url = URL(string: post.imageUrl)
-                                                KFImage(url)
+                                            if let currentUserProfileImageUrlString = sharedViewModel.currentUserProfileImageUrl,
+                                               let currentUserProfileImageUrl = URL(string: currentUserProfileImageUrlString) {
+                                                KFImage(currentUserProfileImageUrl)
                                                     .resizable()
-                                                    .frame(width: 159, height: 159)
-                                                    .cornerRadius(10)
-                                                    .tag(2)
+                                                    .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
+                                                    .frame(width: 47, height: 47)
+                                                    .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
+                                                    .padding(.leading,90)
+                                                    .padding(.top,80)
+                                            } else {
+                                                Image("nonpro1") // Replace this with your default image
+                                                    .resizable()
+                                                    .frame(width: 47, height: 47)
+                                                    .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
+                                                    .padding(.leading,90)
+                                                    .padding(.top,80)
                                             }
                                         }
-                                        .tabViewStyle(PageTabViewStyle())
-                                        .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .never))
-                                        
-                                        Image("profile")
-                                            .resizable()
-                                            .frame(width: 47, height: 47)
-                                            .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
-                                            .padding(.leading,50)
-                                            .padding(.top,50)
-                                        
-                                        Image("Mask group")
-                                            .resizable()
-                                            .frame(width: 47, height: 47)
-                                            .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
-                                            .padding(.leading,90)
-                                            .padding(.top,90)
                                     }
                                 }
+                                
+                                Text("엘범명을 정해주세요")
+                                    .font(.system(size: 15))
+                                    .fontWeight(.semibold)
+                                    .foregroundColor(Color(red: 0.33, green: 0.53, blue: 0.84))
                             }
-                            
-                            Text("엘범명을 정해주세요")
-                                .font(.system(size: 14))
-                                .fontWeight(.semibold)
-                                .foregroundColor(Color(red: 0.33, green: 0.53, blue: 0.84))
                         }
                     }
                 }
             }
-        }.onAppear(perform : loadPosts)
-        
-    }
-    
-    func loadPosts() {
-        
-        let userAFullID = sharedViewModel.userAFullID // SharedViewModel로부터 사용자 이름 가져오기
-        let userBFullID = sharedViewModel.userBFullID
-        
-        Firestore.firestore().collection("posts").whereField("userId", in: [userAFullID]).getDocuments() { (querySnapshot, error) in
-            if let error = error {
-                print("Error getting documents: \(error)")
-            } else {
-                self.postsA = querySnapshot!.documents.compactMap({ document -> Post? in
-                    let data = document.data()
-                    let id = document.documentID
-                    return Post(id: id, userId: data["userId"] as? String ?? "", imageUrl: data["imageUrl"] as? String ?? "", timestamp: data["timestamp"] as? Timestamp ?? Timestamp())
-                })
-            }
         }
-        
-        sharedViewModel.updateToUserInNotification(notificationId:"userBFullID")  // Update the user B Id before loading posts
-        Firestore.firestore().collection("posts").whereField("userId", in:[sharedViewModel.userBFullID]).getDocuments() { (querySnapshot,error) in
-            
-            Firestore.firestore().collection("posts").whereField("userId", in: [userBFullID]).getDocuments() { (querySnapshot, error) in
-                if let error = error {
-                    print("Error getting documents: \(error)")
-                } else {
-                    self.postsB = querySnapshot!.documents.compactMap({ document -> Post? in
-                        let data = document.data()
-                        let id = document.documentID
-                        return Post(id: id, userId: data["userId"] as? String ?? "", imageUrl: data["imageUrl"] as? String ?? "", timestamp: data["timestamp"] as? Timestamp ?? Timestamp())
-                    })
+        .onAppear() {
+            Task.init(priority : .high) { [weak sharedViewModel] in
+                guard let viewModel = sharedViewModel else { return }
+                
+                guard let notification = notificationViewModel.notifications.first else {
+                    print("No notifications found.")
+                    return
                 }
+                let fromUserId = notification.fromUserId
+                
+                await viewModel.loadButtonClickCount()
+                await viewModel.loadUserSelect()
+                await viewModel.loadUserProfileImage(userId: fromUserId) // Use the sender's user id here.
+                await viewModel.loadCurrentUserProfileImage()
+                await viewModel.loadTabState()
+
             }
-            
         }
+        .onAppear(perform: {
+            if sharedViewModel.tabSelection1 == 1 {
+                sharedViewModel.tabSelection1 = 0
+            }
+            if sharedViewModel.tabSelection2 == 2 {
+                sharedViewModel.tabSelection2 = 0
+            }
+            if sharedViewModel.tabSelection3 == 3 {
+                sharedViewModel.tabSelection3 = 0
+            }
+            if sharedViewModel.tabSelection4 == 4 {
+                sharedViewModel.tabSelection4 = 0
+            }
+        })
+        
+        .onDisappear(perform: {
+             Task.init(priority : .high) { [weak sharedViewModel] in
+                  guard let viewModel = sharedViewModel else { return }
+
+                  await viewModel.saveTabState()
+             }
+        }) 
     }
 }
 
@@ -269,3 +381,4 @@ struct ConnectTodayView_Previews : PreviewProvider {
             .environmentObject(SharedViewModel()) // sharedViewModel 인스턴스 생성
     }
 }
+

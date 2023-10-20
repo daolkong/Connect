@@ -16,7 +16,8 @@ struct Post: Codable, Identifiable {
     var id: String?
     let userId: String
     let imageUrl: String
-    let timestamp: Timestamp  // Change from Date to Timestamp
+    let timestamp: Timestamp 
+    var tag: String?  // Add this line.
     
     enum CodingKeys: String, CodingKey {
         case userId

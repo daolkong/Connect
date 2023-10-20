@@ -7,6 +7,16 @@
 
 import Foundation
 
+extension Array where Element == Notification {
+    func removingDuplicates() -> [Element] {
+        var addedDict = [String: Bool]()
+
+        return filter {
+            addedDict.updateValue(true, forKey: $0.fromUserId) == nil
+        }
+    }
+}
+
 struct Notification: Identifiable, Codable, Equatable, Hashable {
     let id: String
     let fromUserId: String

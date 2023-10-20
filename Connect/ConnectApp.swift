@@ -32,6 +32,5 @@ struct ConnectApp: App {
                 .environmentObject(notificationViewModel)
                 .environmentObject(sharedViewModel)
         }
-        
     }
 }

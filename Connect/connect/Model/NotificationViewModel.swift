@@ -108,10 +108,8 @@ class NotificationViewModel: ObservableObject {
     
     func loadNotifications() {
         
-        guard let currentUser=Auth.auth().currentUser else{
-            
+        guard let currentUser = Auth.auth().currentUser else{
             print ("No current user found")
-            
             return
             
         }

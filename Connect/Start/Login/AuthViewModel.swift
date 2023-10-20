@@ -19,7 +19,6 @@ import FirebaseStorage  // Add this line at the top of the file.
 final class AuthViewModel: ObservableObject {
     private var authStateDidChangeListenerHandle: AuthStateDidChangeListenerHandle?
     
-    
     @Published var currentUser: User? // add this line
     
     // 로그인 상태를 나타내는 Published 프로퍼티입니다. 이 프로퍼티의 값이 변경될 때마다 SwiftUI 뷰는 자동으로 업데이트됩니다.
@@ -74,8 +73,6 @@ final class AuthViewModel: ObservableObject {
         }
     }
     
-    
-    
     // 새로운 사용자를 등록하는 함수입니다. 입력받은 정보와 함께 Firebase Authentication에 요청을 보냅니다.
     func registerUser(userId: String, withEmail email: String, password: String, hastags: String)
     async throws {
@@ -84,7 +81,6 @@ final class AuthViewModel: ObservableObject {
         try await storeUser(with:user)
         loginState = .loggedIn  // 성공적으로 등록하면 로그인 상태로 전환합니다.
     }
-    
     
     // 이메일과 비밀번호를 이용해 기존 유저를 로그인 시키는 함수입니다.
     func signInUser(withEmail email:String,password:String) async throws{
