@@ -74,7 +74,7 @@ class NotificationViewModel: ObservableObject {
                     
                     // If the user has no posts yet, do not proceed with creating a notification.
                     if latestPostImageUrl == nil {
-                        print("User has no posts yet. Notification will not be created.")
+                        print("DBUser has no posts yet. Notification will not be created.")
                         return
                     }
                     

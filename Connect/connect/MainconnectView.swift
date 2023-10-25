@@ -11,46 +11,46 @@ struct MainConnectView: View {
     @State private var tabSelection = 1
     @State private var gotoalarm = false
     @State private var gotosetting = false
-
+    
     var body: some View {
         VStack(spacing: 30) {
+            //
+            HStack {
+                Image("align-left")
+                    .resizable()
+                    .frame(width: 24, height: 24)
+                    .onTapGesture {
+                        gotosetting = true
+                    }
+                NavigationLink(destination: MypageView()
+                    .navigationBarBackButtonHidden(true), isActive: $gotosetting) {
+                        EmptyView()
+                    }
+                Spacer()
+                
+                Text("Connect Gallery")
+                    .font(.system(size: 25))
+                    .frame(width: 187)
+                    .fontWeight(.semibold)
+                
+                Spacer()
+                
+                Image("alarm")
+                    .resizable()
+                    .frame(width: 18, height: 20)
+                    .onTapGesture {
+                        gotoalarm = true
+                    }
+                NavigationLink(destination: ConnectAllowView()
+                    .navigationBarBackButtonHidden(true), isActive: $gotoalarm) {
+                        EmptyView()
+                    }
+                
+            }
+            .frame(width: 345, height: 28)
+            .padding(.horizontal,10)
             
-                HStack {
-                    Image("align-left")
-                        .resizable()
-                        .frame(width: 24, height: 24)
-                        .onTapGesture {
-                            gotosetting = true
-                        }
-                    NavigationLink(destination: MypageView()
-                        .navigationBarBackButtonHidden(true), isActive: $gotosetting) {
-                            EmptyView()
-                        }
-                    Spacer()
-                    
-                    Text("Connect Gallery")
-                        .font(.system(size: 25))
-                        .frame(width: 187)
-                        .fontWeight(.semibold)
-                    
-                    Spacer()
-                    
-                    Image("alarm")
-                        .resizable()
-                        .frame(width: 18, height: 20)
-                        .onTapGesture {
-                            gotoalarm = true
-                        }
-                    NavigationLink(destination: ConnectAllowView()
-                        .navigationBarBackButtonHidden(true), isActive: $gotoalarm) {
-                            EmptyView()
-                        }
-                    
-                }
-                .frame(width: 345, height: 28)
             
-                .padding(.horizontal,10)
-            // 스위치
             
             VStack(spacing: 30) {
                 ConnectSelection(tabSelection: $tabSelection)
@@ -63,13 +63,12 @@ struct MainConnectView: View {
                             .tag(2)
                         
                     }
-                    .frame(width: 393, height: 800)
+                    .frame(maxWidth: .greatestFiniteMagnitude)
                     
                 }
                 
             }
         }
-        .padding(.top,270)
     }
 }
 

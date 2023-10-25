@@ -9,6 +9,8 @@ import SwiftUI
 
 struct MainTabbedView: View {
     @State var selectedTab = 0
+    @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var userDataModel: UserDataModel
     
     var body: some View {
         ZStack(alignment: .bottom){
@@ -18,6 +20,8 @@ struct MainTabbedView: View {
                 
                 Time_sellectView()
                     .tag(1)
+                    .environmentObject(AuthViewModel())
+                    .environmentObject(UserDataModel())
                 
                 MainConnectView()
                     .tag(2)
@@ -61,7 +65,10 @@ extension MainTabbedView{
                .renderingMode(.template)
                .foregroundColor(isActive ? Color.black : Color.gray )
                .frame(width :20,height :20)
-        }.frame(width:.infinity ,height :60)// width 값을 infinity로 설정하여 동일한 크기를 가지도록 합니다.
+        }
+        .frame(height :60)
+        .frame(maxWidth: .infinity)
+        // width 값을 infinity로 설정하여 동일한 크기를 가지도록 합니다.
          //.cornerRadius(30)
     }
 

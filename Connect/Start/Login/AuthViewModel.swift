@@ -19,14 +19,14 @@ import FirebaseStorage  // Add this line at the top of the file.
 final class AuthViewModel: ObservableObject {
     private var authStateDidChangeListenerHandle: AuthStateDidChangeListenerHandle?
     
-    @Published var currentUser: User? // add this line
+    @Published var currentUser: DBUser? // add this line
     
     // 로그인 상태를 나타내는 Published 프로퍼티입니다. 이 프로퍼티의 값이 변경될 때마다 SwiftUI 뷰는 자동으로 업데이트됩니다.
     @Published var loginState: LoginState
     
     
     // 현재 로그인한 사용자 정보를 저장하는 Published 프로퍼티입니다.
-    @Published var user: User?
+    @Published var user: DBUser?
     
     // 사용자의 프로필 이미지 URL을 저장하는 private 프로퍼티입니다.
     private var profileImageURL: String?
@@ -49,7 +49,7 @@ final class AuthViewModel: ObservableObject {
             authStateDidChangeListenerHandle = Auth.auth().addStateDidChangeListener { (auth, firebaseUser) in
                 if let firebaseUser = firebaseUser {
                     // Here we create a new user with the info from the FirebaseAuth user
-                    self.currentUser = User(email: firebaseUser.email ?? "", userId:"", hastags:"", uid:firebaseUser.uid, friends: [])
+                    self.currentUser = DBUser(email: firebaseUser.email ?? "", userId:"", hastags:"", uid:firebaseUser.uid, friends: [])
 
                     // Fetch user information immediately after setting currentUser.
                     Task {
@@ -77,7 +77,7 @@ final class AuthViewModel: ObservableObject {
     func registerUser(userId: String, withEmail email: String, password: String, hastags: String)
     async throws {
         let result = try await Auth.auth().createUser(withEmail: email, password: password)
-        let user = User(email: email, userId: userId, hastags: hastags, uid: result.user.uid, friends: [])
+        let user = DBUser(email: email, userId: userId, hastags: hastags, uid: result.user.uid, friends: [])
         try await storeUser(with:user)
         loginState = .loggedIn  // 성공적으로 등록하면 로그인 상태로 전환합니다.
     }
@@ -96,7 +96,7 @@ final class AuthViewModel: ObservableObject {
     
     // Firestore에서 현재 사용자의 정보를 가져오는 함수입니다.
     func fetchUser() async throws{
-        guard let user = try? await Firestore.firestore().collection("users").document(uid).getDocument(as: User.self) else {
+        guard let user = try? await Firestore.firestore().collection("users").document(uid).getDocument(as: DBUser.self) else {
             return
         }
         self.user = user
@@ -203,7 +203,7 @@ extension AuthViewModel {
     // MARK: - Helper
     
     // Firestore에 사용자 정보를 저장하는 private helper 함수입니다.
-    private func storeUser(with user: User) async throws {
+    private func storeUser(with user: DBUser) async throws {
         let encodedUser = try Firestore.Encoder().encode(user)
         try await Firestore.firestore().collection("users").document(uid).setData(encodedUser)
     }

@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct FriendProfileView: View {
-    @StateObject var authViewModel = AuthViewModel() // 'private' 제거
-    @StateObject var userDataModel = UserDataModel() // 'private' 제거
+    @StateObject private var authViewModel = AuthViewModel() // 'private' 제거
+    @StateObject private var userDataModel = UserDataModel() // 'private' 제거
     @Environment(\.presentationMode) var presentationMode
     
-    let user : User
+    let user : DBUser
     var uid: String? // 'uid'의 접근 제어 수준을 변경
     
-    func addFriend(_ friendUser: User) {
+    func addFriend(_ friendUser: DBUser) {
         guard let currentUser = authViewModel.currentUser else {
             print("Error: No current user found")
             return
@@ -179,7 +179,7 @@ struct FriendProfileView: View {
         }
     }
     
-    init(user: User) {
+    init(user: DBUser) {
         self.user = user
         userDataModel.getCurrentUser(uid: authViewModel.uid)
     }
@@ -187,7 +187,7 @@ struct FriendProfileView: View {
 
 struct FriendProfileView_Previews: PreviewProvider {
     static var previews: some View {
-        FriendProfileView(user: User(email: "test@test.com", userId:"TestFullID", hastags:"TestHashtags", uid:"TestUID", profileImageURL:"", uploadedImagesURLs:[], friends: []))
+        FriendProfileView(user: DBUser(email: "test@test.com", userId:"TestFullID", hastags:"TestHashtags", uid:"TestUID", profileImageURL:"", uploadedImagesURLs:[], friends: []))
             .environmentObject(AuthViewModel())
             .environmentObject(UserDataModel())
     }

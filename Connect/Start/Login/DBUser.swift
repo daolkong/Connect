@@ -1,5 +1,5 @@
 //
-//  User.swift
+//  DBUser.swift
 //  Connect
 //
 //  Created by Daol on 2023/09/02.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct User: Codable, Identifiable, Hashable {
+struct DBUser: Codable, Identifiable, Hashable {
     let email: String
     let userId: String   
     let hastags: String
@@ -16,12 +16,13 @@ struct User: Codable, Identifiable, Hashable {
     var uploadedImagesURLs: [String]? // Add this line.
     var friends: [String]
     
-    var id: String { uid }
+    var id: String { uid }        
+        
 
 }
 
-extension User {
-    static let sample: User = User(
+extension DBUser {
+    static let sample: DBUser = DBUser(
         email: "", userId: "", hastags: "", uid: "", friends: [])
 }
 

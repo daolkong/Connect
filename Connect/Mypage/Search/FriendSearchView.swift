@@ -14,7 +14,7 @@ struct FriendSearchView: View {
     @State private var activeUserId: String? // Add this line
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 35) {

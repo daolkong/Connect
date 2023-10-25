@@ -15,6 +15,12 @@ struct ConnectTodayView: View {
     @EnvironmentObject var sharedViewModel : SharedViewModel  // 추가된 부분
     @EnvironmentObject var notificationViewModel : NotificationViewModel
     
+    @State var album1: String = "앨범명을 정해주세요"
+    @State var album2: String = "앨범명을 정해주세요"
+    @State var album3: String = "앨범명을 정해주세요"
+    @State var album4: String = "앨범명을 정해주세요"
+    
+    
     var body: some View {
         VStack(spacing: 35) {
             ScrollView {
@@ -25,8 +31,8 @@ struct ConnectTodayView: View {
                         VStack(spacing: 13) {
                             if sharedViewModel.tabSelection1 == 0 {
                                 Image("non")
-                                      .resizable()
-                                      .frame(width: 159, height: 159)
+                                    .resizable()
+                                    .frame(width: 159, height: 159)
                                 
                                 Text("서로의 추억을 만들어보세요!")
                                     .font(.system(size: 15))
@@ -57,7 +63,7 @@ struct ConnectTodayView: View {
                                                let profileImageUrl = URL(string: profileImageUrlString) {
                                                 KFImage(profileImageUrl)
                                                     .resizable()
-                                                    .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
+                                                    .clipShape(Circle())
                                                     .frame(width: 47, height: 47)
                                                     .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
                                                     .padding(.leading,50)
@@ -75,13 +81,13 @@ struct ConnectTodayView: View {
                                                let currentUserProfileImageUrl = URL(string: currentUserProfileImageUrlString) {
                                                 KFImage(currentUserProfileImageUrl)
                                                     .resizable()
-                                                    .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
+                                                    .clipShape(Circle())
                                                     .frame(width: 47, height: 47)
                                                     .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
                                                     .padding(.leading,90)
                                                     .padding(.top,80)
                                             } else {
-                                                Image("nonpro1") // Replace this with your default image
+                                                Image("nonpro1")
                                                     .resizable()
                                                     .frame(width: 47, height: 47)
                                                     .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
@@ -92,17 +98,18 @@ struct ConnectTodayView: View {
                                         }
                                     }
                                 }
-                                Text("엘범명을 정해주세요")
+                                TextField("", text: $album1)
                                     .font(.system(size: 15))
                                     .fontWeight(.semibold)
                                     .foregroundColor(Color(red: 0.33, green: 0.53, blue: 0.84))
+                                    .frame(width:130)
                             }
                         }
                         VStack(spacing: 13) {
                             if sharedViewModel.tabSelection1 == 0 {
                                 Image("non")
-                                      .resizable()
-                                      .frame(width: 159, height: 159)
+                                    .resizable()
+                                    .frame(width: 159, height: 159)
                                 
                                 Text("서로의 추억을 만들어보세요!")
                                     .font(.system(size: 15))
@@ -133,7 +140,7 @@ struct ConnectTodayView: View {
                                                let profileImageUrl = URL(string: profileImageUrlString) {
                                                 KFImage(profileImageUrl)
                                                     .resizable()
-                                                    .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
+                                                    .clipShape(Circle())
                                                     .frame(width: 47, height: 47)
                                                     .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
                                                     .padding(.leading,50)
@@ -151,13 +158,13 @@ struct ConnectTodayView: View {
                                                let currentUserProfileImageUrl = URL(string: currentUserProfileImageUrlString) {
                                                 KFImage(currentUserProfileImageUrl)
                                                     .resizable()
-                                                    .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
+                                                    .clipShape(Circle())
                                                     .frame(width: 47, height: 47)
                                                     .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
                                                     .padding(.leading,90)
                                                     .padding(.top,80)
                                             } else {
-                                                Image("nonpro1") // Replace this with your default image
+                                                Image("nonpro1")
                                                     .resizable()
                                                     .frame(width: 47, height: 47)
                                                     .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
@@ -168,10 +175,12 @@ struct ConnectTodayView: View {
                                         }
                                     }
                                 }
-                                Text("엘범명을 정해주세요")
+                                TextField("", text: $album2)
                                     .font(.system(size: 15))
                                     .fontWeight(.semibold)
                                     .foregroundColor(Color(red: 0.33, green: 0.53, blue: 0.84))
+                                    .frame(width:130)
+                                
                             }
                         }
                     }
@@ -213,13 +222,13 @@ struct ConnectTodayView: View {
                                                let profileImageUrl = URL(string: profileImageUrlString) {
                                                 KFImage(profileImageUrl)
                                                     .resizable()
-                                                    .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
+                                                    .clipShape(Circle())
                                                     .frame(width: 47, height: 47)
                                                     .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
                                                     .padding(.leading,50)
                                                     .padding(.top,40)
                                             } else {
-                                                Image("nonpro") // Replace this with your default image
+                                                Image("nonpro")
                                                     .resizable()
                                                     .frame(width: 47, height: 47)
                                                     .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
@@ -231,13 +240,13 @@ struct ConnectTodayView: View {
                                                let currentUserProfileImageUrl = URL(string: currentUserProfileImageUrlString) {
                                                 KFImage(currentUserProfileImageUrl)
                                                     .resizable()
-                                                    .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
+                                                    .clipShape(Circle())
                                                     .frame(width: 47, height: 47)
                                                     .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
                                                     .padding(.leading,90)
                                                     .padding(.top,80)
                                             } else {
-                                                Image("nonpro1") // Replace this with your default image
+                                                Image("nonpro1")
                                                     .resizable()
                                                     .frame(width: 47, height: 47)
                                                     .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
@@ -247,10 +256,11 @@ struct ConnectTodayView: View {
                                         }
                                     }
                                 }
-                                Text("엘범명을 정해주세요")
+                                TextField("", text: $album3)
                                     .font(.system(size: 15))
                                     .fontWeight(.semibold)
                                     .foregroundColor(Color(red: 0.33, green: 0.53, blue: 0.84))
+                                    .frame(width:130)
                             }
                         }
                         VStack(spacing: 13) {
@@ -287,13 +297,13 @@ struct ConnectTodayView: View {
                                                let profileImageUrl = URL(string: profileImageUrlString) {
                                                 KFImage(profileImageUrl)
                                                     .resizable()
-                                                    .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
+                                                    .clipShape(Circle())
                                                     .frame(width: 47, height: 47)
                                                     .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
                                                     .padding(.leading,50)
                                                     .padding(.top,40)
                                             } else {
-                                                Image("nonpro") // Replace this with your default image
+                                                Image("nonpro")
                                                     .resizable()
                                                     .frame(width: 47, height: 47)
                                                     .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
@@ -305,13 +315,13 @@ struct ConnectTodayView: View {
                                                let currentUserProfileImageUrl = URL(string: currentUserProfileImageUrlString) {
                                                 KFImage(currentUserProfileImageUrl)
                                                     .resizable()
-                                                    .clipShape(Circle()) // 프로필 사진을 원 모양으로 클리핑합니다.
+                                                    .clipShape(Circle())
                                                     .frame(width: 47, height: 47)
                                                     .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
                                                     .padding(.leading,90)
                                                     .padding(.top,80)
                                             } else {
-                                                Image("nonpro1") // Replace this with your default image
+                                                Image("nonpro1")
                                                     .resizable()
                                                     .frame(width: 47, height: 47)
                                                     .shadow(color: .black.opacity(0.25), radius: 1, x: 0, y: 2)
@@ -322,10 +332,11 @@ struct ConnectTodayView: View {
                                     }
                                 }
                                 
-                                Text("엘범명을 정해주세요")
+                                TextField("", text: $album4)
                                     .font(.system(size: 15))
                                     .fontWeight(.semibold)
                                     .foregroundColor(Color(red: 0.33, green: 0.53, blue: 0.84))
+                                    .frame(width:130)
                             }
                         }
                     }
@@ -342,12 +353,9 @@ struct ConnectTodayView: View {
                 }
                 let fromUserId = notification.fromUserId
                 
-                await viewModel.loadButtonClickCount()
-                await viewModel.loadUserSelect()
                 await viewModel.loadUserProfileImage(userId: fromUserId) // Use the sender's user id here.
                 await viewModel.loadCurrentUserProfileImage()
-                await viewModel.loadTabState()
-
+                
             }
         }
         .onAppear(perform: {
@@ -364,14 +372,6 @@ struct ConnectTodayView: View {
                 sharedViewModel.tabSelection4 = 0
             }
         })
-        
-        .onDisappear(perform: {
-             Task.init(priority : .high) { [weak sharedViewModel] in
-                  guard let viewModel = sharedViewModel else { return }
-
-                  await viewModel.saveTabState()
-             }
-        }) 
     }
 }
 

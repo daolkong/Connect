@@ -13,7 +13,6 @@ struct ConnectSaveView: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 35) {
-    
                 // 검색 바
                 ZStack {
                     Rectangle()
@@ -77,6 +76,7 @@ struct ConnectSaveView: View {
                                     
                                 }
                                 Text("# 운동 # 일상")
+                                    .font(.subheadline)
                                     .font(.system(size: 17))
                                     .fontWeight(.bold)
                                     .foregroundColor(Color(red: 0.33, green: 0.53, blue: 0.84))
@@ -405,6 +405,8 @@ struct ConnectSaveView: View {
                      
                     }
                 }
+                
+                Spacer()
             }
         }
     }

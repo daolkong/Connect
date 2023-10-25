@@ -10,6 +10,8 @@ import SwiftUI
 struct Time_sellectView: View {
     @State private var tabSelection = 1
     @State private var searchText: String = "" // $text를 정의
+    @EnvironmentObject var authViewModel: AuthViewModel
+    @EnvironmentObject var userDataModel: UserDataModel
     
     var body: some View {
         VStack {
@@ -56,21 +58,20 @@ struct Time_sellectView: View {
             }
             .padding()
             .padding(.top,220)
-            
-
         
             ZStack() {
                 TabView(selection: $tabSelection) {
                     FriendSearchView()
                         .tag(1)
+                        .environmentObject(AuthViewModel())
+                        .environmentObject(UserDataModel())
                     GroupSearchView()
                         .tag(2)
+                        .environmentObject(AuthViewModel())
+                        .environmentObject(UserDataModel())
                     
                 }
                 .frame(width: 393, height: 800)
-                
-                
-                
             }
         }
         

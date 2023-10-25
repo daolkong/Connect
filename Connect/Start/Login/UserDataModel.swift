@@ -11,9 +11,9 @@ import FirebaseFirestore
 import FirebaseFirestoreSwift
 
 class UserDataModel: ObservableObject {
-    @Published var user: User?
-    @Published var users = [User]() // Array to store all users
-    @Published var currentUser: User?
+    @Published var user: DBUser?
+    @Published var users = [DBUser]() // Array to store all users
+    @Published var currentUser: DBUser?
     
     public var uid: String {
           Auth.auth().currentUser?.uid ?? ""
@@ -40,7 +40,7 @@ class UserDataModel: ObservableObject {
             
             if let document = document, document.exists {
                 do {
-                    self.user = try document.data(as: User.self)
+                    self.user = try document.data(as: DBUser.self)
                 } catch let error as NSError {
                     print("Error decoding user: \(error)")
                 }
@@ -66,7 +66,7 @@ class UserDataModel: ObservableObject {
                }else{
                    for document in querySnapshot!.documents{
                        do{
-                           if let user = try? document.data(as: User.self){
+                           if let user = try? document.data(as: DBUser.self){
                                // Check if the user's uid is already in the users array.
                                if !self.users.contains(where: { $0.uid == user.uid }) {
                                    self.users.append(user)
@@ -113,7 +113,7 @@ class UserDataModel: ObservableObject {
 
             if let document = document, document.exists {
                 do {
-                    self.user = try document.data(as: User.self)
+                    self.user = try document.data(as: DBUser.self)
                 } catch let error as NSError {
                     print("Error decoding user: \(error)")
                 }
@@ -141,7 +141,7 @@ class UserDataModel: ObservableObject {
 
             if let document = document, document.exists {
                 do {
-                    self.currentUser = try document.data(as: User.self)
+                    self.currentUser = try document.data(as: DBUser.self)
                 } catch let error as NSError {
                     print("Error decoding user: \(error)")
                 }
