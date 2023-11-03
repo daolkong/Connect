@@ -46,7 +46,7 @@ struct FriendSearchView: View {
                                                     }
                                                     
                                                     .frame(width: 390, height: 49)
-                            }
+                                                }
                         }
                         
                     }

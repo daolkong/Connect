@@ -18,7 +18,7 @@ struct MainTabbedView: View {
                 HomeView(imageUrl:"")
                     .tag(0)
                 
-                Time_sellectView()
+                Friend_sellectView()
                     .tag(1)
                     .environmentObject(AuthViewModel())
                     .environmentObject(UserDataModel())

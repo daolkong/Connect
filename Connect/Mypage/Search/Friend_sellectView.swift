@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Time_sellectView: View {
+struct Friend_sellectView: View {
     @State private var tabSelection = 1
     @State private var searchText: String = "" // $text를 정의
     @EnvironmentObject var authViewModel: AuthViewModel
@@ -76,8 +76,8 @@ struct Time_sellectView: View {
     }
 }
 
-struct Time_sellectView_Previews: PreviewProvider {
+struct Friend_sellectView_Previews: PreviewProvider {
     static var previews: some View {
-        Time_sellectView()
+        Friend_sellectView()
     }
 }

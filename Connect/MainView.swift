@@ -18,7 +18,7 @@ struct MainView: View {
                     HomeView(imageUrl:"")
                         .tag(1)
 
-                    Time_sellectView()
+                    Friend_sellectView()
                         .tag(2)
 
                     MyprofileView()
