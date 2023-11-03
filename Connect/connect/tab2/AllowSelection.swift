@@ -23,8 +23,7 @@ struct AllowSelection: View {
             }) {
                 ZStack {
                     Text(tabItems[0])
-                        .font(.system(size: 14))
-                        .fontWeight(.bold)
+                        .font(.system(size: 14, weight:.bold))
                         .foregroundColor(tabSelection == 1 ? .white : .white)
                         .zIndex(1)
                     
@@ -48,9 +47,8 @@ struct AllowSelection: View {
             }) {
                 ZStack {
                     Text(tabItems[1])
-                        .font(.system(size: 14))
+                        .font(.system(size: 14, weight: .bold))
                         .frame(width: 46, height: 46)
-                        .fontWeight(.bold)
                         .foregroundColor(tabSelection == 2 ? .white : .white)
                         .zIndex(1)
                     

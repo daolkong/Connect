@@ -17,13 +17,9 @@ struct DBUser: Codable, Identifiable, Hashable {
     var friends: [String]
     
     var id: String { uid }        
-        
-
 }
 
 extension DBUser {
     static let sample: DBUser = DBUser(
         email: "", userId: "", hastags: "", uid: "", friends: [])
 }
-
-

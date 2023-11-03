@@ -14,7 +14,7 @@ struct MainConnectView: View {
     
     var body: some View {
         VStack(spacing: 30) {
-            //
+            // Connect Gallery
             HStack {
                 Image("align-left")
                     .resizable()
@@ -29,9 +29,8 @@ struct MainConnectView: View {
                 Spacer()
                 
                 Text("Connect Gallery")
-                    .font(.system(size: 25))
-                    .frame(width: 187)
-                    .fontWeight(.semibold)
+                    .font(.system(size: 25, weight: .semibold))
+                    .frame(width: 190)
                 
                 Spacer()
                 
@@ -50,8 +49,6 @@ struct MainConnectView: View {
             .frame(width: 345, height: 28)
             .padding(.horizontal,10)
             
-            
-            
             VStack(spacing: 30) {
                 ConnectSelection(tabSelection: $tabSelection)
                 
@@ -61,7 +58,6 @@ struct MainConnectView: View {
                             .tag(1)
                         ConnectSaveView()
                             .tag(2)
-                        
                     }
                     .frame(maxWidth: .greatestFiniteMagnitude)
                     

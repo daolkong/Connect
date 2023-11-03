@@ -75,8 +75,7 @@ struct FriendProfileView: View {
                     .shadow(color: .black.opacity(0.25), radius: 3.5, x: 0, y: 0)
                 VStack(spacing: 10) {
                     Text(user.userId ?? "No Full ID")
-                        .font(.system(size: 45))
-                        .fontWeight(.bold)
+                        .font(.system(size: 45, weight:.bold))
                     
                     Text(user.hastags ?? "No Full ID")
                         .font(.system(size: 17))
@@ -103,8 +102,7 @@ struct FriendProfileView: View {
                             .frame(width: 34, height: 4)
                         
                         Text("\(user.friends.count)") // Show the number of friends of the user.
-                            .font(.system(size: 30))
-                            .fontWeight(.semibold)
+                            .font(.system(size: 30, weight:.semibold))
                         
                     }
                     
@@ -127,9 +125,7 @@ struct FriendProfileView: View {
                             .frame(width: 34, height: 4)
                         
                         Text("21")
-                            .font(.system(size: 30))
-                            .fontWeight(.semibold)
-                        
+                            .font(.system(size: 30, weight:.semibold))
                     }
                     
                     // 정보수정 버튼
@@ -156,15 +152,12 @@ struct FriendProfileView: View {
                             .padding(.trailing, 130)
                             
                             Text("친구추가")
-                                .font(.system(size: 20))
+                                .font(.system(size: 20, weight:.bold))
                                 .foregroundColor(Color(red: 0.13, green: 0.14, blue: 0.14))
-                                .fontWeight(.bold)
                                 .padding(.leading,30)
                             
                         }
                     }
-                    
-                    
                     
                     .padding(.top, 30)
                     

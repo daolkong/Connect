@@ -1,21 +1,18 @@
 
 
-//
+///
 //  AllowConnectView.swift
 //  Connect
 //
 //  Created by Daol on 2023/09/16.
 //
-
 import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
 import Kingfisher
-
 struct AlarmConnectView: View {
     @EnvironmentObject var notificationViewModel : NotificationViewModel
     @EnvironmentObject var sharedViewModel : SharedViewModel
-    
     var body: some View {
         ScrollView {
             ForEach(notificationViewModel.notifications.removingDuplicates(), id: \.id) { notification in
@@ -47,8 +44,7 @@ struct AlarmConnectView: View {
                             VStack(alignment:.leading){
                                 Text("\(notification.fromUserId)님이 회원님과 일상을 connect 하고 싶어 합니다.")
                                     .foregroundColor(Color.black)
-                                    .font(.system(size: 15))
-                                    .fontWeight(.medium)
+                                    .font(.system(size: 15, weight:.medium))
                             }
                         }
                         .frame(width: 300)
@@ -60,6 +56,14 @@ struct AlarmConnectView: View {
                                 if sharedViewModel.buttonClickCount < 4 {
                                     let fromUserId = notification.fromUserId
                                     let toUserId = notification.toUserId  // 알림에서 'toUserId' 사용
+                                    let uid = Auth.auth().currentUser?.uid ?? "" // 현재 로그인한 사용자의 uid
+                                    
+                                    guard let document = try? await Firestore.firestore().collection("users").document(uid).getDocument(), let dbUser = try? document.data(as: DBUser.self) else {
+                                        print("Error getting userId for the current user")
+                                        return
+                                    }
+                                    
+                                    let currentUserId = dbUser.userId
                                     
                                     sharedViewModel.userAFullID = fromUserId
                                     sharedViewModel.userBFullID = toUserId
@@ -86,6 +90,12 @@ struct AlarmConnectView: View {
                                         return
                                     }
                                     
+                                    do {
+                                        try await sharedViewModel.increaseButtonClickCount(userId: currentUserId, fromUserId: notification.fromUserId)
+                                    } catch {
+                                        print("Error updating button click count:", error)
+                                    }
+                                    
                                     // 이미지 URL 가져오기
                                     if let imageUrlStringA = firstPostA?.imageUrl, let imageUrlStringB = firstPostB?.imageUrl {
                                         if let urlImageA = URL(string: imageUrlStringA), let urlImageB = URL(string: imageUrlStringB) {
@@ -105,17 +115,23 @@ struct AlarmConnectView: View {
                                                             let dataToSave: [String: Any] = [
                                                                 "tag\(sharedViewModel.buttonClickCount + 1)": [
                                                                     "userANImageUrl": imageUrlANew,
-                                                                    "userBNImageUrl": imageUrlBNew
+                                                                    "userBNImageUrl": imageUrlBNew,
+                                                                    "userAId": fromUserId,
+                                                                    "userBId": toUserId
                                                                 ]
                                                             ]
                                                             
                                                             let db = Firestore.firestore()
                                                             
-                                                            let documentId = UUID().uuidString
+                                                            let dateFormatter = DateFormatter()
+                                                            dateFormatter.dateFormat = "yyyy.MM.dd"
+                                                            let documentId = dateFormatter.string(from: Date())
                                                             let documentRef = db.collection("ConnectDB").document(documentId)
-                                                            try await documentRef.setData(dataToSave, merge: true)
+                                                            try await documentRef.setData([currentUserId: dataToSave], merge: true)
                                                             
                                                             print("데이터를 Firestore에 성공적으로 저장했습니다!")
+                                                            
+                                                            sharedViewModel.buttonClickCount += 1 // 버튼 클릭 횟수 증가
                                                         } catch {
                                                             print("Firestore에 데이터를 쓰는 중 오류 발생:", error)
                                                         }
@@ -171,13 +187,9 @@ struct AlarmConnectView: View {
         }
     }
 }
-
-
 struct AlarmConnectView_Previews: PreviewProvider {
     static var previews: some View {
         AlarmConnectView()
             .environmentObject(SharedViewModel()) // sharedViewModel 인스턴스 생성
     }
 }
-
-

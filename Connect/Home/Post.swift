@@ -18,11 +18,14 @@ struct Post: Codable, Identifiable {
     let imageUrl: String
     let timestamp: Timestamp 
     var tag: String?  // Add this line.
+    var likeCount: Int  // Add this line.
     
     enum CodingKeys: String, CodingKey {
         case userId
         case imageUrl
         case timestamp
+        case tag
+        case likeCount
     }
 }
 
@@ -31,7 +34,9 @@ extension Post {
         return [
             "userId": userId,
             "imageUrl": imageUrl,
-            "timestamp": timestamp as Any
+            "timestamp": timestamp as Any,
+            "tag": tag as Any,
+            "likeCount": likeCount
         ]
     }
 }

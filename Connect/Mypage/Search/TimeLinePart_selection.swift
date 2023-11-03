@@ -25,7 +25,8 @@ struct TimeLinePart_selection: View {
                 
                 if tabSelection == 1 {
                     Text(tabItems[0])
-                        .foregroundColor(Color(red: 0.32, green: 0.53, blue: 0.84))                        .fontWeight(.black)
+                        .foregroundColor(Color(red: 0.32, green: 0.53, blue: 0.84))       
+                        .fontWeight(.black)
                         .matchedGeometryEffect(id: "SelectedTabId_\(tabItems[0])", in: animationNamespace)
                 } else {
                     Text(tabItems[0])
@@ -42,7 +43,8 @@ struct TimeLinePart_selection: View {
                 
                 if tabSelection == 2 {
                     Text(tabItems[1])
-                        .foregroundColor(Color(red: 0.32, green: 0.53, blue: 0.84))                        .fontWeight(.black)
+                        .foregroundColor(Color(red: 0.32, green: 0.53, blue: 0.84))               
+                        .fontWeight(.black)
                         .matchedGeometryEffect(id: "SelecedTabId", in: animationNamespace)
                 } else {
                     Text(tabItems[1])

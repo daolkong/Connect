@@ -32,8 +32,7 @@ struct MypageView: View {
                     .shadow(color: .black.opacity(0.25), radius: 3.5, x: 0, y: 0)
                 
                 Text("susun_hit")
-                    .font(.system(size: 40))
-                    .fontWeight(.bold)
+                    .font(.system(size: 40, weight:.bold))
                 
                 // 설정 정보
                 VStack(spacing: 27) {
@@ -117,8 +116,7 @@ struct MypageView: View {
                             .cornerRadius(35)
                         
                         Text("로그아웃")
-                            .font(.system(size: 27))
-                            .fontWeight(.bold)
+                            .font(.system(size: 27, weight:.bold))
                             .foregroundColor(Color.white)
                         
                     }

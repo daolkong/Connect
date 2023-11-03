@@ -27,8 +27,7 @@ struct ConnectAllowView: View {
                 }
                
                 Text("Nontifications")
-                    .font(.system(size: 23))
-                    .fontWeight(.semibold)
+                    .font(.system(size: 23, weight:.semibold))
                     
                 Spacer()
             }

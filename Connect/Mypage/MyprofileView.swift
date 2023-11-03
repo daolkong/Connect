@@ -77,26 +77,21 @@ struct MyprofileView: View {
                     // 사용자 아이디
                     VStack(spacing: 10) {
                         Text(authViewModel.user?.userId ?? "Loading...")
-                            .font(.system(size: 45))
-                            .fontWeight(.bold)
+                            .font(.system(size: 45, weight:.bold))
                         
                         // 해시태그 4개
                         HStack {
                             Text("# 논어")
-                                .font(.system(size: 17))
-                                .fontWeight(.regular)
+                                .font(.system(size: 17, weight:.regular))
                             
                             Text("# 재즈 사랑")
-                                .font(.system(size: 17))
-                                .fontWeight(.regular)
+                                .font(.system(size: 17, weight:.regular))
                             
                             Text("# 유튜버")
-                                .font(.system(size: 17))
-                                .fontWeight(.regular)
+                                .font(.system(size: 17, weight:.regular))
                             
                             Text("# 국어교사")
-                                .font(.system(size: 17))
-                                .fontWeight(.regular)
+                                .font(.system(size: 17, weight:.regular))
                         }
                     }
                 }
@@ -121,8 +116,7 @@ struct MyprofileView: View {
                             .frame(width: 34, height: 4)
                         
                         Text("18")
-                            .font(.system(size: 30))
-                            .fontWeight(.semibold)
+                            .font(.system(size: 30, weight:.semibold))
                         
                     }
                     
@@ -144,8 +138,7 @@ struct MyprofileView: View {
                             .frame(width: 34, height: 4)
                         
                         Text("21")
-                            .font(.system(size: 30))
-                            .fontWeight(.semibold)
+                            .font(.system(size: 30, weight:.semibold))
                         
                     }
                     

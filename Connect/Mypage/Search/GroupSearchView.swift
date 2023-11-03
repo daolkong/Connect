@@ -45,16 +45,14 @@ struct GroupSearchView: View {
                             
                             VStack(alignment: .leading, spacing: 1) {
                                 Text("우리들의 헬스모임 ")
-                                    .font(.system(size: 17)) // 이 부분은 원하는 폰트 크기로 변경
-                                    .fontWeight(.semibold)
+                                    .font(.system(size: 17, weight:.semibold))
+                                
                                     + Text("(100+)")
-                                    .font(.system(size: 13)) // 변경할 폰트 크기로 설정
-                                    .fontWeight(.semibold)
+                                    .font(.system(size: 13, weight:.semibold))
                                     .foregroundColor(Color(red: 0.42, green: 0.61, blue: 0.89))
                                 
                                 Text("하루에 한번 모임 만남을 가집니다. 근손실 방지방지!!!")
-                                    .font(.system(size: 12))
-                                    .fontWeight(.regular)
+                                    .font(.system(size: 12, weight:.regular))
                             }
                         }
                         .frame(width: 390, height: 49)

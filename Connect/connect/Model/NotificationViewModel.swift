@@ -37,7 +37,7 @@ class NotificationViewModel: ObservableObject {
             guard
                 let documentSnapshot=documentSnapshot,
                 let data=documentSnapshot.data(),
-                var post=try? Firestore.Decoder().decode(Post.self,from:data)
+                var post = try? Firestore.Decoder().decode(Post.self,from:data)
                     
             else {
                 print ("Failed to retrieve post or post data")
@@ -190,7 +190,8 @@ class NotificationViewModel: ObservableObject {
         
         let db = Firestore.firestore()
         
-        let post = Post(id: nil, userId: userId, imageUrl: imageUrl, timestamp: Timestamp(date: Date()))
+        let likeCount = 0  // Add this line.
+        let post = Post(id: nil, userId: userId, imageUrl: imageUrl, timestamp: Timestamp(date: Date()), likeCount: likeCount)
         
         do {
             _ = try db.collection("posts").addDocument(from: post)

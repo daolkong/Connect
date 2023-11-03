@@ -17,9 +17,8 @@ struct SigninTopNavigationBar: View {
                     .frame(width: 10, height: 16)
                 
                 Text("로그인")
-                    .font(.system(size: 20))
+                    .font(.system(size: 20, weight:.heavy))
                     .foregroundColor(Color.white)
-                    .fontWeight(.heavy)
             }
             .padding(.trailing,250)
         

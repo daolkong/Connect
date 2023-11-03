@@ -31,34 +31,30 @@ struct SigninView: View {
                 VStack(spacing: 40) {
                     
                     Button(action: {
-                        // Dismiss the view when the button is tapped
                         presentationMode.wrappedValue.dismiss()
                     }) {
                         SigninTopNavigationBar()
                     }
                     
-                    // 로고
                     VStack(spacing: 0) {
                         Image("whitechain")
                             .resizable()
                             .frame(width: 145, height: 145)
                         
                         Text("Connect")
-                            .font(.system(size: 80))
+                            .font(.system(size: 80, weight: .black))
                             .foregroundColor(Color.white)
-                            .fontWeight(.black)
                     }
                     
                     
                     VStack(spacing: 45) {
-                        // 아이디
                         ZStack(alignment: .leading) {
                             if userId.isEmpty {
                                 Text("아이디")
-                                    .foregroundColor(.white)  // Change color here
+                                    .foregroundColor(.white)
                             }
                             TextField("", text: $userId)
-                                .foregroundColor(.white)  // Change color here
+                                .foregroundColor(.white)
                                 .overlay( Rectangle()
                                     .foregroundColor(.clear)
                                     .frame(width: 323, height: 48)
@@ -69,15 +65,13 @@ struct SigninView: View {
                                             .stroke(Color(red: 0.95, green: 0.95, blue: 0.95), lineWidth: 1.5)
                                     )
                                 )
-                            
                         }
                         .padding(.horizontal,50)
 
-                        // 이메일
                         ZStack(alignment: .leading) {
                             if email.isEmpty {
                                 Text("이메일")
-                                    .foregroundColor(.white)  // Change color here
+                                    .foregroundColor(.white)  
                             }
                             TextField("", text: $email)
                                 .foregroundColor(.white)  // Change color here
@@ -180,13 +174,10 @@ struct SigninView: View {
                                 .cornerRadius(50)
                             
                             Text("회원가입")
-                                .font(.system(size: 27))
+                                .font(.system(size: 27, weight: .bold))
                                 .foregroundColor(Color.white)
-                                .fontWeight(.bold)
-                            
                         }
                     }
-                    
                 }
                 .padding(.bottom,50)
             }

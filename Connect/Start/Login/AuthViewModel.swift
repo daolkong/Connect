@@ -132,7 +132,7 @@ final class AuthViewModel: ObservableObject {
         let storageRef = storage.reference()
 
         // Convert the image to Data
-        guard let imageData = image.jpegData(compressionQuality: 0.4) else {
+        guard let imageData = image.jpegData(compressionQuality: 1) else {
             print("Could not convert image to Data")
             return
         }
@@ -158,7 +158,8 @@ final class AuthViewModel: ObservableObject {
 
                 var post = Post(userId: userId,
                                 imageUrl: downloadURL.absoluteString,
-                                timestamp: Timestamp(date: captureTime))
+                                timestamp: Timestamp(date: captureTime),
+                                likeCount: 0)
 
                 // Get a reference to Firestore Database
                 let db = Firestore.firestore()

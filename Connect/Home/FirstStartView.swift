@@ -11,20 +11,30 @@ struct FirstStartView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @EnvironmentObject var userDataModel: UserDataModel
     @State var isSignIn = true
+    @State var isStartView = true // 추가
     
     var body: some View {
-        NavigationStack {
+        NavigationView {
             Group {
-                switch authViewModel.loginState {
-                case .firstLaunch:
+                if isStartView { // 추가
                     StartView()
-                case .loggedIn:
-                    MainTabbedView()
-                case .loggedOut:
-                    LoginView()
-                case .notSigned:
-                    SigninView()
+                } else {
+                    switch authViewModel.loginState {
+                    case .firstLaunch:
+                        StartView()
+                    case .loggedIn:
+                        MainTabbedView()
+                    case .loggedOut:
+                        LoginView()
+                    case .notSigned:
+                        SigninView()
+                    }
                 }
+            }
+        }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { // 추가
+                isStartView = false
             }
         }
     }

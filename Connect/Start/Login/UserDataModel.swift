@@ -19,9 +19,7 @@ class UserDataModel: ObservableObject {
           Auth.auth().currentUser?.uid ?? ""
       }
 
-
     init() {}
-
     func fetchUser() {
         
         guard let uid = Auth.auth().currentUser?.uid, !uid.isEmpty else {
@@ -67,7 +65,6 @@ class UserDataModel: ObservableObject {
                    for document in querySnapshot!.documents{
                        do{
                            if let user = try? document.data(as: DBUser.self){
-                               // Check if the user's uid is already in the users array.
                                if !self.users.contains(where: { $0.uid == user.uid }) {
                                    self.users.append(user)
                                }
@@ -119,7 +116,6 @@ class UserDataModel: ObservableObject {
                 }
             } else {
                 print("Document does not exist or is nil")
-                // 여기서 user를 nil로 설정하거나 다른 처리를 수행할 수 있습니다.
                 self.user = nil
             }
         }
@@ -147,7 +143,6 @@ class UserDataModel: ObservableObject {
                 }
             } else {
                 print("Document does not exist or is nil")
-                // 여기서 currentUser를 nil로 설정하거나 다른 처리를 수행할 수 있습니다.
                 self.currentUser = nil
             }
         }

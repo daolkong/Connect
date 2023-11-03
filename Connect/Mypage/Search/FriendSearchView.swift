@@ -14,7 +14,7 @@ struct FriendSearchView: View {
     @State private var activeUserId: String? // Add this line
     
     var body: some View {
-        NavigationStack {
+        NavigationView {
             VStack {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 35) {
@@ -33,14 +33,12 @@ struct FriendSearchView: View {
                                                         
                                                         VStack(alignment: .leading) {
                                                             Text(user.userId ?? "No Full ID")
-                                                                .font(.system(size: 20))
+                                                                .font(.system(size: 20, weight:.semibold))
                                                                 .foregroundColor(Color.black)
-                                                                .fontWeight(.semibold)
                                                             
                                                             Text(user.hastags ?? "No Hashtags")
-                                                                .font(.system(size: 12))
+                                                                .font(.system(size: 12, weight:.regular))
                                                                 .foregroundColor(Color.black)
-                                                                .fontWeight(.regular)
                                                         }
                                                     }
                                                     .onTapGesture{

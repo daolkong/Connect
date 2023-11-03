@@ -31,9 +31,8 @@ struct LoginView: View {
                             .frame(width: 145, height: 145)
                         
                         Text("Connect")
-                            .font(.system(size: 75))
+                            .font(.system(size: 75, weight: .black))
                             .foregroundColor(Color.white)
-                            .fontWeight(.black)
                     }
                     
                     VStack(spacing: 45) {
@@ -106,9 +105,8 @@ struct LoginView: View {
                                     .cornerRadius(50)
                                 
                                 Text("로그인")
-                                    .font(.system(size: 27))
+                                    .font(.system(size: 27, weight: .bold))
                                     .foregroundColor(Color.white)
-                                    .fontWeight(.bold)
                             }
                         }
                         
@@ -121,13 +119,10 @@ struct LoginView: View {
                             isSigninViewActive = true
                         }) {
                             Text("회원가입 하기")
-                                .font(.system(size: 18))
+                                .font(.system(size: 18, weight: .bold))
                                 .foregroundColor(Color(red: 0.1, green: 0.1, blue: 0.1))
-                                .fontWeight(.bold)
                         }
-                        
                     }
-                    
                 }
                 .frame(width: 333)
                 .alert("로그인 실패", isPresented: $retrySignIn) {

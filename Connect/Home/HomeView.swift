@@ -61,8 +61,7 @@ struct HomeView: View {
                     Spacer().frame(width: 105) // 여기에 Spacer 추가
                     
                     Text("Connect")
-                        .font(.system(size: 25))
-                        .fontWeight(.semibold)
+                        .font(.system(size: 25, weight:.semibold))
                     
                     Spacer().frame(width: 105) // 여기에 Spacer 추가
                     
@@ -196,8 +195,12 @@ struct HomeView: View {
                         }
                         
                         // Firestore에 업로드할 데이터 구성 및 Post 객체 생성 후 사전 변환
-                        let postObject = Post(id: imageName, userId: userId , imageUrl:downloadURL.absoluteString , timestamp :timestamp)
-                        
+                        let postObject = Post(id: imageName,
+                                              userId: userId,
+                                              imageUrl: downloadURL.absoluteString,
+                                              timestamp: timestamp,
+                                              likeCount: 0) // 'likeCount'를 추가했습니다.
+
                         // Post 객체를 사전으로 변환합니다.
                         let postDict = postObject.asDictionary()
                         
@@ -272,7 +275,7 @@ struct HomeView: View {
                                let imageUrl = document.data()["imageUrl"] as? String,
                                let timestampData = document.data()["timestamp"] as? Timestamp {
 
-                                return Post(id: document.documentID, userId: userId, imageUrl: imageUrl, timestamp: timestampData)
+                                return Post(id: document.documentID, userId: userId, imageUrl: imageUrl, timestamp: timestampData,likeCount: 0)
                             } else {
                                 print("Failed to create a Post object from the data of Document ID \(document.documentID). Check whether all necessary fields are present and in correct format.")
                             }

@@ -31,8 +31,7 @@ struct AlarmLikeView: View {
                                 .resizable()
                                 .frame(width: 44, height: 44)
                             Text("susun_hit 님이 회원님의 게시물을 좋아합니다. ")
-                                .font(.system(size: 15))
-                                .fontWeight(.medium)
+                                .font(.system(size: 15, weight:.medium))
                         }
                         .frame(width: 300)
                         

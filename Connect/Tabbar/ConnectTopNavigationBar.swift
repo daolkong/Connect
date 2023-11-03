@@ -21,8 +21,7 @@ struct ConnectTopNavigationBar: View {
                 .frame(width: 24, height: 24)
             
             Text(AlarmItem)
-                .font(.system(size: 25))
-                .fontWeight(.semibold)
+                .font(.system(size: 25, weight:.semibold))
             
             Image(imageLogo)
                 .resizable()

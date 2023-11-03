@@ -19,8 +19,7 @@ struct Time_sellectView: View {
             VStack {
                 HStack {
                     Text("Friend Search")
-                        .font(.system(size: 23))
-                        .fontWeight(.semibold)
+                        .font(.system(size: 23, weight:.semibold))
                     
                     Spacer()
                     
@@ -48,8 +47,7 @@ struct Time_sellectView: View {
                             .frame(width: 1, height: 14)
                         
                         TextField("Search...", text: $searchText) // 여기서 searchText는 문자열 바인딩 변수여야 합니다.
-                            .font(.system(size: 17))
-                            .fontWeight(.regular)
+                            .font(.system(size: 17, weight: .regular))
                             .foregroundColor(Color(red: 0.52, green: 0.69, blue: 0.94))
                     }
                     .padding(.leading, 40)
