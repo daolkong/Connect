@@ -12,46 +12,35 @@ import FirebaseAuth
 import FirebaseFirestore
 import FirebaseFirestoreSwift
 import _PhotosUI_SwiftUI
-import FirebaseStorage  // Add this line at the top of the file.
+import FirebaseStorage  
 
-// 메인 액터 어노테이션을 사용하여 클래스가 메인 스레드에서 실행되도록 합니다.
 @MainActor
 final class AuthViewModel: ObservableObject {
     private var authStateDidChangeListenerHandle: AuthStateDidChangeListenerHandle?
     
-    @Published var currentUser: DBUser? // add this line
+    @Published var currentUser: DBUser?
     
-    // 로그인 상태를 나타내는 Published 프로퍼티입니다. 이 프로퍼티의 값이 변경될 때마다 SwiftUI 뷰는 자동으로 업데이트됩니다.
     @Published var loginState: LoginState
     
-    
-    // 현재 로그인한 사용자 정보를 저장하는 Published 프로퍼티입니다.
     @Published var user: DBUser?
     
-    // 사용자의 프로필 이미지 URL을 저장하는 private 프로퍼티입니다.
     private var profileImageURL: String?
     
-    // 현재 로그인한 사용자의 UID를 가져오는 computed property입니다. 만약 로그인한 사용자가 없다면 빈 문자열을 반환합니다.
     public var uid: String {
         Auth.auth().currentUser?.uid ?? ""
     }
-    
-    // 생성자에서는 현재 로그인 상태를 확인하여 loginState 변수에 할당합니다.
     
     init() {
         loginState = Auth.auth().currentUser != nil ? .loggedIn : .loggedOut
         addAuthListener()
     }
     
-    
     func addAuthListener() {
         if authStateDidChangeListenerHandle == nil {
             authStateDidChangeListenerHandle = Auth.auth().addStateDidChangeListener { (auth, firebaseUser) in
                 if let firebaseUser = firebaseUser {
-                    // Here we create a new user with the info from the FirebaseAuth user
                     self.currentUser = DBUser(email: firebaseUser.email ?? "", userId:"", hastags:"", uid:firebaseUser.uid, friends: [])
 
-                    // Fetch user information immediately after setting currentUser.
                     Task {
                         do {
                             try await self.fetchUser()
@@ -73,28 +62,25 @@ final class AuthViewModel: ObservableObject {
         }
     }
     
-    // 새로운 사용자를 등록하는 함수입니다. 입력받은 정보와 함께 Firebase Authentication에 요청을 보냅니다.
     func registerUser(userId: String, withEmail email: String, password: String, hastags: String)
     async throws {
         let result = try await Auth.auth().createUser(withEmail: email, password: password)
         let user = DBUser(email: email, userId: userId, hastags: hastags, uid: result.user.uid, friends: [])
         try await storeUser(with:user)
-        loginState = .loggedIn  // 성공적으로 등록하면 로그인 상태로 전환합니다.
+        loginState = .loggedIn
     }
     
-    // 이메일과 비밀번호를 이용해 기존 유저를 로그인 시키는 함수입니다.
     func signInUser(withEmail email:String,password:String) async throws{
         try await Auth.auth().signIn(withEmail :email,password :password)
-        loginState = .loggedIn  // 성공적으로 등록하면 로그인 상태로 전환합니다.
+        loginState = .loggedIn
     }
     
     func signOutUser() throws{
         try Auth.auth().signOut()
         self.user = nil
-        loginState = .loggedOut // 성공적으로 로그아웃하면 로그아웃 상태로 전환합니다.
+        loginState = .loggedOut
     }
     
-    // Firestore에서 현재 사용자의 정보를 가져오는 함수입니다.
     func fetchUser() async throws{
         guard let user = try? await Firestore.firestore().collection("users").document(uid).getDocument(as: DBUser.self) else {
             return
@@ -113,7 +99,6 @@ final class AuthViewModel: ObservableObject {
         
         _ = try await fileRef.putDataAsync(data, metadata: nil)
         
-        // 직접 URL을 가져오기
         do {
             let url = try await fileRef.downloadURL()
             let urlStr = url.absoluteString
@@ -126,24 +111,19 @@ final class AuthViewModel: ObservableObject {
          }
     }
 
-    // 이미지를 저장하고 이미지와 관련된 정보를 Firestore에 함께 저장
     func saveImage(_ image: UIImage, userId: String, captureTime: Date) {
         let storage = Storage.storage()
         let storageRef = storage.reference()
 
-        // Convert the image to Data
         guard let imageData = image.jpegData(compressionQuality: 1) else {
             print("Could not convert image to Data")
             return
         }
 
-        // Create a unique identifier for the image
         let imageName = UUID().uuidString
 
-        // Create a reference to the file you want to upload
         let imagesRef = storageRef.child("images/\(imageName).jpg")
 
-        // Upload the file to the path "images/[imageName].jpg"
         imagesRef.putData(imageData, metadata: nil) { (metadata, error) in
             guard metadata != nil else {
                 print("Error uploading image")
@@ -161,7 +141,6 @@ final class AuthViewModel: ObservableObject {
                                 timestamp: Timestamp(date: captureTime),
                                 likeCount: 0)
 
-                // Get a reference to Firestore Database
                 let db = Firestore.firestore()
 
                 db.collection("posts").addDocument(data:
@@ -178,33 +157,24 @@ final class AuthViewModel: ObservableObject {
          }
     }
     func saveAndStoreImage(_ image: UIImage) async throws -> String {
-        // Save the image and get its URL.
         let urlStr = try await saveProfileImage(image)
         
-        // Save the image to Firebase Storage and store its info in Firestore.
         saveImage(image, userId: uid, captureTime: Date())
         
-        // Update the user object in memory.
         if user?.uploadedImagesURLs == nil {
-            user?.uploadedImagesURLs = [urlStr]  // If it's nil, initialize it with the new URL.
+            user?.uploadedImagesURLs = [urlStr]
         } else {
-            user?.uploadedImagesURLs?.append(urlStr)  // If it's not nil, append the new URL.
+            user?.uploadedImagesURLs?.append(urlStr)
         }
         
-        // Update the user object in Firestore database.
         try await Firestore.firestore().collection("users").document(uid).updateData(["uploadedImagesURLs": FieldValue.arrayUnion([urlStr])])
-        
         return urlStr
     }
-    
-    
 }
 
 extension AuthViewModel {
     // MARK: - Helper
-    
-    // Firestore에 사용자 정보를 저장하는 private helper 함수입니다.
-    private func storeUser(with user: DBUser) async throws {
+        private func storeUser(with user: DBUser) async throws {
         let encodedUser = try Firestore.Encoder().encode(user)
         try await Firestore.firestore().collection("users").document(uid).setData(encodedUser)
     }

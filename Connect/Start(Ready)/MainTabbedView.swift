@@ -18,10 +18,8 @@ struct MainTabbedView: View {
                 HomeView(imageUrl:"")
                     .tag(0)
                 
-                Friend_sellectView()
+                FriendSearchView()
                     .tag(1)
-                    .environmentObject(AuthViewModel())
-                    .environmentObject(UserDataModel())
                 
                 MainConnectView()
                     .tag(2)
@@ -90,3 +88,4 @@ enum TabbedItems:Int , CaseIterable{
         }
     }
 }
+

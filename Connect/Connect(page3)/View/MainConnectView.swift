@@ -28,8 +28,8 @@ struct MainConnectView: View {
                     }
                 Spacer()
                 
-                Text("Connect Gallery")
-                    .font(.system(size: 25, weight: .semibold))
+                Text("커넥트 갤러리")
+                    .font(.system(size: 23, weight: .bold))
                     .frame(width: 190)
                 
                 Spacer()

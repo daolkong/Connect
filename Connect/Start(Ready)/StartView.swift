@@ -23,8 +23,6 @@ struct StartView: View {
             Image("Connect(2)")
                 .resizable()
                 .frame(width: 420, height: 150)
-
-            
         }
     }
 }

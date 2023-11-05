@@ -11,12 +11,12 @@ struct FirstStartView: View {
     @EnvironmentObject var authViewModel: AuthViewModel
     @EnvironmentObject var userDataModel: UserDataModel
     @State var isSignIn = true
-    @State var isStartView = true // 추가
+    @State var isStartView = true
     
     var body: some View {
         NavigationView {
             Group {
-                if isStartView { // 추가
+                if isStartView {
                     StartView()
                 } else {
                     switch authViewModel.loginState {
@@ -33,7 +33,7 @@ struct FirstStartView: View {
             }
         }
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { // 추가
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { 
                 isStartView = false
             }
         }

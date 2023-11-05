@@ -12,7 +12,7 @@ import FirebaseFirestoreSwift
 
 class UserDataModel: ObservableObject {
     @Published var user: DBUser?
-    @Published var users = [DBUser]() // Array to store all users
+    @Published var users = [DBUser]() 
     @Published var currentUser: DBUser?
     
     public var uid: String {

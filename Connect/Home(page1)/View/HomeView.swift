@@ -17,11 +17,11 @@ struct HomeView: View {
     @State private var isCameraPresented = true
     @State private var isNavigatingToMyPage = false
     @State private var isNavigatingToHomeGroup = false
-    @State private var imageUrls: [String] = [] // 이미지 URL 배열 추가
+    @State private var imageUrls: [String] = []
     @State private var uiImage : UIImage?
     @State private var lastImageCaptureDate: Date?
     @State private var posts: [Post] = []
-    @State private var lastDocumentSnapshot: DocumentSnapshot? // 마지막으로 가져온 DocumentSnapshot 저장
+    @State private var lastDocumentSnapshot: DocumentSnapshot?
     @State private var isLoading = false
     @State private var isUploaded = false
     
@@ -41,7 +41,6 @@ struct HomeView: View {
     }()
     
     var body: some View {
-        
         NavigationView {
             VStack(spacing: 10) {
                 
@@ -57,30 +56,19 @@ struct HomeView: View {
                         .navigationBarBackButtonHidden(true), isActive: $isNavigatingToMyPage) {
                             EmptyView()
                         }
-                    
-                    Spacer().frame(width: 105) // 여기에 Spacer 추가
-                    
+                    Spacer()
                     Text("Connect")
-                        .font(.system(size: 25, weight:.semibold))
+                        .font(.system(size: 30, weight:.black))
+                    Spacer()
                     
-                    Spacer().frame(width: 105) // 여기에 Spacer 추가
-                    
-                    Image("users")
-                        .resizable()
+                    Circle()
+                        .foregroundColor(.clear)
                         .frame(width: 24, height: 24)
-                        .onTapGesture {
-                            isNavigatingToHomeGroup = true
-                        }
-                    
-                    NavigationLink(destination: HomeGroupView()
-                        .navigationBarBackButtonHidden(true), isActive: $isNavigatingToHomeGroup) {
-                            EmptyView()
-                        }
                 }
+                .padding(.horizontal,10)
                 
                 ScrollView {
                     LazyVStack(spacing :1){
-                        // 아래 게시물
                         ForEach(posts) { post in
                             PostRow(postData: post)
                         }
@@ -111,7 +99,6 @@ struct HomeView: View {
                     }
                 }
             })
-            
             .onDisappear(perform:{
                 if let image = uiImage, isUploaded == false {
                     uploadImageToFirestore(image:image)
@@ -119,7 +106,6 @@ struct HomeView: View {
                 }
                 
                 guard let userId = authViewModel.user?.userId else {
-                    // Instead of 'return', set isCameraPresented to true and exit.
                     self.isCameraPresented = true
                     return
                 }
@@ -143,13 +129,11 @@ struct HomeView: View {
     
     private func saveImageCaptureDate() {
         lastImageCaptureDate = Date()
-        // 날짜를 문자열로 변환하여 UserDefaults에 저장합니다.
         lastImageCaptureDateString = DateFormatter.localizedString(from: lastImageCaptureDate ?? Date(), dateStyle: .short, timeStyle: .none)
     }
     
     private func uploadImageToFirestore(image: UIImage) {
-        // Firestore에 업로드할 이미지 데이터
-        guard let resizedImage = image.resized(toWidth : 500),
+        guard let resizedImage = image.resized(toWidth : 393),
               let imageData = resizedImage.jpegData(compressionQuality : 1) else{
             print("Failed to convert image to data.")
             return
@@ -159,12 +143,12 @@ struct HomeView: View {
             do {
                 try await self.authViewModel.fetchUser()
                 
-                guard let userId = authViewModel.user?.userId else { // Change from 'fullId' to 'userId'
+                guard let userId = authViewModel.user?.userId else {
                     print("No Full ID found")
                     return
                 }
                 
-                let timestamp = Timestamp(date: Date()) // 현재 시간을 타임스탬프로 사용, 수정된 부분입니다.
+                let timestamp = Timestamp(date: Date())
                 let imageName = UUID().uuidString
                 
                 if imageName.isEmpty {
@@ -194,29 +178,23 @@ struct HomeView: View {
                             return
                         }
                         
-                        // Firestore에 업로드할 데이터 구성 및 Post 객체 생성 후 사전 변환
                         let postObject = Post(id: imageName,
                                               userId: userId,
                                               imageUrl: downloadURL.absoluteString,
                                               timestamp: timestamp,
-                                              likeCount: 0) // 'likeCount'를 추가했습니다.
-
-                        // Post 객체를 사전으로 변환합니다.
+                                              likeCount: 0)
+                        
                         let postDict = postObject.asDictionary()
                         
-                        
-                        // Firestore에 데이터 추가
-    
-
-                        Firestore.firestore().collection("posts").addDocument(data: postDict){ error in  // Removed [weak self]
+                        Firestore.firestore().collection("posts").addDocument(data: postDict){ error in
                             if let err = error {
                                 print(err.localizedDescription)
                             } else {
                                 print("Document added successfully!")
                                 
-                                isUploaded = true   // <- 이곳으로 옮김.
+                                isUploaded = true
                                 
-                                fetchLatestPostTimestamp(forUser : userId) { date in  // Fetch the latest timestamp after upload.
+                                fetchLatestPostTimestamp(forUser : userId) { date in
                                     if let lastCaptureDate = date {
                                         DispatchQueue.main.async {
                                             self.isCameraPresented =
@@ -224,27 +202,23 @@ struct HomeView: View {
                                         }
                                     } else {
                                         DispatchQueue.main.async{
-                                            self.isCameraPresented = true  // If no posts are found for the user after upload.
+                                            self.isCameraPresented = true
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                    
-                    
                 }
                 
             } catch {
                 print(error.localizedDescription)
             }
-            
         }
-        
     }
     
     func fetchImages() {
-        guard !isLoading else { return }  // 이미 데이터를 불러오고 있다면 중복해서 불러오기 방지
+        guard !isLoading else { return }
         
         isLoading = true
         
@@ -253,8 +227,7 @@ struct HomeView: View {
         var query: Query = db.collection("posts").order(by: "timestamp", descending: true)
         
         query.addSnapshotListener { (querySnapshot, err) in
-            //        query.limit(to: 10).addSnapshotListener { (querySnapshot, err) in
-            defer { self.isLoading = false }  // 데이터 로딩이 끝났음을 표시
+            defer { self.isLoading = false }
             
             if let err = err {
                 print("Error fetching documents:", err.localizedDescription)
@@ -266,15 +239,13 @@ struct HomeView: View {
                 return
                 
             } else {
-                
                 DispatchQueue.main.async {
-                    
                     self.posts = querySnapshot!.documents.compactMap { document in
                         if document.exists {
                             if let userId = document.data()["userId"] as? String,
                                let imageUrl = document.data()["imageUrl"] as? String,
                                let timestampData = document.data()["timestamp"] as? Timestamp {
-
+                                
                                 return Post(id: document.documentID, userId: userId, imageUrl: imageUrl, timestamp: timestampData,likeCount: 0)
                             } else {
                                 print("Failed to create a Post object from the data of Document ID \(document.documentID). Check whether all necessary fields are present and in correct format.")
@@ -282,10 +253,8 @@ struct HomeView: View {
                         } else {
                             print("Document does not exist for Document ID \(document.documentID)")
                         }
-
                         return nil
                     }
-
                 }
             }
         }
@@ -293,7 +262,7 @@ struct HomeView: View {
     
     private func fetchLatestPostTimestamp(forUser userId: String, completion: @escaping (Date?) -> Void) {
         let db = Firestore.firestore()
-
+        
         db.collection("posts")
             .whereField("userId", isEqualTo: userId)
             .order(by: "timestamp", descending: true)
@@ -304,20 +273,17 @@ struct HomeView: View {
                     completion(nil)
                     return
                 } else if querySnapshot?.documents.isEmpty ?? true {
-                    print("No posts found for user \(userId).")  // Print the user ID as well.
+                    print("No posts found for user \(userId).")
                     completion(nil)
                     return
                 } else {
                     if let document = querySnapshot?.documents.first,
                        let timestampData = document.data()["timestamp"] as? Timestamp {
-                        // Return the timestamp of the latest post.
                         completion(timestampData.dateValue())
                         return
                     }
                     
-                    // If 'timestamp' field is not found or not in expected format,
-                    // print an error message and complete with nil.
-                    print("'timestamp' field is missing or not in expected format for user \(userId).")  // Print the user ID as well.
+                    print("'timestamp' field is missing or not in expected format for user \(userId).")
                     completion(nil)
                 }
             }
@@ -328,7 +294,7 @@ struct CameraView: UIViewControllerRepresentable {
     @Binding var isShown: Bool
     @Binding var image: UIImage?
     
-    @EnvironmentObject var authViewModel: AuthViewModel  // Add this line
+    @EnvironmentObject var authViewModel: AuthViewModel
     
     
     func makeCoordinator() -> Coordinator {
@@ -337,7 +303,7 @@ struct CameraView: UIViewControllerRepresentable {
     
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
-        picker.sourceType = .camera // Use the photo library interface
+        picker.sourceType = .camera
         picker.delegate = context.coordinator
         
         return picker
@@ -349,17 +315,17 @@ struct CameraView: UIViewControllerRepresentable {
         @Binding var isShown: Bool
         @Binding var image: UIImage?
         
-        init(isShown : Binding<Bool>, image : Binding<UIImage?>) {  // Add 'image1' binding here.
+        init(isShown : Binding<Bool>, image : Binding<UIImage?>) {
             _isShown = isShown
             _image = image
             
             super.init()
             
-            AVCaptureDevice.requestAccess(for:.video) { (granted) in // Request authorization for camera access.
+            AVCaptureDevice.requestAccess(for:.video) { (granted) in
                 if !granted { print("Error - AVCaptureDevice authorization status not authorized.") }
             }
             
-            PHPhotoLibrary.requestAuthorization { (status) in // Request authorization for photo library access.
+            PHPhotoLibrary.requestAuthorization { (status) in
                 switch status {
                 case .authorized:
                     break
@@ -369,9 +335,7 @@ struct CameraView: UIViewControllerRepresentable {
                     break
                     
                 }
-                
             }
-            
         }
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -379,11 +343,8 @@ struct CameraView: UIViewControllerRepresentable {
                 return
             }
             
-            // 선택한 이미지를 처리합니다.
             if self.image == nil {
                 self.image = selectedImage
-                
-                // 두 장의 사진 모두 선택되었으므로 isShown 상태 변수를 false로 설정하여 카메라 뷰(모달)를 닫습니다.
                 self.isShown = false
             }
         }

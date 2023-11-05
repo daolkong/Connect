@@ -33,7 +33,19 @@ struct SigninView: View {
                     Button(action: {
                         presentationMode.wrappedValue.dismiss()
                     }) {
-                        SigninTopNavigationBar()
+                        HStack(spacing:35) {
+                            Image("backk")
+                                .resizable()
+                                .frame(width: 7, height: 13)
+                            
+                            Text("로그인")
+                                .font(.system(size: 20, weight: .bold))
+                                .foregroundColor(Color.white)
+                            
+                            Spacer()
+                            
+                        }
+                        .padding(.horizontal,20)
                     }
                     
                     VStack(spacing: 0) {
@@ -74,7 +86,7 @@ struct SigninView: View {
                                     .foregroundColor(.white)  
                             }
                             TextField("", text: $email)
-                                .foregroundColor(.white)  // Change color here
+                                .foregroundColor(.white)
                                 .overlay( Rectangle()
                                     .foregroundColor(.clear)
                                     .frame(width: 323, height: 48)
@@ -85,7 +97,6 @@ struct SigninView: View {
                                             .stroke(Color(red: 0.95, green: 0.95, blue: 0.95), lineWidth: 1.5)
                                     )
                                 )
-                            
                         }
                         .padding(.horizontal,50)
                         
@@ -93,10 +104,10 @@ struct SigninView: View {
                         ZStack(alignment: .leading) {
                             if password.isEmpty {
                                 Text("비밀번호")
-                                    .foregroundColor(.white)  // Change color here
+                                    .foregroundColor(.white)
                             }
                             SecureField("", text: $password)
-                                .foregroundColor(.white)  // Change color here
+                                .foregroundColor(.white)
                                 .overlay( Rectangle()
                                     .foregroundColor(.clear)
                                     .frame(width: 323, height: 48)
@@ -107,7 +118,6 @@ struct SigninView: View {
                                             .stroke(Color(red: 0.95, green: 0.95, blue: 0.95), lineWidth: 1.5)
                                     )
                                 )
-                            
                         }
                         .padding(.horizontal,50)
 
@@ -115,10 +125,10 @@ struct SigninView: View {
                         ZStack(alignment: .leading) {
                             if hastags.isEmpty {
                                 Text("나를 나타내는 해시태그 4개(쉼표로 구분)")
-                                    .foregroundColor(.white)  // Change color here
+                                    .foregroundColor(.white)
                             }
                             TextField("", text: $hastags)
-                                .foregroundColor(.white)  // Change color here
+                                .foregroundColor(.white)
                                 .overlay( Rectangle()
                                     .foregroundColor(.clear)
                                     .frame(width: 323, height: 48)
@@ -129,7 +139,6 @@ struct SigninView: View {
                                             .stroke(Color(red: 0.95, green: 0.95, blue: 0.95), lineWidth: 1.5)
                                     )
                                 )
-                            
                             
                         }
                         .padding(.horizontal,50)
@@ -147,7 +156,7 @@ struct SigninView: View {
                         Task {
                             do {
                                 try await authViewModel.registerUser(userId: userId, withEmail: email, password: password, hastags: hastags)
-                                isLoginSuccessful = true // <- 여기에 추가
+                                isLoginSuccessful = true
                             } catch {
                                 retrySignUp = true
                                 errorMessage = error.localizedDescription
@@ -164,9 +173,8 @@ struct SigninView: View {
                                          .frame(width: 0, height: 0)
                                          .disabled(true)
                                          .allowsHitTesting(false)
-                                         .opacity(0.00001) // Make it invisible but still active.
+                                         .opacity(0.00001)
                                   }
-                            
                             
                             Rectangle()
                                 .foregroundColor(Color(red: 0.1, green: 0.1, blue: 0.1))

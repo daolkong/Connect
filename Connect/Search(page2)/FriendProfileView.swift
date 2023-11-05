@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct FriendProfileView: View {
-    @StateObject private var authViewModel = AuthViewModel() // 'private' 제거
-    @StateObject private var userDataModel = UserDataModel() // 'private' 제거
+    @StateObject private var authViewModel = AuthViewModel()
+    @StateObject private var userDataModel = UserDataModel()
     @Environment(\.presentationMode) var presentationMode
     
     let user : DBUser
-    var uid: String? // 'uid'의 접근 제어 수준을 변경
+    var uid: String?
     
     func addFriend(_ friendUser: DBUser) {
         guard let currentUser = authViewModel.currentUser else {
@@ -21,7 +21,6 @@ struct FriendProfileView: View {
             return
         }
         
-        // Add friendUser's uid to currentUser's friends list
         userDataModel.addFriend(currentUser.uid , friendUser.uid) { result in
             switch result {
             case .success():
@@ -31,8 +30,7 @@ struct FriendProfileView: View {
             }
         }
         
-        // Add currentUser's uid to friendUser's friends list
-        userDataModel.addFriend(friendUser.uid, authViewModel.uid) { result in  // <-- Here
+        userDataModel.addFriend(friendUser.uid, authViewModel.uid) { result in
             switch result {
             case .success():
                 print("Successfully added current user to friend's friends list")
@@ -106,31 +104,9 @@ struct FriendProfileView: View {
                         
                     }
                     
-                    // 총 커넥트 횟수(요청)
-                    HStack(spacing: 20) {
-                        ZStack {
-                            Rectangle()
-                                .foregroundColor(.clear)
-                                .frame(width: 65, height: 59)
-                                .background(Color(red: 0.13, green: 0.14, blue: 0.14))
-                                .cornerRadius(20)
-                            
-                            Image("ccc")
-                                .resizable()
-                                .frame(width: 35, height: 35)
-                        }
-                        
-                        Image("lline")
-                            .resizable()
-                            .frame(width: 34, height: 4)
-                        
-                        Text("21")
-                            .font(.system(size: 30, weight:.semibold))
-                    }
                     
-                    // 정보수정 버튼
+                    // 친구추가 버튼
                     Button(action: {
-                        // Add your action here when the button is tapped
                         addFriend(user)
                     }) {
                         ZStack {
@@ -155,10 +131,8 @@ struct FriendProfileView: View {
                                 .font(.system(size: 20, weight:.bold))
                                 .foregroundColor(Color(red: 0.13, green: 0.14, blue: 0.14))
                                 .padding(.leading,30)
-                            
                         }
                     }
-                    
                     .padding(.top, 30)
                     
                 }

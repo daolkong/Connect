@@ -17,8 +17,8 @@ struct Post: Codable, Identifiable {
     let userId: String
     let imageUrl: String
     let timestamp: Timestamp 
-    var tag: String?  // Add this line.
-    var likeCount: Int  // Add this line.
+    var tag: String?
+    var likeCount: Int
     
     enum CodingKeys: String, CodingKey {
         case userId

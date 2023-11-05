@@ -41,10 +41,10 @@ struct LoginView: View {
                         ZStack(alignment: .leading) {
                             if email.isEmpty {
                                 Text("이메일을 입력해주세요")
-                                    .foregroundColor(.white)  // Change color here
+                                    .foregroundColor(.white)
                             }
                             TextField("", text: $email)
-                                .foregroundColor(.white)  // Change color here
+                                .foregroundColor(.white)
                                 .overlay( Rectangle()
                                     .foregroundColor(.clear)
                                     .frame(width: 323, height: 48)
@@ -59,15 +59,13 @@ struct LoginView: View {
                         }
                         .padding(.horizontal,20)
 
-                        
-                        //비밀번호 입력
                         ZStack(alignment: .leading) {
                             if password.isEmpty {
                                 Text("비밀번호를 입력해주세요")
-                                    .foregroundColor(.white)  // Change color here
+                                    .foregroundColor(.white)
                             }
                             SecureField("", text: $password)
-                                .foregroundColor(.white)  // Change color here
+                                .foregroundColor(.white)
                                 .overlay( Rectangle()
                                     .foregroundColor(.clear)
                                     .frame(width: 323, height: 48)
@@ -78,7 +76,6 @@ struct LoginView: View {
                                             .stroke(Color(red: 0.95, green: 0.95, blue: 0.95), lineWidth: 1.5)
                                     )
                                 )
-                            
                         }
                         .padding(.horizontal,20)
                         
@@ -115,7 +112,6 @@ struct LoginView: View {
                         }
                         
                         Button(action: {
-                            // "회원가입 하기" 버튼이 클릭되면 SigninView로 이동합니다.
                             isSigninViewActive = true
                         }) {
                             Text("회원가입 하기")
@@ -139,8 +135,6 @@ struct LoginView: View {
         }
     }
 }
-
-
 
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {

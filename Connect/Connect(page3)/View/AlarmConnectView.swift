@@ -10,9 +10,11 @@ import SwiftUI
 import FirebaseAuth
 import FirebaseFirestore
 import Kingfisher
+
 struct AlarmConnectView: View {
     @EnvironmentObject var notificationViewModel : NotificationViewModel
     @EnvironmentObject var sharedViewModel : SharedViewModel
+    
     var body: some View {
         ScrollView {
             ForEach(notificationViewModel.notifications.removingDuplicates(), id: \.id) { notification in
@@ -190,6 +192,6 @@ struct AlarmConnectView: View {
 struct AlarmConnectView_Previews: PreviewProvider {
     static var previews: some View {
         AlarmConnectView()
-            .environmentObject(SharedViewModel()) // sharedViewModel 인스턴스 생성
+            .environmentObject(SharedViewModel()) 
     }
 }
