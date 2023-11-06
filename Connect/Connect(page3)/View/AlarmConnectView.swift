@@ -54,11 +54,13 @@ struct AlarmConnectView: View {
                         
                         Button(action: {
                             Task {
-                                print("Button action started") // 버튼 액션 시작
+                                print("Button action started")
                                 if sharedViewModel.buttonClickCount < 4 {
                                     let fromUserId = notification.fromUserId
-                                    let toUserId = notification.toUserId  // 알림에서 'toUserId' 사용
-                                    let uid = Auth.auth().currentUser?.uid ?? "" // 현재 로그인한 사용자의 uid
+                                    
+                                    print("fromUserId: \(fromUserId)")
+                                    let toUserId = notification.toUserId
+                                    let uid = Auth.auth().currentUser?.uid ?? ""
                                     
                                     guard let document = try? await Firestore.firestore().collection("users").document(uid).getDocument(), let dbUser = try? document.data(as: DBUser.self) else {
                                         print("Error getting userId for the current user")
@@ -73,7 +75,6 @@ struct AlarmConnectView: View {
                                     var firstPostA: Post?
                                     var firstPostB: Post?
                                     
-                                    // 데이터 불러오기
                                     do {
                                         await sharedViewModel.loadPostForUsers(["A"], tab: sharedViewModel.tabSelection1)
                                         let postsARecent = try await sharedViewModel.loadPosts(for: "A", tab: sharedViewModel.tabSelection1)
@@ -98,11 +99,9 @@ struct AlarmConnectView: View {
                                         print("Error updating button click count:", error)
                                     }
                                     
-                                    // 이미지 URL 가져오기
                                     if let imageUrlStringA = firstPostA?.imageUrl, let imageUrlStringB = firstPostB?.imageUrl {
                                         if let urlImageA = URL(string: imageUrlStringA), let urlImageB = URL(string: imageUrlStringB) {
                                             
-                                            // 이미지 데이터 가져오기
                                             async let imageDataATask: Data? = try? await sharedViewModel.fetchData(from: urlImageA)
                                             async let imageDataBTask: Data? = try? await sharedViewModel.fetchData(from: urlImageB)
                                             
@@ -115,28 +114,43 @@ struct AlarmConnectView: View {
                                                         
                                                         do {
                                                             let dataToSave: [String: Any] = [
-                                                                "tag\(sharedViewModel.buttonClickCount + 1)": [
-                                                                    "userANImageUrl": imageUrlANew,
-                                                                    "userBNImageUrl": imageUrlBNew,
-                                                                    "userAId": fromUserId,
-                                                                    "userBId": toUserId
+                                                                "CurrentUserId": [
+                                                                    "tag\(sharedViewModel.buttonClickCount + 1)": [
+                                                                        "userANImageUrl": imageUrlANew,
+                                                                        "userBNImageUrl": imageUrlBNew,
+                                                                        "userAId": fromUserId,
+                                                                        "userBId": toUserId
+                                                                    ]
+                                                                ],
+                                                                "fromUserId": [
+                                                                    "tag\(sharedViewModel.buttonClickCount + 1)": [
+                                                                        "userANImageUrl": imageUrlBNew,
+                                                                        "userBNImageUrl": imageUrlANew,
+                                                                        "userAId": toUserId,
+                                                                        "userBId": fromUserId
+                                                                    ]
                                                                 ]
                                                             ]
                                                             
                                                             let db = Firestore.firestore()
                                                             
                                                             let dateFormatter = DateFormatter()
-                                                            dateFormatter.dateFormat = "yyyy.MM.dd"
-                                                            let documentId = dateFormatter.string(from: Date())
-                                                            let documentRef = db.collection("ConnectDB").document(documentId)
-                                                            try await documentRef.setData([currentUserId: dataToSave], merge: true)
+                                                            dateFormatter.dateFormat = "yyyy/MM/dd"
+                                                            let currentDate = dateFormatter.string(from: Date()) 
                                                             
-                                                            print("데이터를 Firestore에 성공적으로 저장했습니다!")
+                                                            let documentRef = db.collection("ConnectDB").document(currentDate)
                                                             
-                                                            sharedViewModel.buttonClickCount += 1 // 버튼 클릭 횟수 증가
+                                                            do {
+                                                                try await documentRef.setData(dataToSave, merge: true)
+                                                                print("데이터를 Firestore에 성공적으로 저장했습니다!")
+                                                                sharedViewModel.buttonClickCount += 1
+                                                            } catch {
+                                                                print("Firestore에 데이터를 쓰는 중 오류 발생:", error)
+                                                            }
                                                         } catch {
-                                                            print("Firestore에 데이터를 쓰는 중 오류 발생:", error)
+                                                            print("Firebase Storage에 이미지를 업로드하는 중 오류 발생")
                                                         }
+                                                        
                                                     } else {
                                                         print("Firebase Storage에 이미지를 업로드하는 중 오류 발생")
                                                     }
@@ -192,6 +206,6 @@ struct AlarmConnectView: View {
 struct AlarmConnectView_Previews: PreviewProvider {
     static var previews: some View {
         AlarmConnectView()
-            .environmentObject(SharedViewModel()) 
+            .environmentObject(SharedViewModel())
     }
 }

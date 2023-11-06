@@ -368,17 +368,22 @@ class SharedViewModel: ObservableObject {
     }
     
     @MainActor func increaseButtonClickCount(userId: String, fromUserId: String) async throws {
+        print("fromUserId: \(fromUserId)") // 디버그 코드 추가
         let db = Firestore.firestore()
         let documentRef = db.collection("Connect Numer").document(userId)
 
         let document = try await documentRef.getDocument()
-        if let data = document.data(), let count = data[fromUserId] as? Int {
-            try await documentRef.updateData([fromUserId: count + 1])
+        if let data = document.data(), let count = data["buttonClickCount"] as? Int {
+            print("Increasing button click count for \(fromUserId)")
+            try await documentRef.updateData(["buttonClickCount": count + 1, "fromUserId": fromUserId])
+            print("Successfully increased button click count for \(fromUserId)")
         } else {
-            try await documentRef.setData([fromUserId: 1], merge: true)
+            print("Setting button click count for \(fromUserId) to 1")
+            try await documentRef.setData(["buttonClickCount": 1, "fromUserId": fromUserId], merge: true)
+            print("Successfully set button click count for \(fromUserId) to 1")
         }
     }
-    
+
     @MainActor func getConnectNumer(userId: String) async throws -> [String: Int] {
         let db = Firestore.firestore()
         let documentRef = db.collection("Connect Numer").document(userId)

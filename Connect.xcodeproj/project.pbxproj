@@ -142,14 +142,14 @@
 		3356BC772AA2BEF500B1EF01 /* Connect */ = {
 			isa = PBXGroup;
 			children = (
+				339164752AE4C4B80000D23C /* ConnectDebug.entitlements */,
+				339164742AE3A36D0000D23C /* Connect.entitlements */,
 				3356BC782AA2BEF500B1EF01 /* ConnectApp.swift */,
 				33A099B92AF76ED300FD14C7 /* Start(Ready) */,
 				33A099B82AF76E7000FD14C7 /* Home(page1) */,
 				33A099B72AF76E6900FD14C7 /* Search(page2) */,
 				33A099B62AF76E4C00FD14C7 /* Connect(page3) */,
 				33A099B52AF76E1E00FD14C7 /* Mypage(page4) */,
-				339164752AE4C4B80000D23C /* ConnectDebug.entitlements */,
-				339164742AE3A36D0000D23C /* Connect.entitlements */,
 				3356BC7C2AA2BEF700B1EF01 /* Assets.xcassets */,
 				3356BC7E2AA2BEF700B1EF01 /* Preview Content */,
 			);
@@ -212,11 +212,11 @@
 		33A099B92AF76ED300FD14C7 /* Start(Ready) */ = {
 			isa = PBXGroup;
 			children = (
+				3356BCB02AA2C17000B1EF01 /* MainTabbedView.swift */,
+				338617832AA45C60008EF610 /* FirstStartView.swift */,
 				3356BC942AA2C09300B1EF01 /* SigninView.swift */,
 				3356BC922AA2C08800B1EF01 /* LoginView.swift */,
 				3356BC902AA2C07800B1EF01 /* StartView.swift */,
-				338617832AA45C60008EF610 /* FirstStartView.swift */,
-				3356BCB02AA2C17000B1EF01 /* MainTabbedView.swift */,
 				3356BCD22AA321E100B1EF01 /* LoginState.swift */,
 			);
 			path = "Start(Ready)";
@@ -246,9 +246,9 @@
 		33A099BC2AF76FF900FD14C7 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				338C281F2AAFFFE1004587CD /* ConnectSelection.swift */,
-				33391FF02ACD5126004CAB15 /* NotificationViewModel.swift */,
 				335985B82AD5238E004ACC17 /* SharedViewModel.swift */,
+				33391FF02ACD5126004CAB15 /* NotificationViewModel.swift */,
+				338C281F2AAFFFE1004587CD /* ConnectSelection.swift */,
 				33971C382AC1324D00418442 /* Notification.swift */,
 			);
 			path = Model;

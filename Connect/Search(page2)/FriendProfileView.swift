@@ -42,8 +42,8 @@ struct FriendProfileView: View {
     
     var body: some View {
         ZStack {
-            Image("Rectangle 19")
-                .resizable()
+            Rectangle()
+                .foregroundColor(.clear)
                 .frame(width: 394, height: 844)
                 .background(
                     LinearGradient(
@@ -55,8 +55,6 @@ struct FriendProfileView: View {
                         endPoint: UnitPoint(x: 1.07, y: 1.02)
                     )
                 )
-            
-            
             VStack(spacing: 30) {
                 
                 Button(action: {
@@ -99,11 +97,10 @@ struct FriendProfileView: View {
                             .resizable()
                             .frame(width: 34, height: 4)
                         
-                        Text("\(user.friends.count)") // Show the number of friends of the user.
+                        Text("\(user.friends.count)")
                             .font(.system(size: 30, weight:.semibold))
                         
                     }
-                    
                     
                     // 친구추가 버튼
                     Button(action: {
@@ -148,14 +145,11 @@ struct FriendProfileView: View {
     
     init(user: DBUser) {
         self.user = user
-        userDataModel.getCurrentUser(uid: authViewModel.uid)
     }
 }
 
 struct FriendProfileView_Previews: PreviewProvider {
     static var previews: some View {
         FriendProfileView(user: DBUser(email: "test@test.com", userId:"TestFullID", hastags:"TestHashtags", uid:"TestUID", profileImageURL:"", uploadedImagesURLs:[], friends: []))
-            .environmentObject(AuthViewModel())
-            .environmentObject(UserDataModel())
     }
 }

@@ -15,14 +15,12 @@ import FirebaseFirestoreSwift
 
 struct MyprofileView: View {
     @StateObject var authViewModel = AuthViewModel()
-    @State private var profileImage: UIImage? // This will hold the selected image.
-    @State private var isShowingImagePicker = false // This will control the showing of the image picker.
+    @State private var profileImage: UIImage? 
+    @State private var isShowingImagePicker = false
     @State private var profileImageURL: String?
     
     @Environment(\.scenePhase) private var scenePhase
-
-    
-    // 현재 로그인한 사용자의 UID를 가져오는 computed property입니다. 만약 로그인한 사용자가 없다면 빈 문자열을 반환합니다.
+        
     public var uid: String {
         Auth.auth().currentUser?.uid ?? ""
     }
@@ -46,6 +44,7 @@ struct MyprofileView: View {
             VStack(spacing: 65) {
                 // 프로필 이미지
                 VStack(spacing: 25) {
+                    
                     Button(action: { isShowingImagePicker.toggle() }) {
                         if let urlStr = profileImageURL, let url = URL(string: urlStr) {
                             AsyncImage(url: url) { image in
@@ -72,7 +71,7 @@ struct MyprofileView: View {
                     .sheet(isPresented: $isShowingImagePicker) {
                         PHPickerView(image: $profileImage)
                     }
-                    
+                    .disabled(profileImageURL != nil)
                     
                     // 사용자 아이디
                     VStack(spacing: 10) {
@@ -80,25 +79,14 @@ struct MyprofileView: View {
                             .font(.system(size: 45, weight:.bold))
                         
                         // 해시태그 4개
-                        HStack {
-                            Text("# 논어")
-                                .font(.system(size: 17, weight:.regular))
-                            
-                            Text("# 재즈 사랑")
-                                .font(.system(size: 17, weight:.regular))
-                            
-                            Text("# 유튜버")
-                                .font(.system(size: 17, weight:.regular))
-                            
-                            Text("# 국어교사")
-                                .font(.system(size: 17, weight:.regular))
-                        }
+                        Text(authViewModel.user?.hastags ?? "No Full ID")
+                            .font(.system(size: 17, weight:.regular))
                     }
                 }
                 
                 VStack {
                     // 친구 수
-                    HStack(spacing: 20) {
+                    HStack {
                         ZStack {
                             Rectangle()
                                 .foregroundColor(.clear)
@@ -111,41 +99,47 @@ struct MyprofileView: View {
                                 .frame(width: 25, height: 20)
                         }
                         
+                        Spacer()
+                        
                         Image("lline")
                             .resizable()
-                            .frame(width: 34, height: 4)
+                            .frame(width: 60, height: 4)
                         
-                        Text("18")
+                        Spacer()
+                        
+                        Text("\(authViewModel.user?.friends.count ?? 0)")
                             .font(.system(size: 30, weight:.semibold))
                         
                     }
+                    .frame(width: 210)
                     
-                    HStack(spacing: 20) {
+                    // 프로필 수정 버튼
+                    Button {
+                        isShowingImagePicker.toggle()
+                    } label: {
                         ZStack {
                             Rectangle()
-                                .foregroundColor(.clear)
-                                .frame(width: 65, height: 59)
-                                .background(Color(red: 0.13, green: 0.14, blue: 0.14))
-                                .cornerRadius(20)
+                              .foregroundColor(.white)
+                              .frame(width: 214, height: 59)
+                              .cornerRadius(20)
                             
-                            Image("ccc")
-                                .resizable()
-                                .frame(width: 35, height: 35)
+                            HStack(spacing:20) {
+                                Image("pencill")
+                                    .resizable()
+                                    .frame(width: 18, height: 18)
+                                
+                                Text("프로필사진 수정")
+                                    .foregroundColor(Color.black)
+                                    .font(.system(size: 17, weight:.bold))
+                            }
                         }
-                        
-                        Image("lline")
-                            .resizable()
-                            .frame(width: 34, height: 4)
-                        
-                        Text("21")
-                            .font(.system(size: 30, weight:.semibold))
-                        
                     }
-                    
+                    .sheet(isPresented: $isShowingImagePicker) {
+                        PHPickerView(image: $profileImage)
+                    }
                 }
                 .padding(.bottom, 30)
             }
-            
             // 총 커넥트 횟수(요청)
         }
         .onChange(of: profileImage) { newImage in
@@ -153,6 +147,9 @@ struct MyprofileView: View {
                 Task.init {
                     do {
                         self.profileImageURL = try await authViewModel.saveProfileImage(newImage)
+                        if let profileImageURL = self.profileImageURL {
+                            try await authViewModel.updateUserProfileImageURL(profileImageURL)
+                        }
                     } catch {
                         print("Failed to save profile image:", error)
                     }
@@ -170,13 +167,11 @@ struct MyprofileView: View {
             }
         })
            
-
         .onChange(of: scenePhase) { newScenePhase in
             if newScenePhase == .active {
                 loadProfileImageData()
             }
         }
-        
     }
     
     func loadProfileImageData() {

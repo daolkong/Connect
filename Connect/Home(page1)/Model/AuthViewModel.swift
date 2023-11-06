@@ -62,6 +62,17 @@ final class AuthViewModel: ObservableObject {
         }
     }
     
+    func updateUserProfileImageURL(_ url: String) async throws {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            throw NSError(domain: "", code: 0, userInfo: [NSLocalizedDescriptionKey: "No current user"])
+        }
+
+        let db = Firestore.firestore()
+        try await db.collection("users").document(uid).updateData([
+            "profileImageURL": url
+        ])
+    }
+
     func registerUser(userId: String, withEmail email: String, password: String, hastags: String)
     async throws {
         let result = try await Auth.auth().createUser(withEmail: email, password: password)
@@ -153,7 +164,6 @@ final class AuthViewModel: ObservableObject {
                         }
                     }
             }
-            
          }
     }
     func saveAndStoreImage(_ image: UIImage) async throws -> String {

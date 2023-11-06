@@ -45,7 +45,7 @@ struct FriendSearchView: View {
                         .resizable()
                         .frame(width: 1, height: 14)
                     
-                    TextField("Search...", text: $searchText) // 여기서 searchText는 문자열 바인딩 변수여야 합니다.
+                    TextField("Search...", text: $searchText)
                         .font(.system(size: 17, weight: .regular))
                         .foregroundColor(Color(red: 0.52, green: 0.69, blue: 0.94))
                 }
@@ -54,35 +54,37 @@ struct FriendSearchView: View {
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 35) {
-                    ForEach(userDataModel.users, id: \.uid) { user in
+                    ForEach(userDataModel.users.filter({ user in
+                        searchText.isEmpty ? true : user.userId.lowercased().contains(searchText.lowercased())
+                    }), id: \.uid) { user in
                         NavigationLink(destination: FriendProfileView(user: user)
                             .navigationBarBackButtonHidden(true), // 이 부분 수정
                                        isActive:
                                         Binding(
                                             get:{ self.activeUserId == user.uid },
                                             set:{ _ in self.activeUserId = nil })) {
+                                            
+                                            HStack {
+                                                Image("profile")
+                                                    .resizable()
+                                                    .frame(width: 44, height: 44)
                                                 
-                                                HStack {
-                                                    Image("profile")
-                                                        .resizable()
-                                                        .frame(width: 44, height: 44)
+                                                VStack(alignment: .leading) {
+                                                    Text(user.userId)
+                                                        .font(.system(size: 20, weight:.semibold))
+                                                        .foregroundColor(Color.black)
                                                     
-                                                    VStack(alignment: .leading) {
-                                                        Text(user.userId ?? "No Full ID")
-                                                            .font(.system(size: 20, weight:.semibold))
-                                                            .foregroundColor(Color.black)
-                                                        
-                                                        Text(user.hastags ?? "No Hashtags")
-                                                            .font(.system(size: 12, weight:.regular))
-                                                            .foregroundColor(Color.black)
-                                                    }
+                                                    Text(user.hastags)
+                                                        .font(.system(size: 12, weight:.regular))
+                                                        .foregroundColor(Color.black)
                                                 }
-                                                .onTapGesture{
-                                                    self.activeUserId = user.uid
-                                                }
-                                                
-                                                .frame(width: 390, height: 49)
                                             }
+                                            .onTapGesture{
+                                                self.activeUserId = user.uid
+                                            }
+                                            
+                                            .frame(width: 390, height: 49)
+                                        }
                     }
                     
                 }

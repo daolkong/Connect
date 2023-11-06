@@ -20,9 +20,10 @@ extension Array where Element == Notification {
 struct Notification: Identifiable, Codable, Equatable, Hashable {
     let id: String
     let fromUserId: String
-    let toUserId: String  // Add this line
+    let toUserId: String
     var fromUserProfileImageUrl: String?
     var latestPostImageUrl: String?
+    var time: Date?  // Add this line
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -30,22 +31,25 @@ struct Notification: Identifiable, Codable, Equatable, Hashable {
         case toUserId = "to"
         case fromUserProfileImageUrl = "fromUserProfileImageUrl"
         case latestPostImageUrl = "latestPostImageUrl"
+        case time  // Add this line
     }
 
-   init(id: String,
-         fromUserId: String,
-         toUserId:String,
-         fromUserProfileImageUrl:String?,
-         latestPostImageUrl:String?) {
+    init(id: String,
+          fromUserId: String,
+          toUserId: String,
+          fromUserProfileImageUrl: String?,
+          latestPostImageUrl: String?,
+          time: Date?) {  // Add this line
 
-       self.id = id
-       self.fromUserId = fromUserId
-       self.toUserId = toUserId
-       self.fromUserProfileImageUrl = fromUserProfileImageUrl
-       self.latestPostImageUrl = latestPostImageUrl
-   }
+        self.id = id
+        self.fromUserId = fromUserId
+        self.toUserId = toUserId
+        self.fromUserProfileImageUrl = fromUserProfileImageUrl
+        self.latestPostImageUrl = latestPostImageUrl
+        self.time = time  // Add this line
+    }
     
     static func == (lhs: Notification, rhs: Notification) -> Bool {
-         return lhs.fromUserId == rhs.fromUserId
-     }
+        return lhs.fromUserId == rhs.fromUserId
+    }
 }
