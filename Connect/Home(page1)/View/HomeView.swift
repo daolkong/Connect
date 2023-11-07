@@ -58,7 +58,7 @@ struct HomeView: View {
                         }
                     Spacer()
                     Text("Connect")
-                        .font(.system(size: 30, weight:.black))
+                        .font(.system(size: 28, weight:.black))
                     Spacer()
                     
                     Circle()

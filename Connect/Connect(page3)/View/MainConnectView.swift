@@ -40,7 +40,7 @@ struct MainConnectView: View {
                     .onTapGesture {
                         gotoalarm = true
                     }
-                NavigationLink(destination: ConnectAllowView()
+                NavigationLink(destination: AlarmConnectView()
                     .navigationBarBackButtonHidden(true), isActive: $gotoalarm) {
                         EmptyView()
                     }
