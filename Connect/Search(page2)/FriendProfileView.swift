@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct FriendProfileView: View {
     @StateObject private var authViewModel = AuthViewModel()
@@ -44,7 +45,7 @@ struct FriendProfileView: View {
         ZStack {
             Rectangle()
                 .foregroundColor(.clear)
-                .frame(width: 394, height: 844)
+                .frame(width: 430, height: 844)
                 .background(
                     LinearGradient(
                         stops: [
@@ -58,17 +59,32 @@ struct FriendProfileView: View {
             VStack(spacing: 30) {
                 
                 Button(action: {
-                    // Dismiss the view when the button is tapped
                     presentationMode.wrappedValue.dismiss()
                 }) {
-                    ProfileTopNavigationBar(TextLogo: "back1")
+                    HStack(spacing: 11) {
+                        Image("back1")
+                            .resizable()
+                            .frame(width: 10, height: 16)
+                        Spacer()
+                    }
                 }
-            
-                   
-                Image("profile")
-                    .resizable()
-                    .frame(width: 195, height: 195)
-                    .shadow(color: .black.opacity(0.25), radius: 3.5, x: 0, y: 0)
+                .frame(width: UIScreen.main.bounds.width == 430 ? 390 : UIScreen.main.bounds.width == 393 ? 353 : UIScreen.main.bounds.width == 390 ? 350 : UIScreen.main.bounds.width == 375 ? 335 : UIScreen.main.bounds.width == 320 ? 280 : 375,
+                       height:15)
+                
+                if let urlStr = user.profileImageURL, let url = URL(string: urlStr) {
+                    KFImage(url)
+                        .cacheOriginalImage()
+                        .resizable()
+                        .frame(width: 195, height: 195)
+                        .clipShape(Circle())
+                        .shadow(color: .black.opacity(0.25), radius: 3.5, x: 0, y: 0)
+
+                } else {
+                    Image("nonpro")
+                        .resizable()
+                        .frame(width: 195, height: 195)
+                }
+                
                 VStack(spacing: 10) {
                     Text(user.userId ?? "No Full ID")
                         .font(.system(size: 45, weight:.bold))
@@ -148,8 +164,6 @@ struct FriendProfileView: View {
     }
 }
 
-struct FriendProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        FriendProfileView(user: DBUser(email: "test@test.com", userId:"TestFullID", hastags:"TestHashtags", uid:"TestUID", profileImageURL:"", uploadedImagesURLs:[], friends: []))
-    }
+#Preview {
+    FriendProfileView(user: DBUser(email: "test@test.com", userId:"TestFullID", hastags:"TestHashtags", uid:"TestUID", profileImageURL:"", uploadedImagesURLs:[], friends: []))
 }

@@ -12,8 +12,8 @@ struct DBUser: Codable, Identifiable, Hashable {
     let userId: String   
     let hastags: String
     let uid: String
-    var profileImageURL: String?  // Add this line.
-    var uploadedImagesURLs: [String]? // Add this line.
+    var profileImageURL: String?
+    var uploadedImagesURLs: [String]?
     var friends: [String]
     
     var id: String { uid }        

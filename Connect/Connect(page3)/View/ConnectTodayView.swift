@@ -15,10 +15,52 @@ struct ConnectTodayView: View {
     @EnvironmentObject var sharedViewModel : SharedViewModel
     @EnvironmentObject var notificationViewModel : NotificationViewModel
     
+    @State private var tabSelection = 1
+    @State private var gotoalarm = false
+    @State private var gotosetting = false
+    
     var body: some View {
-        VStack(spacing: 50) {
-            ScrollView {
-                VStack(spacing: 50) {
+        
+        VStack(spacing: 30) {
+            
+            //  커넥트 갤러리
+            HStack {
+                Image("align-left")
+                    .resizable()
+                    .frame(width: 24, height: 24)
+                    .onTapGesture {
+                        gotosetting = true
+                    }
+                NavigationLink(destination: MypageView()
+                    .navigationBarBackButtonHidden(true), isActive: $gotosetting) {
+                        EmptyView()
+                    }
+                Spacer()
+                
+                Text("커넥트 갤러리")
+                    .font(.system(size: 23, weight: .bold))
+                    .frame(width: 190)
+                
+                Spacer()
+                
+                Image("alarm")
+                    .resizable()
+                    .frame(width: 18, height: 20)
+                    .onTapGesture {
+                        gotoalarm = true
+                    }
+                NavigationLink(destination: AlarmConnectView()
+                    .navigationBarBackButtonHidden(true), isActive: $gotoalarm) {
+                        EmptyView()
+                    }
+                
+            }
+            .frame(width: 345, height: 28)
+            .padding(.horizontal,10)
+            
+            Spacer()
+            ScrollView() {
+                VStack(spacing: 80) {
                     //첫번째 게시물 묶음
                     HStack(spacing:20) {
                         VStack(spacing: 13) {
@@ -75,6 +117,8 @@ struct ConnectTodayView: View {
                                                         )
                                                         .aspectRatio(contentMode: .fill)
                                                         .tag("tag1")
+                                                } else {
+                                                    ProgressView("커넥트 대기중..")
                                                 }
                                             }
                                             .shadow(color: .black.opacity(0.25), radius: 2, x: 3, y: 3)
@@ -109,7 +153,6 @@ struct ConnectTodayView: View {
                                     .font(.system(size: 15, weight:.bold))
                                     .foregroundColor(Color.black)
                                     .frame(width: 100)
-                                
                             }
                         }
                         VStack(spacing: 13) {
@@ -166,6 +209,8 @@ struct ConnectTodayView: View {
                                                         )
                                                         .aspectRatio(contentMode: .fill)
                                                         .tag("tag2")
+                                                } else {
+                                                    ProgressView("커넥트 대기중..")
                                                 }
                                             }
                                             .shadow(color: .black.opacity(0.25), radius: 2, x: 3, y: 3)
@@ -236,6 +281,7 @@ struct ConnectTodayView: View {
                                                         .aspectRatio(contentMode: .fill)
                                                         .tag("tag3")
                                                 }
+                                                
                                                 if let urlBString = sharedViewModel.userBNImageUrls[2],
                                                    let urlB = URL(string: urlBString) {
                                                     KFImage(urlB)
@@ -259,10 +305,13 @@ struct ConnectTodayView: View {
                                                         )
                                                         .aspectRatio(contentMode: .fill)
                                                         .tag("tag3")
+                                                } else {
+                                                    ProgressView("커넥트 대기중..")
                                                 }
+                                                
                                             }
                                             .shadow(color: .black.opacity(0.25), radius: 2, x: 3, y: 3)
-                                            .frame(width: 170, height: 170)
+                                            .frame(width: 170, height: 180)
                                             .tabViewStyle(PageTabViewStyle())
                                             .indexViewStyle(PageIndexViewStyle(backgroundDisplayMode: .never))
                                         }
@@ -281,7 +330,6 @@ struct ConnectTodayView: View {
                                     }
                                     .frame(width:130)
                                     .multilineTextAlignment(.center)
-                                    
                                 }
                                 
                             } else {
@@ -348,6 +396,8 @@ struct ConnectTodayView: View {
                                                         )
                                                         .aspectRatio(contentMode: .fill)
                                                         .tag("tag4")
+                                                }  else {
+                                                    ProgressView("커넥트 대기중..")
                                                 }
                                             }
                                             .shadow(color: .black.opacity(0.25), radius: 2, x: 3, y: 3)
@@ -388,44 +438,44 @@ struct ConnectTodayView: View {
                     }
                 }
             }
-        }
-        .padding(.top,30)
-        .onAppear {
-            Task.init(priority: .high) {
-                guard let uid = Auth.auth().currentUser?.uid else {
-                    print("user is not logged in")
-                    return
-                }
-                
-                guard let document = try? await Firestore.firestore().collection("users").document(uid).getDocument(),
-                      let dbUser = try? document.data(as: DBUser.self) else {
-                    print("Failed to get user document or parse it into DBUser")
-                    return
-                }
-                
-                let userId = dbUser.userId
-                
-                do {
-                    try await sharedViewModel.loadImagesForToday(userId: userId)
-                    sharedViewModel.isImageLoaded = true
-                } catch {
-                    print("Failed to load images for today: \(error)")
-                    sharedViewModel.isImageLoaded = false
-                }
-                
-                do {
-                    sharedViewModel.userAIds = try await sharedViewModel.getFetchedUserAId(from: "ConnectDB", on: Date(), for: userId)
-                } catch {
-                    print("Error fetching user A id:", error)
+            .onAppear {
+                Task.init(priority: .high) {
+                    guard let uid = Auth.auth().currentUser?.uid else {
+                        print("User is not logged in")
+                        return
+                    }
+                    
+                    guard let document = try? await Firestore.firestore().collection("users").document(uid).getDocument(),
+                          let dbUser = try? document.data(as: DBUser.self) else {
+                        print("Failed to get user document or parse it into DBUser")
+                        return
+                    }
+                    
+                    let userId = dbUser.userId
+                    
+                    do {
+                        try await sharedViewModel.loadImagesForToday(userId: userId)
+                        sharedViewModel.isImageLoaded = true
+                    } catch {
+                        print("Failed to load images for today: \(error)")
+                        sharedViewModel.isImageLoaded = false
+                    }
+                    
+                    do {
+                        sharedViewModel.userAIds = try await sharedViewModel.getFetchedUserAId(from: "ConnectDB", on: Date(), for: userId)
+                    } catch {
+                        print("Error fetching user A id:", error)
+                    }
                 }
             }
+            
+            Spacer()
+
         }
     }
 }
 
-struct ConnectTodayView_Previews : PreviewProvider {
-    static var previews:some View {
-        ConnectTodayView()
-            .environmentObject(SharedViewModel())
-    }
+#Preview {
+    ConnectTodayView()
+        .environmentObject(SharedViewModel())
 }

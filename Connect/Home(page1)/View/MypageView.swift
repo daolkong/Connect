@@ -10,16 +10,23 @@ import SwiftUI
 struct MypageView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var authViewModel: AuthViewModel
-    
     var body: some View {
         
         Button(action: {
             presentationMode.wrappedValue.dismiss()
         }) {
-            ProfileTopNavigationBar(TextLogo: "back1")
+            HStack {
+                Image("back1")
+                    .resizable()
+                    .frame(width: 10, height: 16)
+                Spacer()
+            }
         }
+        .frame(width: UIScreen.main.bounds.width == 430 ? 390 : UIScreen.main.bounds.width == 393 ? 353 : UIScreen.main.bounds.width == 390 ? 350 : UIScreen.main.bounds.width == 375 ? 335 : UIScreen.main.bounds.width == 320 ? 280 : 375,
+               height:15)
         
-        VStack(spacing:40) {
+        
+        VStack {
             
             // 프로필 사진과 유저 아이디
             VStack(spacing:20) {
@@ -27,7 +34,7 @@ struct MypageView: View {
                     AsyncImage(url: url) { image in
                         image
                             .resizable()
-                            .frame(width: 134, height: 134)
+                            .frame(width: 150, height: 150)
                             .clipShape(Circle())
                             .shadow(color: .black.opacity(0.25), radius: 3.5, x: 0, y: 0)
                         
@@ -40,17 +47,18 @@ struct MypageView: View {
                         .frame(width: 134, height: 134)
                         .shadow(color: .black.opacity(0.25), radius: 3.5, x: 0, y: 0)
                 }
-
+                
                 Text(authViewModel.user?.userId ?? "Loading...")
                     .font(.system(size: 50, weight:.bold))
             }
-
+            Spacer()
+            
             
             // 개인정보 처리방침 링크
             Button {
                 if let url = URL(string: "https://jungbaeck.notion.site/jungbaeck/G-School-42d77688f2f94bc29e519f1efa14170b") {
-                        UIApplication.shared.open(url)
-                    }
+                    UIApplication.shared.open(url)
+                }
             } label: {
                 ZStack {
                     RoundedRectangle(cornerRadius: 15)
@@ -95,15 +103,12 @@ struct MypageView: View {
                     print("DEBUG: Failed to fetch user \(error.localizedDescription)")
                 }
             }
-            
-            
         }
-        .padding(.bottom,100)
+        .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
+               height: UIScreen.main.bounds.height == 932 ? 650 : UIScreen.main.bounds.height == 852 ? 580 : UIScreen.main.bounds.height == 844 ? 600 : UIScreen.main.bounds.height == 812 ? 812 : UIScreen.main.bounds.height == 667 ? 500: UIScreen.main.bounds.height)
     }
 }
 
-struct MypageView_Previews: PreviewProvider {
-    static var previews: some View {
-        MypageView()
-    }
+#Preview {
+    MypageView()
 }

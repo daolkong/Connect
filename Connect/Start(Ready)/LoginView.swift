@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct LoginView: View {
     @State private var isSigninViewActive = false
@@ -20,7 +21,7 @@ struct LoginView: View {
             ZStack {
                 Image("back")
                     .resizable()
-                    .frame(width: 395, height: 1000)
+                    .frame(width: 430, height: 1000)
                 
                 VStack(spacing: 60) {
                     
@@ -28,10 +29,10 @@ struct LoginView: View {
                     VStack(spacing: 10) {
                         Image("whitechain")
                             .resizable()
-                            .frame(width: 145, height: 145)
+                            .frame(width: 130, height: 130)
                         
                         Text("Connect")
-                            .font(.system(size: 75, weight: .black))
+                            .font(.system(size: 70, weight: .black))
                             .foregroundColor(Color.white)
                     }
                     
@@ -47,8 +48,8 @@ struct LoginView: View {
                                 .foregroundColor(.white)
                                 .overlay( Rectangle()
                                     .foregroundColor(.clear)
-                                    .frame(width: 323, height: 48)
-                                    .cornerRadius(50)
+                                    .frame(width: UIScreen.main.bounds.width == 430 ? 340 : UIScreen.main.bounds.width == 393 ? 333 : UIScreen.main.bounds.width == 390 ? 360 : UIScreen.main.bounds.width == 375 ? 325 : UIScreen.main.bounds.width == 320 ? 290 : 375,
+                                           height: UIScreen.main.bounds.height == 932 ? 52 : UIScreen.main.bounds.height == 852 ? 48 : UIScreen.main.bounds.height == 844 ? 48 : UIScreen.main.bounds.height == 812 ? 48 : UIScreen.main.bounds.height == 667 ? 48: UIScreen.main.bounds.height)                                    .cornerRadius(50)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 50)
                                             .inset(by: 0.75)
@@ -58,7 +59,7 @@ struct LoginView: View {
                             
                         }
                         .padding(.horizontal,20)
-
+                        
                         ZStack(alignment: .leading) {
                             if password.isEmpty {
                                 Text("비밀번호를 입력해주세요")
@@ -68,8 +69,8 @@ struct LoginView: View {
                                 .foregroundColor(.white)
                                 .overlay( Rectangle()
                                     .foregroundColor(.clear)
-                                    .frame(width: 323, height: 48)
-                                    .cornerRadius(50)
+                                    .frame(width: UIScreen.main.bounds.width == 430 ? 340 : UIScreen.main.bounds.width == 393 ? 333 : UIScreen.main.bounds.width == 390 ? 340 : UIScreen.main.bounds.width == 375 ? 325 : UIScreen.main.bounds.width == 320 ? 250 : 375,
+                                           height: UIScreen.main.bounds.height == 932 ? 52 : UIScreen.main.bounds.height == 852 ? 48 : UIScreen.main.bounds.height == 844 ? 48 : UIScreen.main.bounds.height == 812 ? 48 : UIScreen.main.bounds.height == 667 ? 48: UIScreen.main.bounds.height)                                    .cornerRadius(50)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 50)
                                             .inset(by: 0.75)
@@ -87,9 +88,24 @@ struct LoginView: View {
                             Task {
                                 do {
                                     try await authViewModel.signInUser(withEmail: email, password: password)
-                                } catch {
+                                } catch let error as NSError {
+                                    switch error.localizedDescription {
+                                    case "auth/user-not-found", "auth/wrong-password":
+                                        errorMessage = "이메일 혹은 비밀번호가 일치하지 않습니다."
+                                    case "auth/email-already-in-use":
+                                        errorMessage = "이미 사용 중인 이메일입니다."
+                                    case "auth/weak-password":
+                                        errorMessage = "비밀번호는 6글자 이상이어야 합니다."
+                                    case "auth/network-request-failed":
+                                        errorMessage = "네트워크 연결에 실패 하였습니다."
+                                    case "auth/invalid-email":
+                                        errorMessage = "잘못된 이메일 형식입니다."
+                                    case "auth/internal-error":
+                                        errorMessage = "잘못된 요청입니다."
+                                    default:
+                                        errorMessage = "로그인에 실패 하였습니다."
+                                    }
                                     retrySignIn = true
-                                    errorMessage = error.localizedDescription
                                     print("DEBUG: Failed to sign in \(error.localizedDescription)")
                                 }
                             }
@@ -97,8 +113,8 @@ struct LoginView: View {
                             ZStack {
                                 Rectangle()
                                     .foregroundColor(.clear)
-                                    .frame(width: 323, height: 69)
-                                    .background(Color(red: 0.1, green: 0.1, blue: 0.1))
+                                    .frame(width: UIScreen.main.bounds.width == 430 ? 340 : UIScreen.main.bounds.width == 393 ? 323 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 325 : UIScreen.main.bounds.width == 320 ? 250 : 375,
+                                           height: UIScreen.main.bounds.height == 932 ? 69 : UIScreen.main.bounds.height == 852 ? 69 : UIScreen.main.bounds.height == 844 ? 69 : UIScreen.main.bounds.height == 812 ? 69 : UIScreen.main.bounds.height == 667 ? 69: UIScreen.main.bounds.height)                                    .background(Color(red: 0.1, green: 0.1, blue: 0.1))
                                     .cornerRadius(50)
                                 
                                 Text("로그인")
@@ -131,13 +147,12 @@ struct LoginView: View {
                     Text(errorMessage)
                 }
             }
-            .padding(.bottom,20)
         }
+        .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
+               height: UIScreen.main.bounds.height == 932 ? 932 : UIScreen.main.bounds.height == 852 ? 852 : UIScreen.main.bounds.height == 844 ? 844 : UIScreen.main.bounds.height == 812 ? 812 : UIScreen.main.bounds.height == 667 ? 667: UIScreen.main.bounds.height)
     }
 }
 
-struct LoginView_Previews: PreviewProvider {
-    static var previews: some View {
-        LoginView()
-    }
+#Preview {
+    LoginView()
 }

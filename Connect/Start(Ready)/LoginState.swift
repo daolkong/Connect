@@ -13,5 +13,4 @@ enum LoginState {
     case loggedIn
     case loggedOut
     case notSigned
-    
 }

@@ -29,7 +29,7 @@ struct MyprofileView: View {
         ZStack {
             Rectangle()
                 .foregroundColor(.clear)
-                .frame(width: 390, height: 844)
+                .frame(width: 430, height: 844)
                 .background(
                     LinearGradient(
                         stops: [
@@ -41,7 +41,7 @@ struct MyprofileView: View {
                     )
                 )
             
-            VStack(spacing: 65) {
+            VStack {
                 // 프로필 이미지
                 VStack(spacing: 25) {
                     
@@ -83,6 +83,8 @@ struct MyprofileView: View {
                             .font(.system(size: 17, weight:.regular))
                     }
                 }
+                
+                Spacer()
                 
                 VStack {
                     // 친구 수
@@ -138,8 +140,11 @@ struct MyprofileView: View {
                         PHPickerView(image: $profileImage)
                     }
                 }
-                .padding(.bottom, 30)
             }
+            .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
+                   height: UIScreen.main.bounds.height == 932 ? 600
+                   : UIScreen.main.bounds.height == 852 ? 550 : UIScreen.main.bounds.height == 844 ? 550 : UIScreen.main.bounds.height == 812 ? 812 : UIScreen.main.bounds.height == 667 ? 500: UIScreen.main.bounds.height)
+            
             // 총 커넥트 횟수(요청)
         }
         .onChange(of: profileImage) { newImage in
@@ -201,8 +206,6 @@ struct MyprofileView: View {
     }
 }
 
-struct MyprofileView_Previews: PreviewProvider {
-    static var previews: some View {
+#Preview {
         MyprofileView()
-    }
 }

@@ -33,18 +33,15 @@ struct FirstStartView: View {
             }
         }
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) { 
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 isStartView = false
             }
         }
     }
 }
 
-struct FirstStartView_Previews: PreviewProvider {
-    static var previews: some View {
-        FirstStartView()
-            .environmentObject(AuthViewModel())
-            .environmentObject(UserDataModel())
-        
-    }
+#Preview {
+    FirstStartView()
+        .environmentObject(AuthViewModel())
+        .environmentObject(UserDataModel())
 }

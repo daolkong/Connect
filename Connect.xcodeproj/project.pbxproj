@@ -45,13 +45,12 @@
 		338019482AD256380030EF86 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 338019472AD256380030EF86 /* Kingfisher */; };
 		338617842AA45C60008EF610 /* FirstStartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338617832AA45C60008EF610 /* FirstStartView.swift */; };
 		338C28202AAFFFE2004587CD /* ConnectSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338C281F2AAFFFE1004587CD /* ConnectSelection.swift */; };
-		338C28222AB00ADB004587CD /* MainConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338C28212AB00ADB004587CD /* MainConnectView.swift */; };
 		338C28252AB03DC0004587CD /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 338C28242AB03DC0004587CD /* URLImage */; };
 		338C28272AB03DC0004587CD /* URLImageStore in Frameworks */ = {isa = PBXBuildFile; productRef = 338C28262AB03DC0004587CD /* URLImageStore */; };
 		33971C392AC1324D00418442 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33971C382AC1324D00418442 /* Notification.swift */; };
-		33A099B42AF7194C00FD14C7 /* ProfileTopNavigationBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A099B32AF7194C00FD14C7 /* ProfileTopNavigationBar.swift */; };
 		33A0D4302AAA276500FEEDBC /* UserDataModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A0D42F2AAA276500FEEDBC /* UserDataModel.swift */; };
 		33A0D4332AAAA99D00FEEDBC /* FriendSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A0D4322AAAA99D00FEEDBC /* FriendSearchView.swift */; };
+		33A418052B017A1100079E74 /* Algorithms in Frameworks */ = {isa = PBXBuildFile; productRef = 33A418042B017A1100079E74 /* Algorithms */; };
 		33C5DC7E2AD2631A00BB9822 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 33C5DC7D2AD2631A00BB9822 /* Kingfisher */; };
 		33C5DC802AD2635500BB9822 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 33C5DC7F2AD2635500BB9822 /* Kingfisher */; };
 /* End PBXBuildFile section */
@@ -83,11 +82,9 @@
 		338019422AD15E430030EF86 /* PHPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHPickerView.swift; sourceTree = "<group>"; };
 		338617832AA45C60008EF610 /* FirstStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstStartView.swift; sourceTree = "<group>"; };
 		338C281F2AAFFFE1004587CD /* ConnectSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectSelection.swift; sourceTree = "<group>"; };
-		338C28212AB00ADB004587CD /* MainConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainConnectView.swift; sourceTree = "<group>"; };
 		339164742AE3A36D0000D23C /* Connect.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Connect.entitlements; sourceTree = "<group>"; };
 		339164752AE4C4B80000D23C /* ConnectDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ConnectDebug.entitlements; sourceTree = "<group>"; };
 		33971C382AC1324D00418442 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
-		33A099B32AF7194C00FD14C7 /* ProfileTopNavigationBar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileTopNavigationBar.swift; sourceTree = "<group>"; };
 		33A0D42F2AAA276500FEEDBC /* UserDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataModel.swift; sourceTree = "<group>"; };
 		33A0D4322AAAA99D00FEEDBC /* FriendSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSearchView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -97,6 +94,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				33A418052B017A1100079E74 /* Algorithms in Frameworks */,
 				338019482AD256380030EF86 /* Kingfisher in Frameworks */,
 				33C5DC802AD2635500BB9822 /* Kingfisher in Frameworks */,
 				3374FD1C2AE8F01B00557266 /* FirebaseAnalytics in Frameworks */,
@@ -174,7 +172,6 @@
 			isa = PBXGroup;
 			children = (
 				3356BCA82AA2C12300B1EF01 /* MyprofileView.swift */,
-				33A099B32AF7194C00FD14C7 /* ProfileTopNavigationBar.swift */,
 				338019422AD15E430030EF86 /* PHPickerView.swift */,
 			);
 			path = "Mypage(page4)";
@@ -258,7 +255,6 @@
 				33328D232AB5D4D7001D9676 /* AlarmConnectView.swift */,
 				3356BCA42AA2C10900B1EF01 /* ConnectSaveView.swift */,
 				3356BCA02AA2C0F400B1EF01 /* ConnectTodayView.swift */,
-				338C28212AB00ADB004587CD /* MainConnectView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -297,6 +293,7 @@
 				3374FD292AE8F0D000557266 /* FirebaseFirestore */,
 				3374FD2B2AE8F0EF00557266 /* FirebaseFirestoreSwift */,
 				3374FD2D2AE8F10C00557266 /* FirebaseStorage */,
+				33A418042B017A1100079E74 /* Algorithms */,
 			);
 			productName = Connect;
 			productReference = 3356BC752AA2BEF500B1EF01 /* Connect.app */;
@@ -332,6 +329,7 @@
 				338C28232AB03DC0004587CD /* XCRemoteSwiftPackageReference "url-image" */,
 				33391FF22ACD726A004CAB15 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				338019442AD255D60030EF86 /* XCRemoteSwiftPackageReference "KingfisherWebP" */,
+				33A418032B017A1100079E74 /* XCRemoteSwiftPackageReference "swift-algorithms" */,
 			);
 			productRefGroup = 3356BC762AA2BEF500B1EF01 /* Products */;
 			projectDirPath = "";
@@ -360,7 +358,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				33A099B42AF7194C00FD14C7 /* ProfileTopNavigationBar.swift in Sources */,
 				3356BCB12AA2C17000B1EF01 /* MainTabbedView.swift in Sources */,
 				338C28202AAFFFE2004587CD /* ConnectSelection.swift in Sources */,
 				3356BCAF2AA2C15F00B1EF01 /* FriendProfileView.swift in Sources */,
@@ -385,7 +382,6 @@
 				3356BC792AA2BEF500B1EF01 /* ConnectApp.swift in Sources */,
 				3356BC9F2AA2C0DF00B1EF01 /* MypageView.swift in Sources */,
 				33391FEF2ACD4FD8004CAB15 /* PostRow.swift in Sources */,
-				338C28222AB00ADB004587CD /* MainConnectView.swift in Sources */,
 				33391FF12ACD5126004CAB15 /* NotificationViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -633,6 +629,14 @@
 				minimumVersion = 3.0.0;
 			};
 		};
+		33A418032B017A1100079E74 /* XCRemoteSwiftPackageReference "swift-algorithms" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-algorithms.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -709,6 +713,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 338C28232AB03DC0004587CD /* XCRemoteSwiftPackageReference "url-image" */;
 			productName = URLImageStore;
+		};
+		33A418042B017A1100079E74 /* Algorithms */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 33A418032B017A1100079E74 /* XCRemoteSwiftPackageReference "swift-algorithms" */;
+			productName = Algorithms;
 		};
 		33C5DC7D2AD2631A00BB9822 /* Kingfisher */ = {
 			isa = XCSwiftPackageProductDependency;

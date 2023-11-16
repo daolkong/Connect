@@ -16,7 +16,6 @@ struct PostRow: View {
     @State private var profileImageURL: String? = nil
     @State private var likeCount: Int
     
-    
     let postData: Post  
     let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
@@ -80,19 +79,17 @@ struct PostRow: View {
     
     var body: some View {
         
-        VStack(spacing: 0) {
+        VStack(spacing:0) {
             // 프로필 상단
-            VStack(spacing: 0) {
+            VStack(spacing:0) {
                 ZStack {
                     Rectangle()
                         .foregroundColor(Color(red: 0.85, green: 0.85, blue: 0.85).opacity(0.3))
-                        .frame(width: 393, height: 65)
-                    
-                 
+                        .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
+                               height: 65)
                     HStack {
                         Spacer()
                             .frame(width: 8)
-                        
                         if let urlStr = profileImageURL, let url = URL(string: urlStr) {
                             KFImage(url)
                                 .cacheOriginalImage()
@@ -115,28 +112,29 @@ struct PostRow: View {
                         Spacer()
                     }
                 }
-                
-                Group {
-                    if let imageUrl = URL(string: postData.imageUrl) {
-                        KFImage(imageUrl)
-                            .cacheOriginalImage()
-                            .resizable()
-                            .frame(width: 393, height: 393)
-                            .scaledToFill()
-                            .aspectRatio(contentMode: .fit)
-                    } else {
-                        Text("Invalid URL string.")
-                            .font(.system(size: 20))
-                            .foregroundColor(Color.black)
+                    Group {
+                        if let imageUrl = URL(string: postData.imageUrl) {
+                            KFImage(imageUrl)
+                                .cacheOriginalImage()
+                                .resizable()
+                                .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
+                                       height: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375)
+                                .scaledToFill()
+                                .aspectRatio(contentMode: .fit)
+                        } else {
+                            Text("Invalid URL string.")
+                                .font(.system(size: 20))
+                                .foregroundColor(Color.black)
+                        }
                     }
-                }
             }
             
             // 공감과 커넥트 칸
             ZStack {
                 Rectangle()
                   .foregroundColor(.clear)
-                  .frame(width: 393, height: 85)
+                  .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
+                         height: 85)
                   .background(
                     LinearGradient(
                       stops: [

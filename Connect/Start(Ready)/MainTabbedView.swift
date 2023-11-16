@@ -21,7 +21,7 @@ struct MainTabbedView: View {
                 FriendSearchView()
                     .tag(1)
                 
-                MainConnectView()
+                ConnectTodayView()
                     .tag(2)
                 
                 MyprofileView()
@@ -49,10 +49,8 @@ struct MainTabbedView: View {
     }
 }
 
-struct MainTabbedView_Previews: PreviewProvider {
-    static var previews: some View {
+#Preview {
         MainTabbedView()
-    }
 }
 
 extension MainTabbedView{

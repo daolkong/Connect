@@ -166,6 +166,7 @@ final class AuthViewModel: ObservableObject {
             }
          }
     }
+    
     func saveAndStoreImage(_ image: UIImage) async throws -> String {
         let urlStr = try await saveProfileImage(image)
         
@@ -179,6 +180,38 @@ final class AuthViewModel: ObservableObject {
         
         try await Firestore.firestore().collection("users").document(uid).updateData(["uploadedImagesURLs": FieldValue.arrayUnion([urlStr])])
         return urlStr
+    }
+    
+    func loadProfileImageData(_ uid: String, completion: @escaping (String) -> Void) {
+        let db = Firestore.firestore()
+
+        db.collection("users").whereField("uid", isEqualTo: uid).getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error fetching user document:", error.localizedDescription)
+                return
+            }
+
+            guard let document = querySnapshot?.documents.first else {
+                print("No documents found for user \(uid)")
+                return
+            }
+
+            let userData = document.data()
+
+            if userData.isEmpty {
+                print("User document data is nil for user \(uid)")
+                return
+            }
+
+            guard let profileImageUrl = userData["profileImageURL"] as? String else {
+                print("No profile image URL found for user \(uid), full data: \(userData)")
+                return
+            }
+
+            DispatchQueue.main.async {
+                completion(profileImageUrl)
+            }
+        }
     }
 }
 

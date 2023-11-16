@@ -155,8 +155,6 @@ struct ConnectSaveView: View {
     }
 }
 
-struct ConnectSaveView_Previews: PreviewProvider {
-    static var previews: some View {
+#Preview {
         ConnectSaveView()
-    }
 }

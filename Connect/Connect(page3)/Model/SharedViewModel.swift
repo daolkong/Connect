@@ -228,7 +228,7 @@ class SharedViewModel: ObservableObject {
     @MainActor func loadImagesForToday(userId: String) async throws {
         let currentDate = Date()
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy.MM.dd"
+        dateFormatter.dateFormat = "yyyy_MM_dd"
         let dateString = dateFormatter.string(from: currentDate)
         
         let docRef = Firestore.firestore().collection("ConnectDB").document(dateString)
@@ -255,6 +255,35 @@ class SharedViewModel: ObservableObject {
             self.isImageLoaded = false
             throw NSError(domain: "", code: -1, userInfo:[ NSLocalizedDescriptionKey:"No available image for user \(userId)"])
         }
+    }
+    
+    func getFetchedUserAId(from collectionName: String, on date: Date, for userId: String) async throws -> [String] {
+        let db = Firestore.firestore()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy_MM_dd"
+        let documentId = dateFormatter.string(from: date)
+        
+        guard let document = try? await db.collection(collectionName).document(documentId).getDocument(),
+              let data = document.data() else {
+            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to get document"])
+        }
+        
+        guard let userData = data[userId] as? [String: Any] else {
+            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data for user \(userId)"])
+        }
+        
+        var userAIds: [String] = []
+        
+        for i in 1...4 {
+            let tag = "tag\(i)"
+            
+            if let tagData = userData[tag] as? [String: Any],
+               let userAId = tagData["userAId"] as? String {
+                userAIds.append(userAId)
+            }
+        }
+        
+        return userAIds
     }
     
     @MainActor func loadImageURLs() async {
@@ -339,53 +368,32 @@ class SharedViewModel: ObservableObject {
         }
     }
     
-    func getFetchedUserAId(from collectionName: String, on date: Date, for userId: String) async throws -> [String] {
-        let db = Firestore.firestore()
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy.MM.dd"
-        let documentId = dateFormatter.string(from: date)
-        
-        guard let document = try? await db.collection(collectionName).document(documentId).getDocument(),
-              let data = document.data() else {
-            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Failed to get document"])
-        }
-        
-        guard let userData = data[userId] as? [String: Any] else {
-            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No data for user \(userId)"])
-        }
-        
-        var userAIds: [String] = []
-        
-        for i in 1...4 {
-            let tag = "tag\(i)"
-            
-            if let tagData = userData[tag] as? [String: Any],
-               let userAId = tagData["userAId"] as? String {
-                userAIds.append(userAId)
-            }
-        }
-        
-        return userAIds
-    }
-    
     @MainActor func increaseButtonClickCount(toUserId: String, fromUserId: String) async throws {
         print("fromUserId: \(fromUserId)")
         let db = Firestore.firestore()
         let documentRef = db.collection("Connect Numer").document(toUserId)
 
         let document = try await documentRef.getDocument()
-        
+
         if let data = document.data(), let count = data["buttonClickCount"] as? Int {
-                print("Increasing button click count for \(fromUserId)")
-                try await documentRef.updateData(["buttonClickCount": count + 1, "fromUserId": fromUserId])
-                print("Successfully increased button click count for \(fromUserId)")
-                UserDefaults.standard.set(count + 1, forKey: "buttonClickCount") 
+            print("Increasing button click count for \(fromUserId)")
+            try await documentRef.updateData(["buttonClickCount": count + 1, "fromUserId": fromUserId])
+            print("Successfully increased button click count for \(fromUserId)")
+            UserDefaults.standard.set(count + 1, forKey: "buttonClickCount")
+
+            if let userCount = data[fromUserId] as? Int {
+                try await documentRef.updateData([fromUserId: userCount + 1])
             } else {
-                print("Setting button click count for \(fromUserId) to 1")
-                try await documentRef.setData(["buttonClickCount": 1, "fromUserId": fromUserId], merge: true)
-                print("Successfully set button click count for \(fromUserId) to 1")
-                UserDefaults.standard.set(1, forKey: "buttonClickCount")
+                try await documentRef.setData([fromUserId: 1], merge: true)
             }
+        } else {
+            print("Setting button click count for \(fromUserId) to 1")
+            try await documentRef.setData(["buttonClickCount": 1, "fromUserId": fromUserId], merge: true)
+            print("Successfully set button click count for \(fromUserId) to 1")
+            UserDefaults.standard.set(1, forKey: "buttonClickCount")
+
+            try await documentRef.setData([fromUserId: 1], merge: true)
+        }
     }
 
     @MainActor func getConnectNumer(userId: String) async throws -> [String: Int] {
@@ -397,4 +405,33 @@ class SharedViewModel: ObservableObject {
 
         return data
     }
+    
+    func getHighestTagNumber(date: String) async throws -> Int {
+        let db = Firestore.firestore()
+        let documentRef = db.collection("ConnectDB").document(date)
+        let document = try await documentRef.getDocument()
+        
+        guard let data = document.data() else {
+            throw NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Could not retrieve data"])
+        }
+        
+        var highestTagNumber = 0
+        for (_, userData) in data {
+            if let userDataDict = userData as? [String: Any] {
+                for key in userDataDict.keys {
+                    if key.hasPrefix("tag") {
+                        if let tagNumber = Int(key.dropFirst(3)), tagNumber > highestTagNumber {
+                            highestTagNumber = tagNumber
+                        }
+                    }
+                }
+            }
+        }
+        
+        if highestTagNumber == 0 {
+            highestTagNumber = 1
+        }
+        return highestTagNumber
+    }
+
 }
