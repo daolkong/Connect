@@ -102,18 +102,16 @@ struct AlarmConnectView: View {
                                         alertMessage = "하루에 4번만 커넥트 할 수 있습니다."
                                     }
                                     
-                                    if buttonClickCount < 4 {
+                                    if buttonClickCount <= 4 {
                                         let fromUserId = notification.fromUserId
                                         let toUserId = notification.toUserId
                                         let uid = Auth.auth().currentUser?.uid ?? ""
                                         
-                                        guard let document = try? await Firestore.firestore().collection("users").document(uid).getDocument(), let dbUser = try? document.data(as: DBUser.self) else {
+                                        guard let document = try? await Firestore.firestore().collection("users").document(uid).getDocument(), let _ = try? document.data(as: DBUser.self) else {
                                             print("Error getting userId for the current user")
                                             return
                                         }
-                                        
-                                        let currentUserId = dbUser.userId
-                                        
+
                                         sharedViewModel.userAFullID = fromUserId
                                         sharedViewModel.userBFullID = toUserId
                                         
@@ -274,9 +272,8 @@ struct AlarmConnectView: View {
                     let uid = Auth.auth().currentUser?.uid ?? ""
                     let db = Firestore.firestore()
                     let docRef = db.collection("Connect Numer").document(uid)
-                    let doc = try? await docRef.getDocument()
+                    _ = try? await docRef.getDocument()
                 }
-                
                 buttonClickCount = UserDefaults.standard.integer(forKey: "buttonClickCount")
 
                 if let date = UserDefaults.standard.object(forKey: "lastClickDate") as? Date {

@@ -73,6 +73,7 @@ struct HomeView: View {
                             PostRow(postData: post)
                         }
                     }
+                    .padding(.bottom, 25)
                     .sheet(isPresented:$isCameraPresented){
                         CameraView(isShown:$isCameraPresented,image:$uiImage).environmentObject(authViewModel)
                     }
@@ -224,7 +225,7 @@ struct HomeView: View {
         
         let db = Firestore.firestore()
         
-        var query: Query = db.collection("posts").order(by: "timestamp", descending: true)
+        let query: Query = db.collection("posts").order(by: "timestamp", descending: true)
         
         query.addSnapshotListener { (querySnapshot, err) in
             defer { self.isLoading = false }

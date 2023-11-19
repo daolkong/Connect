@@ -19,7 +19,7 @@ struct FriendSearchView: View {
         VStack(spacing: 20) {
             // Friend search title
             HStack {
-                Text("Search Friends")
+                Text("친구검색")
                     .font(.system(size: 23, weight: .bold))
                 Spacer()
             }

@@ -13,6 +13,8 @@ struct FriendProfileView: View {
     @StateObject private var userDataModel = UserDataModel()
     @Environment(\.presentationMode) var presentationMode
     
+    @State private var showingAlert = false
+    
     let user : DBUser
     var uid: String?
     
@@ -86,10 +88,10 @@ struct FriendProfileView: View {
                 }
                 
                 VStack(spacing: 10) {
-                    Text(user.userId ?? "No Full ID")
+                    Text(user.userId)
                         .font(.system(size: 45, weight:.bold))
                     
-                    Text(user.hastags ?? "No Full ID")
+                    Text(user.hastags)
                         .font(.system(size: 17))
                     
                 }
@@ -121,6 +123,7 @@ struct FriendProfileView: View {
                     // 친구추가 버튼
                     Button(action: {
                         addFriend(user)
+                        self.showingAlert = true
                     }) {
                         ZStack {
                             Rectangle()
@@ -147,7 +150,9 @@ struct FriendProfileView: View {
                         }
                     }
                     .padding(.top, 30)
-                    
+                    .alert(isPresented: $showingAlert) {
+                        Alert(title: Text("친구추가 완료"), message: Text("친구추가 되었습니다"), dismissButton: .default(Text("확인")))
+                    }
                 }
                 .padding(.top,30)
             }

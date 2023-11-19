@@ -119,15 +119,14 @@ class SharedViewModel: ObservableObject {
             
             guard
                 let documentSnapshot = documentSnapshot,
-                let data = documentSnapshot.data(),
-                var notification = try? Firestore.Decoder().decode(Notification.self, from: data)
+                let _ = documentSnapshot.data()
             else {
                 print("Failed to retrieve notification or notification data")
                 return
             }
         }
     }
-    
+
     func userIdsMatchingCurrentUserId(currentUserId: String, completion: @escaping ([String]?, Error?) -> Void) {
         let db = Firestore.firestore()
         
@@ -204,9 +203,8 @@ class SharedViewModel: ObservableObject {
             print("Uploading image to Firebase Storage")
             
             _ = try await imageRef.putData(data)
-            
-            await Task.sleep(2 * 1_000_000_000)
-            
+
+            try await Task.sleep(nanoseconds: 2 * 1_000_000_000)
             guard let downloadURL = try? await imageRef.downloadURL() else {
                 throw NSError(domain: "", code: -1, userInfo:[ NSLocalizedDescriptionKey:"Failed getting download URL from \(imageRef.fullPath)"])
             }
@@ -433,5 +431,4 @@ class SharedViewModel: ObservableObject {
         }
         return highestTagNumber
     }
-
 }

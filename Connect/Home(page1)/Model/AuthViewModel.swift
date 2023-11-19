@@ -147,7 +147,7 @@ final class AuthViewModel: ObservableObject {
                     return
                 }
 
-                var post = Post(userId: userId,
+                let post = Post(userId: userId,
                                 imageUrl: downloadURL.absoluteString,
                                 timestamp: Timestamp(date: captureTime),
                                 likeCount: 0)
