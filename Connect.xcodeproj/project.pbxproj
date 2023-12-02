@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		331C5B762B0C59BA00FB5495 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3374FD352AE937FD00557266 /* GoogleService-Info.plist */; };
 		33202A572AB7F6E700725EF3 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33202A562AB7F6E700725EF3 /* Post.swift */; };
 		33328D242AB5D4D7001D9676 /* AlarmConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33328D232AB5D4D7001D9676 /* AlarmConnectView.swift */; };
 		33391FEF2ACD4FD8004CAB15 /* PostRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33391FEE2ACD4FD7004CAB15 /* PostRow.swift */; };
@@ -39,7 +40,6 @@
 		3374FD2A2AE8F0D000557266 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 3374FD292AE8F0D000557266 /* FirebaseFirestore */; };
 		3374FD2C2AE8F0EF00557266 /* FirebaseFirestoreSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3374FD2B2AE8F0EF00557266 /* FirebaseFirestoreSwift */; };
 		3374FD2E2AE8F10C00557266 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 3374FD2D2AE8F10C00557266 /* FirebaseStorage */; };
-		3374FD362AE937FD00557266 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3374FD352AE937FD00557266 /* GoogleService-Info.plist */; };
 		338019432AD15E430030EF86 /* PHPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 338019422AD15E430030EF86 /* PHPickerView.swift */; };
 		338019462AD255D60030EF86 /* KingfisherWebP in Frameworks */ = {isa = PBXBuildFile; productRef = 338019452AD255D60030EF86 /* KingfisherWebP */; };
 		338019482AD256380030EF86 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 338019472AD256380030EF86 /* Kingfisher */; };
@@ -82,8 +82,6 @@
 		338019422AD15E430030EF86 /* PHPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHPickerView.swift; sourceTree = "<group>"; };
 		338617832AA45C60008EF610 /* FirstStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstStartView.swift; sourceTree = "<group>"; };
 		338C281F2AAFFFE1004587CD /* ConnectSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectSelection.swift; sourceTree = "<group>"; };
-		339164742AE3A36D0000D23C /* Connect.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Connect.entitlements; sourceTree = "<group>"; };
-		339164752AE4C4B80000D23C /* ConnectDebug.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ConnectDebug.entitlements; sourceTree = "<group>"; };
 		33971C382AC1324D00418442 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		33A0D42F2AAA276500FEEDBC /* UserDataModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataModel.swift; sourceTree = "<group>"; };
 		33A0D4322AAAA99D00FEEDBC /* FriendSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendSearchView.swift; sourceTree = "<group>"; };
@@ -121,6 +119,7 @@
 		3356BC6C2AA2BEF500B1EF01 = {
 			isa = PBXGroup;
 			children = (
+				3374FD352AE937FD00557266 /* GoogleService-Info.plist */,
 				3356BC772AA2BEF500B1EF01 /* Connect */,
 				3356BC762AA2BEF500B1EF01 /* Products */,
 				3356BCD62AA36F4D00B1EF01 /* Frameworks */,
@@ -138,8 +137,6 @@
 		3356BC772AA2BEF500B1EF01 /* Connect */ = {
 			isa = PBXGroup;
 			children = (
-				339164752AE4C4B80000D23C /* ConnectDebug.entitlements */,
-				339164742AE3A36D0000D23C /* Connect.entitlements */,
 				3356BC782AA2BEF500B1EF01 /* ConnectApp.swift */,
 				33A099B92AF76ED300FD14C7 /* Start(Ready) */,
 				33A099B82AF76E7000FD14C7 /* Home(page1) */,
@@ -156,7 +153,6 @@
 			isa = PBXGroup;
 			children = (
 				3356BC7F2AA2BEF700B1EF01 /* Preview Assets.xcassets */,
-				3374FD352AE937FD00557266 /* GoogleService-Info.plist */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -306,8 +302,8 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1430;
-				LastUpgradeCheck = 1430;
+				LastSwiftUpdateCheck = 1500;
+				LastUpgradeCheck = 1500;
 				TargetAttributes = {
 					3356BC742AA2BEF500B1EF01 = {
 						CreatedOnToolsVersion = 14.3.1;
@@ -319,7 +315,6 @@
 			developmentRegion = ko;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
 				ko,
 			);
@@ -345,8 +340,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				331C5B762B0C59BA00FB5495 /* GoogleService-Info.plist in Resources */,
 				3356BC802AA2BEF700B1EF01 /* Preview Assets.xcassets in Resources */,
-				3374FD362AE937FD00557266 /* GoogleService-Info.plist in Resources */,
 				3356BC7D2AA2BEF700B1EF01 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -393,6 +388,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -425,6 +421,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -439,6 +436,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -457,6 +455,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -489,6 +488,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -497,6 +497,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
@@ -512,28 +513,32 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Connect/ConnectDebug.entitlements;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Connect/Preview Content\"";
 				DEVELOPMENT_TEAM = BJ89YM9GA5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "\"We need access to your camera to take photos\"";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = " \"This app needs access to the photo library to allow you to select photos.\"";
+				INFOPLIST_FILE = "/Users/lenz/lens's project/Dev/Connect/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = TestDisplayNameQQ;
+				INFOPLIST_KEY_NSCameraUsageDescription = "\"카메라 엑세스 권한을 허용해 주세요\"";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "\"갤러리 접근 권한을 허용해 주세요\"";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lens.Connect;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aaaa.ssss.qq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -545,27 +550,29 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = Connect/Connect.entitlements;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Connect/Preview Content\"";
 				DEVELOPMENT_TEAM = BJ89YM9GA5;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_NSCameraUsageDescription = "\"We need access to your camera to take photos\"";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = " \"This app needs access to the photo library to allow you to select photos.\"";
+				INFOPLIST_FILE = "/Users/lenz/lens's project/Dev/Connect/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = TestDisplayNameQQ;
+				INFOPLIST_KEY_NSCameraUsageDescription = "\"카메라 엑세스 권한을 허용해 주세요\"";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "\"갤러리 접근 권한을 허용해 주세요\"";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.lens.Connect;
+				PRODUCT_BUNDLE_IDENTIFIER = com.aaaa.ssss.qq;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;

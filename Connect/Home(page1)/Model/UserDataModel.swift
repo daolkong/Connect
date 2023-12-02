@@ -14,6 +14,8 @@ class UserDataModel: ObservableObject {
     @Published var user: DBUser?
     @Published var users = [DBUser]() 
     @Published var currentUser: DBUser?
+    @Published var friends: [DBUser] = [] // friends 배열을 @Published로 선언합니다.
+
     
     public var uid: String {
           Auth.auth().currentUser?.uid ?? ""

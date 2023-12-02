@@ -15,7 +15,6 @@ struct StartView: View {
                 .frame(width: 420, height: 130)
                 .padding(.bottom,20)
             
-            
             Image("chain")
                 .resizable()
                 .frame(width: 222, height: 222)

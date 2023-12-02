@@ -36,7 +36,6 @@ struct MainTabbedView: View {
                         } label: {
                             CustomTabItem(imageName: item.iconName, isActive: (selectedTab == item.rawValue))
                                 .padding(.horizontal,10)
-
                         }
                         Spacer()
                     }

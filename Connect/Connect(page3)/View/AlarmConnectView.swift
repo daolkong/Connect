@@ -35,7 +35,7 @@ struct AlarmConnectView: View {
                         .frame(width: 10, height: 16)
                 }
                 
-                Text("Nontifications")
+                Text("알림")
                     .font(.system(size: 23, weight:.semibold))
                 
                 Spacer()

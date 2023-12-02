@@ -28,15 +28,16 @@ struct FriendProfileView: View {
             switch result {
             case .success():
                 print("Successfully added friend to current user's friends list")
+                userDataModel.getCurrentUser(uid: authViewModel.uid) // 친구가 추가된 후에 currentUser를 업데이트 합니다.
             case .failure(let error):
                 print("Error adding friend to current user's friends list: \(error)")
             }
         }
-        
         userDataModel.addFriend(friendUser.uid, authViewModel.uid) { result in
             switch result {
             case .success():
                 print("Successfully added current user to friend's friends list")
+                userDataModel.getCurrentUser(uid: authViewModel.uid) // 친구가 추가된 후에 currentUser를 업데이트 합니다.
             case .failure(let error):
                 print("Error adding current user to friend's friends list: \(error)")
             }
@@ -80,7 +81,7 @@ struct FriendProfileView: View {
                         .frame(width: 195, height: 195)
                         .clipShape(Circle())
                         .shadow(color: .black.opacity(0.25), radius: 3.5, x: 0, y: 0)
-
+                    
                 } else {
                     Image("nonpro")
                         .resizable()
@@ -115,7 +116,7 @@ struct FriendProfileView: View {
                             .resizable()
                             .frame(width: 34, height: 4)
                         
-                        Text("\(user.friends.count)")
+                        Text("\(userDataModel.friends.count)")
                             .font(.system(size: 30, weight:.semibold))
                         
                     }

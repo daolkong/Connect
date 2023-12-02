@@ -97,7 +97,7 @@ struct FriendSearchView: View {
                     }
                     
                     if userDataModel.users.isEmpty {
-                        ProgressView("데이터를 불러오는 중 입니다...") // Message to display while loading data
+                        ProgressView("친구목록을 불러오는 중 입니다...") // Message to display while loading data
                             .progressViewStyle(CircularProgressViewStyle())
                             .foregroundColor(.gray)
                     }

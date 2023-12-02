@@ -110,7 +110,7 @@ class SharedViewModel: ObservableObject {
     // Add this function to update the userBFullID when a new notification is received.
     func updateToUserInNotification(notificationId: String) {
         Firestore.firestore().collection("notifications").document(notificationId).getDocument { [weak self] (documentSnapshot, error) in
-            guard let `self` = self else { return }
+            guard self != nil else { return }
             
             if let error = error {
                 print("Error getting document:", error)
@@ -202,7 +202,7 @@ class SharedViewModel: ObservableObject {
         do {
             print("Uploading image to Firebase Storage")
             
-            _ = try await imageRef.putData(data)
+            _ = imageRef.putData(data)
 
             try await Task.sleep(nanoseconds: 2 * 1_000_000_000)
             guard let downloadURL = try? await imageRef.downloadURL() else {
