@@ -18,6 +18,7 @@ struct ConnectTodayView: View {
     @State private var tabSelection = 1
     @State private var gotoalarm = false
     @State private var gotosetting = false
+    @State private var isLoading = true
     
     var body: some View {
         
@@ -72,6 +73,9 @@ struct ConnectTodayView: View {
                                                 if let urlAString = sharedViewModel.userANImageUrls[0],
                                                    let urlA = URL(string: urlAString) {
                                                     KFImage(urlA)
+                                                        .placeholder {
+                                                            ProgressView()
+                                                        }
                                                         .cacheOriginalImage()
                                                         .resizable()
                                                         .frame(width: 165, height: 165)
@@ -97,6 +101,9 @@ struct ConnectTodayView: View {
                                                 if let urlBString = sharedViewModel.userBNImageUrls[0],
                                                    let urlB = URL(string: urlBString) {
                                                     KFImage(urlB)
+                                                        .placeholder {
+                                                            ProgressView()
+                                                        }
                                                         .cacheOriginalImage()
                                                         .resizable()
                                                         .frame(width: 165, height: 165)
@@ -117,8 +124,6 @@ struct ConnectTodayView: View {
                                                         )
                                                         .aspectRatio(contentMode: .fill)
                                                         .tag("tag1")
-                                                } else {
-                                                    ProgressView("커넥트 대기중..")
                                                 }
                                             }
                                             .shadow(color: .black.opacity(0.25), radius: 2, x: 3, y: 3)
@@ -129,7 +134,6 @@ struct ConnectTodayView: View {
                                         }
                                     }
                                 }
-                                
                                 if sharedViewModel.userAIds.count > 0 {
                                     let userAId = sharedViewModel.userAIds[0]
                                     VStack {
@@ -143,7 +147,6 @@ struct ConnectTodayView: View {
                                     .frame(width: 130)
                                     .multilineTextAlignment(.center)
                                 }
-                                
                             } else {
                                 Image("non")
                                     .resizable()
@@ -164,6 +167,9 @@ struct ConnectTodayView: View {
                                                 if let urlAString = sharedViewModel.userANImageUrls[1],
                                                    let urlA = URL(string: urlAString) {
                                                     KFImage(urlA)
+                                                        .placeholder {
+                                                            ProgressView()
+                                                        }
                                                         .cacheOriginalImage()
                                                         .resizable()
                                                         .frame(width: 165, height: 165)
@@ -189,6 +195,9 @@ struct ConnectTodayView: View {
                                                 if let urlBString = sharedViewModel.userBNImageUrls[1],
                                                    let urlB = URL(string: urlBString) {
                                                     KFImage(urlB)
+                                                        .placeholder {
+                                                            ProgressView()
+                                                        }
                                                         .cacheOriginalImage()
                                                         .resizable()
                                                         .frame(width: 165, height: 165)
@@ -209,8 +218,6 @@ struct ConnectTodayView: View {
                                                         )
                                                         .aspectRatio(contentMode: .fill)
                                                         .tag("tag2")
-                                                } else {
-                                                    ProgressView("커넥트 대기중..")
                                                 }
                                             }
                                             .shadow(color: .black.opacity(0.25), radius: 2, x: 3, y: 3)
@@ -260,6 +267,9 @@ struct ConnectTodayView: View {
                                                 if let urlAString = sharedViewModel.userANImageUrls[2],
                                                    let urlA = URL(string: urlAString) {
                                                     KFImage(urlA)
+                                                        .placeholder {
+                                                            ProgressView()
+                                                        }
                                                         .cacheOriginalImage()
                                                         .resizable()
                                                         .frame(width: 165, height: 165)
@@ -305,10 +315,7 @@ struct ConnectTodayView: View {
                                                         )
                                                         .aspectRatio(contentMode: .fill)
                                                         .tag("tag3")
-                                                } else {
-                                                    ProgressView("커넥트 대기중..")
                                                 }
-                                                
                                             }
                                             .shadow(color: .black.opacity(0.25), radius: 2, x: 3, y: 3)
                                             .frame(width: 170, height: 180)
@@ -343,6 +350,7 @@ struct ConnectTodayView: View {
                                     .frame(width: 100)
                             }
                         }
+                        
                         VStack(spacing: 13) {
                             if sharedViewModel.isImageLoaded {
                                 HStack(spacing: 17) {
@@ -352,6 +360,9 @@ struct ConnectTodayView: View {
                                                 if let urlAString = sharedViewModel.userANImageUrls[3],
                                                    let urlA = URL(string: urlAString) {
                                                     KFImage(urlA)
+                                                        .placeholder {
+                                                            ProgressView()
+                                                        }
                                                         .cacheOriginalImage()
                                                         .resizable()
                                                         .frame(width: 165, height: 165)
@@ -376,6 +387,9 @@ struct ConnectTodayView: View {
                                                 if let urlBString = sharedViewModel.userBNImageUrls[3],
                                                    let urlB = URL(string: urlBString) {
                                                     KFImage(urlB)
+                                                        .placeholder {
+                                                            ProgressView()
+                                                        }
                                                         .cacheOriginalImage()
                                                         .resizable()
                                                         .frame(width: 165, height: 165)
@@ -396,8 +410,6 @@ struct ConnectTodayView: View {
                                                         )
                                                         .aspectRatio(contentMode: .fill)
                                                         .tag("tag4")
-                                                }  else {
-                                                    ProgressView("커넥트 대기중..")
                                                 }
                                             }
                                             .shadow(color: .black.opacity(0.25), radius: 2, x: 3, y: 3)
@@ -421,9 +433,7 @@ struct ConnectTodayView: View {
                                     }
                                     .frame(width:130)
                                     .multilineTextAlignment(.center)
-                                    
                                 }
-                                
                             } else {
                                 Image("non")
                                     .resizable()
@@ -438,39 +448,46 @@ struct ConnectTodayView: View {
                     }
                 }
             }
-            .onAppear {
-                Task.init(priority: .high) {
-                    guard let uid = Auth.auth().currentUser?.uid else {
-                        print("User is not logged in")
-                        return
-                    }
-                    
-                    guard let document = try? await Firestore.firestore().collection("users").document(uid).getDocument(),
-                          let dbUser = try? document.data(as: DBUser.self) else {
-                        print("Failed to get user document or parse it into DBUser")
-                        return
-                    }
-                    
-                    let userId = dbUser.userId
-                    
-                    do {
-                        try await sharedViewModel.loadImagesForToday(userId: userId)
-                        sharedViewModel.isImageLoaded = true
-                    } catch {
-                        print("Failed to load images for today: \(error)")
-                        sharedViewModel.isImageLoaded = false
-                    }
-                    
-                    do {
-                        sharedViewModel.userAIds = try await sharedViewModel.getFetchedUserAId(from: "ConnectDB", on: Date(), for: userId)
-                    } catch {
-                        print("Error fetching user A id:", error)
-                    }
+            Spacer()
+        }
+        .overlay(
+            Group { // 추가
+                if isLoading {
+                    ProgressView()
                 }
             }
-            
-            Spacer()
-
+        )
+        .onAppear {
+            Task.init(priority: .high) {
+                guard let uid = Auth.auth().currentUser?.uid else {
+                    print("User is not logged in")
+                    return
+                }
+                
+                guard let document = try? await Firestore.firestore().collection("users").document(uid).getDocument(),
+                      let dbUser = try? document.data(as: DBUser.self) else {
+                    print("Failed to get user document or parse it into DBUser")
+                    return
+                }
+                
+                let userId = dbUser.userId
+                
+                do {
+                    try await sharedViewModel.loadImagesForToday(userId: userId)
+                    sharedViewModel.isImageLoaded = true
+                    isLoading = false
+                } catch {
+                    print("Failed to load images for today: \(error)")
+                    sharedViewModel.isImageLoaded = false
+                    isLoading = false
+                }
+                
+                do {
+                    sharedViewModel.userAIds = try await sharedViewModel.getFetchedUserAId(from: "ConnectDB", on: Date(), for: userId)
+                } catch {
+                    print("Error fetching user A id:", error)
+                }
+            }
         }
     }
 }

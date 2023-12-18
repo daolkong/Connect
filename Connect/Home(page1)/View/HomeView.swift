@@ -57,7 +57,7 @@ struct HomeView: View {
                             EmptyView()
                         }
                     Spacer()
-                    Text("Connect")
+                    Text("Link life")
                         .font(.system(size: 28, weight:.black))
                     Spacer()
                     

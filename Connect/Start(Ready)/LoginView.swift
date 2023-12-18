@@ -19,19 +19,29 @@ struct LoginView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                Image("back")
-                    .resizable()
-                    .frame(width: 430, height: 1000)
+                Rectangle()
+                    .foregroundColor(.clear)
+                    .frame(width: 430, height: 932)
+                    .background(
+                        LinearGradient(
+                            stops: [
+                                Gradient.Stop(color: Color(red: 0.02, green: 0.02, blue: 0.02), location: 0.00),
+                                Gradient.Stop(color: .white, location: 1.00),
+                            ],
+                            startPoint: UnitPoint(x: 0.19, y: 0.02),
+                            endPoint: UnitPoint(x: 2.33, y: 2.9) 
+                        )
+                    )
                 
                 VStack(spacing: 60) {
                     
                     // 로고
                     VStack(spacing: 10) {
-                        Image("whitechain")
+                        Image("wwhite")
                             .resizable()
-                            .frame(width: 130, height: 130)
+                            .frame(width: 110, height: 130)
                         
-                        Text("Connect")
+                        Text("Link life")
                             .font(.system(size: 70, weight: .black))
                             .foregroundColor(Color.white)
                     }
@@ -42,7 +52,7 @@ struct LoginView: View {
                         ZStack(alignment: .leading) {
                             if email.isEmpty {
                                 Text("이메일을 입력해주세요")
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color.white)
                             }
                             TextField("", text: $email)
                                 .foregroundColor(.white)
@@ -53,7 +63,7 @@ struct LoginView: View {
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 50)
                                             .inset(by: 0.75)
-                                            .stroke(Color(red: 0.95, green: 0.95, blue: 0.95), lineWidth: 1.5)
+                                            .stroke(Color.white)
                                     )
                                 )
                             
@@ -63,7 +73,7 @@ struct LoginView: View {
                         ZStack(alignment: .leading) {
                             if password.isEmpty {
                                 Text("비밀번호를 입력해주세요")
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Color.white)
                             }
                             SecureField("", text: $password)
                                 .foregroundColor(.white)
@@ -74,7 +84,7 @@ struct LoginView: View {
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 50)
                                             .inset(by: 0.75)
-                                            .stroke(Color(red: 0.95, green: 0.95, blue: 0.95), lineWidth: 1.5)
+                                            .stroke(Color.white)
                                     )
                                 )
                         }
@@ -132,7 +142,7 @@ struct LoginView: View {
                         }) {
                             Text("회원가입 하기")
                                 .font(.system(size: 18, weight: .bold))
-                                .foregroundColor(Color(red: 0.1, green: 0.1, blue: 0.1))
+                                .foregroundColor(Color.white)
                         }
                     }
                 }
