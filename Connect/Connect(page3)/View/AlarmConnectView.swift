@@ -57,6 +57,7 @@ struct AlarmConnectView: View {
                                     ))
                         HStack {
                             HStack {
+                                
                                 if let profileImageUrl = URL(string: notification.fromUserProfileImageUrl ?? "") {
                                     KFImage(profileImageUrl)
                                         .resizable()
@@ -67,12 +68,16 @@ struct AlarmConnectView: View {
                                         .resizable()
                                         .frame(width: 44, height: 44)
                                 }
-                                
-                                VStack(alignment:.leading){
-                                    Text("\(notification.fromUserId)님이 회원님과 일상을 connect 하고 싶어 합니다.")
-                                        .foregroundColor(Color.black)
-                                        .font(.system(size: 15, weight:.medium))
+
+                                HStack {
+                                    VStack(alignment:.leading){
+                                        Text("\(notification.fromUserId)님이 회원님과 일상을 connect 하고 싶어 합니다.")
+                                            .foregroundColor(Color.black)
+                                            .font(.system(size: 15, weight:.medium))
+                                    }
+                                    Spacer()
                                 }
+                                .frame(width: 216)
                             }
                             .frame(width: 300)
                             .padding(.trailing,5)
