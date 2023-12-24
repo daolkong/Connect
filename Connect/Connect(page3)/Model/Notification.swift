@@ -23,7 +23,7 @@ struct Notification: Identifiable, Codable, Equatable, Hashable {
     let toUserId: String
     var fromUserProfileImageUrl: String?
     var latestPostImageUrl: String?
-    var time: Date?  // Add this line
+    var time: Date?
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -31,7 +31,7 @@ struct Notification: Identifiable, Codable, Equatable, Hashable {
         case toUserId = "to"
         case fromUserProfileImageUrl = "fromUserProfileImageUrl"
         case latestPostImageUrl = "latestPostImageUrl"
-        case time  // Add this line
+        case time
     }
 
     init(id: String,
@@ -39,14 +39,14 @@ struct Notification: Identifiable, Codable, Equatable, Hashable {
           toUserId: String,
           fromUserProfileImageUrl: String?,
           latestPostImageUrl: String?,
-          time: Date?) {  // Add this line
+          time: Date?) {
 
         self.id = id
         self.fromUserId = fromUserId
         self.toUserId = toUserId
         self.fromUserProfileImageUrl = fromUserProfileImageUrl
         self.latestPostImageUrl = latestPostImageUrl
-        self.time = time  // Add this line
+        self.time = time  
     }
     
     static func == (lhs: Notification, rhs: Notification) -> Bool {

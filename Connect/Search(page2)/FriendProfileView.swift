@@ -23,27 +23,27 @@ struct FriendProfileView: View {
             print("Error: No current user found")
             return
         }
-        
         userDataModel.addFriend(currentUser.uid , friendUser.uid) { result in
             switch result {
             case .success():
                 print("Successfully added friend to current user's friends list")
-                userDataModel.getCurrentUser(uid: authViewModel.uid) // 친구가 추가된 후에 currentUser를 업데이트 합니다.
+                userDataModel.getCurrentUser(uid: authViewModel.uid)
             case .failure(let error):
                 print("Error adding friend to current user's friends list: \(error)")
             }
         }
-        userDataModel.addFriend(friendUser.uid, authViewModel.uid) { result in
+        userDataModel.addFriend(friendUser.uid, currentUser.uid) { result in
             switch result {
             case .success():
                 print("Successfully added current user to friend's friends list")
-                userDataModel.getCurrentUser(uid: authViewModel.uid) // 친구가 추가된 후에 currentUser를 업데이트 합니다.
+                userDataModel.getCurrentUser(uid: authViewModel.uid)
+                userDataModel.fetchUser()
             case .failure(let error):
                 print("Error adding current user to friend's friends list: \(error)")
             }
         }
     }
-    
+
     var body: some View {
         ZStack {
             Rectangle()
@@ -116,7 +116,7 @@ struct FriendProfileView: View {
                             .resizable()
                             .frame(width: 34, height: 4)
                         
-                        Text("\(userDataModel.friends.count)")
+                        Text("\(authViewModel.user?.friends.count ?? 0)")
                             .font(.system(size: 30, weight:.semibold))
                         
                     }

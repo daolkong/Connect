@@ -35,7 +35,7 @@ struct AlarmConnectView: View {
                         .frame(width: 10, height: 16)
                 }
                 
-                Text("알림")
+                Text("Nontifications")
                     .font(.system(size: 23, weight:.semibold))
                 
                 Spacer()
@@ -86,20 +86,20 @@ struct AlarmConnectView: View {
                                             UserDefaults.standard.set(buttonClickCount, forKey: "buttonClickCount")
                                             UserDefaults.standard.set(Date(), forKey: "lastClickDate")
                                             showingAlert = true
-                                            alertTitle = "커넥트 성공"
-                                            alertMessage = "하루에 4번만 커넥트 할 수 있습니다"
+                                            alertTitle = "커넥트 성공(하루 4번 가능)"
+                                            alertMessage = "이미지 업로드 중 입니다. 2,3초 후에 다른 뷰로 이동해주세요"
                                         } else {
                                             showingAlert = true
-                                            alertTitle = "커넥트 4번 완료"
-                                            alertMessage = "친구 4명과 커넥트를 모두 완료했습니다"
+                                            alertTitle = "커넥트 4번 완료(하루 커넥트 횟수 달성 - 4회)"
+                                            alertMessage = "이미지 업로드 중 입니다. 2,3초 후에 다른 뷰로 이동해주세요"
                                         }
                                     } else {
                                         buttonClickCount = 1
                                         UserDefaults.standard.set(buttonClickCount, forKey: "buttonClickCount")
                                         UserDefaults.standard.set(Date(), forKey: "lastClickDate")
                                         showingAlert = true
-                                        alertTitle = "커넥트 성공"
-                                        alertMessage = "하루에 4번만 커넥트 할 수 있습니다."
+                                        alertTitle = "커넥트 성공(하루 4번 가능)"
+                                        alertMessage = "이미지 업로드 중 입니다. 2,3초 후에 다른 뷰로 이동해주세요"
                                     }
                                     
                                     if buttonClickCount <= 4 {

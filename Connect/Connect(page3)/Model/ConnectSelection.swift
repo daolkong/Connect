@@ -16,7 +16,6 @@ struct ConnectSelection: View {
         "보관함"
     ]
     
-
     var body: some View {
         ZStack {
             
@@ -49,7 +48,6 @@ struct ConnectSelection: View {
                         }
                     }
                 }
-                
                 
                 
                 

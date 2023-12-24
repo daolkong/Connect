@@ -46,7 +46,6 @@ class NotificationViewModel: ObservableObject {
                 
             }
             
-            // Fetch user information for the notification.
             db.collection("users").document(fromUserId).getDocument { (userDocSnapshot,error) in
                 if error != nil{
                     print ("Error loading user document:",error?.localizedDescription ?? "")
@@ -73,7 +72,6 @@ class NotificationViewModel: ObservableObject {
                 
                 self.loadLatestPostImage(fromUserId: fromUserId) { latestPostImageUrl in
                     DispatchQueue.main.async {
-                        // If the user has no posts yet, do not proceed with creating a notification.
                         if latestPostImageUrl == nil {
                             print("DBUser has no posts yet. Notification will not be created.")
                             return
@@ -92,7 +90,6 @@ class NotificationViewModel: ObservableObject {
                         
                         self.notifications.append(newNotification)
                         
-                        // Save notification to Firestore.
                         do {
                             _=try db.collection ("notifications").addDocument(from:newNotification)
                             print ("Notification saved successfully!")
@@ -159,7 +156,7 @@ class NotificationViewModel: ObservableObject {
         
         let db = Firestore.firestore()
         
-        let likeCount = 0  // Add this line.
+        let likeCount = 0
         let post = Post(id: nil, userId: userId, imageUrl: imageUrl, timestamp: Timestamp(date: Date()), likeCount: likeCount)
         
         do {
@@ -186,23 +183,17 @@ class NotificationViewModel: ObservableObject {
                 
                 guard let document = querySnapshot?.documents.first else {
                     print("No posts found for user \(fromUserId)")
-                    
-                    // Return a default image URL or an empty string.
                     completion("")
-                    
                     return
                 }
                 
                 guard let postImageUrl = document.data()["imageUrl"] as? String else {
                     print("Failed to load imageUrl from post data")
-                    
-                    // Return a default image URL or an empty string.
                     completion("")
-                    
                     return
                 }
                 
-                print("Loaded image URL:", postImageUrl)  // Print the loaded image URL
+                print("Loaded image URL:", postImageUrl)
                 
                 completion(postImageUrl)
             }

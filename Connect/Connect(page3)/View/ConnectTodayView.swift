@@ -97,7 +97,7 @@ struct ConnectTodayView: View {
                                                         .aspectRatio(contentMode: .fill)
                                                         .tag("tag1")
                                                 }
-                                                
+                                        
                                                 if let urlBString = sharedViewModel.userBNImageUrls[0],
                                                    let urlB = URL(string: urlBString) {
                                                     KFImage(urlB)
@@ -146,6 +146,8 @@ struct ConnectTodayView: View {
                                     }
                                     .frame(width: 130)
                                     .multilineTextAlignment(.center)
+                                } else {
+                                    ProgressView()
                                 }
                             } else {
                                 Image("non")
@@ -337,6 +339,8 @@ struct ConnectTodayView: View {
                                     }
                                     .frame(width:130)
                                     .multilineTextAlignment(.center)
+                                } else {
+                                    ProgressView()
                                 }
                                 
                             } else {
@@ -433,6 +437,8 @@ struct ConnectTodayView: View {
                                     }
                                     .frame(width:130)
                                     .multilineTextAlignment(.center)
+                                } else {
+                                    ProgressView()
                                 }
                             } else {
                                 Image("non")

@@ -14,8 +14,9 @@ struct PostRow: View {
     @EnvironmentObject var notificationViewModel : NotificationViewModel
     @State private var profileImageURL: String? = nil
     @State private var likeCount: Int
+    @State private var showAlert = false
     
-    let postData: Post  
+    let postData: Post
     let dateFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "hh:mm"
@@ -62,7 +63,7 @@ struct PostRow: View {
     func timeAgo(date: Date) -> String {
         let now = Date()
         let components = Calendar.current.dateComponents([.minute, .hour, .day], from: date, to: now)
-
+        
         if let day = components.day, day >= 1 {
             return "\(day)일 전 공유됨"
         } else if let hour = components.hour, hour >= 1 {
@@ -73,7 +74,7 @@ struct PostRow: View {
             return "방금"
         }
     }
-
+    
     // ------------------------------------------------------------------------------------------------------------------
     
     var body: some View {
@@ -111,57 +112,58 @@ struct PostRow: View {
                         Spacer()
                     }
                 }
-                    Group {
-                        if let imageUrl = URL(string: postData.imageUrl) {
-                            KFImage(imageUrl)
-                                .cacheOriginalImage()
-                                .resizable()
-                                .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
-                                       height: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375)
-                                .scaledToFill()
-                                .aspectRatio(contentMode: .fit)
-                        } else {
-                            Text("Invalid URL string.")
-                                .font(.system(size: 20))
-                                .foregroundColor(Color.black)
-                        }
+                Group {
+                    if let imageUrl = URL(string: postData.imageUrl) {
+                        KFImage(imageUrl)
+                            .cacheOriginalImage()
+                            .resizable()
+                            .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
+                                   height: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375)
+                            .scaledToFill()
+                            .aspectRatio(contentMode: .fit)
+                    } else {
+                        Text("Invalid URL string.")
+                            .font(.system(size: 20))
+                            .foregroundColor(Color.black)
                     }
+                }
             }
             
             // 공감과 커넥트 칸
             ZStack {
                 Rectangle()
-                  .foregroundColor(.clear)
-                  .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
-                         height: 85)
-                  .background(
-                    LinearGradient(
-                      stops: [
-                        Gradient.Stop(color: Color(red: 0.96, green: 0.75, blue: 0.74), location: 0.00),
-                        Gradient.Stop(color: Color(red: 0.6, green: 0.75, blue: 0.98), location: 1.00),
-                      ],
-                      startPoint: UnitPoint(x: 0.41, y: -0.95),
-                      endPoint: UnitPoint(x: 0.94, y: 1.88)
+                    .foregroundColor(.clear)
+                    .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
+                           height: 85)
+                    .background(
+                        LinearGradient(
+                            stops: [
+                                Gradient.Stop(color: Color(red: 0.96, green: 0.75, blue: 0.74), location: 0.00),
+                                Gradient.Stop(color: Color(red: 0.6, green: 0.75, blue: 0.98), location: 1.00),
+                            ],
+                            startPoint: UnitPoint(x: 0.41, y: -0.95),
+                            endPoint: UnitPoint(x: 0.94, y: 1.88)
+                        )
                     )
-                  )
                 
                 Button(action:{
                     if let postId = postData.id {
                         notificationViewModel.sendRequest(imageId: postId)
+                        showAlert = true
                     } else {
                         print("Post ID is nil")
                     }
                 }){
                     ZStack {
                         Rectangle()
-                          .foregroundColor(.clear)
-                          .frame(width: 210, height: 50)
-                          .cornerRadius(15)
-                          .overlay(
-                            RoundedRectangle(cornerRadius: 15)
-                              .inset(by: -1.25)
-                              .stroke(Color(red: 0.96, green: 0.96, blue: 0.96), lineWidth: 2.5)
-                          )
+                            .foregroundColor(.clear)
+                            .frame(width: 210, height: 50)
+                            .cornerRadius(15)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 15)
+                                    .inset(by: -1.25)
+                                    .stroke(Color(red: 0.96, green: 0.96, blue: 0.96), lineWidth: 2.5)
+                            )
                         
                         HStack(spacing: 30) {
                             Image("Connect button")
@@ -173,6 +175,16 @@ struct PostRow: View {
                                 .foregroundColor(Color.white)
                         }
                     }
+                }
+                .alert(isPresented: $showAlert) {
+                    Alert(
+                        title: Text("커넥트 요청이 전송되었습니다"),
+                        message: Text("상대방이 요청을 수락하면 서로의 일상이 연결됩니다."),
+                        dismissButton: .default(
+                            Text("확인")
+                                .foregroundColor(.pink) 
+                        )
+                    )
                 }
             }
             .onAppear(perform:{
@@ -194,9 +206,9 @@ struct PostRow_Previews: PreviewProvider {
     static var previews: some View {
         
         let samplePost = TempPost(id: "1", userId: "TestUser", imageUrl:"https://example.com/image.jpg", timestamp: Date(), likeCount: 10)
-
-        let post = Post(id: samplePost.id, userId: samplePost.userId, imageUrl: samplePost.imageUrl, timestamp: Timestamp(date: samplePost.timestamp), likeCount: samplePost.likeCount) 
-
+        
+        let post = Post(id: samplePost.id, userId: samplePost.userId, imageUrl: samplePost.imageUrl, timestamp: Timestamp(date: samplePost.timestamp), likeCount: samplePost.likeCount)
+        
         PostRow(postData: post)
     }
 }
