@@ -291,65 +291,75 @@ struct HomeView: View {
     }
 }
 
-struct CameraView: UIViewControllerRepresentable {
+struct CameraView: View {
     @Binding var isShown: Bool
     @Binding var image: UIImage?
-    
+
     @EnvironmentObject var authViewModel: AuthViewModel
-    
-    
-    func makeCoordinator() -> Coordinator {
-        return Coordinator(isShown: $isShown, image: $image)
-    }
-    
+
+    var body: some View {
+           CameraViewController(isShown: $isShown, image: $image)
+               .edgesIgnoringSafeArea(.all)
+       }
+   }
+
+struct CameraViewController: UIViewControllerRepresentable {
+    @Binding var isShown: Bool
+    @Binding var image: UIImage?
+
+    @EnvironmentObject var authViewModel: AuthViewModel
+
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
         picker.sourceType = .camera
         picker.delegate = context.coordinator
-        
+
         return picker
     }
-    
+
     func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
-    
-    class Coordinator : NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
+
+    func makeCoordinator() -> Coordinator {
+        return Coordinator(isShown: $isShown, image: $image)
+    }
+
+    class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
         @Binding var isShown: Bool
         @Binding var image: UIImage?
-        
-        init(isShown : Binding<Bool>, image : Binding<UIImage?>) {
+
+        init(isShown: Binding<Bool>, image: Binding<UIImage?>) {
             _isShown = isShown
             _image = image
-            
+
             super.init()
-            
-            AVCaptureDevice.requestAccess(for:.video) { (granted) in
-                if !granted { print("Error - AVCaptureDevice authorization status not authorized.") }
+
+            AVCaptureDevice.requestAccess(for: .video) { granted in
+                if !granted {
+                    print("에러 - AVCaptureDevice 권한 상태가 승인되지 않았습니다.")
+                }
             }
-            
-            PHPhotoLibrary.requestAuthorization { (status) in
+
+            PHPhotoLibrary.requestAuthorization { status in
                 switch status {
                 case .authorized:
                     break
-                    
                 default:
-                    print("Error - PHPhotoLibrary authorization status not authorized.")
+                    print("에러 - PHPhotoLibrary 권한 상태가 승인되지 않았습니다.")
                     break
-                    
                 }
             }
         }
-        
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
             guard let selectedImage = info[.originalImage] as? UIImage else {
                 return
             }
-            
+
             if self.image == nil {
                 self.image = selectedImage
                 self.isShown = false
             }
         }
-        
     }
 }
 

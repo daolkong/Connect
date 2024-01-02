@@ -213,6 +213,16 @@ final class AuthViewModel: ObservableObject {
             }
         }
     }
+    
+    func deleteUser() async throws {
+        let user = Auth.auth().currentUser
+        do {
+            try await user?.delete()
+            print("User deleted")
+        } catch let error {
+            print("Error deleting user: \(error)")
+        }
+    }
 }
 
 extension AuthViewModel {

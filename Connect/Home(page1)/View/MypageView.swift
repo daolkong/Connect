@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct MypageView: View {
+    @State private var deleteUserConfirmation = false
+    @State private var showLogoutConfirmation = false
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var authViewModel: AuthViewModel
     var body: some View {
@@ -78,30 +80,71 @@ struct MypageView: View {
             
             //로그아웃 버튼
             Button {
-                do {
-                    try authViewModel.signOutUser()
-                } catch {
-                    print("DEBUG: Failed to sign out: \(error.localizedDescription)")
-                }
-            } label: {
-                ZStack {
-                    Rectangle()
-                        .frame(width: 338, height: 68)
-                        .background(Color(red: 0.12, green: 0.14, blue: 0.14))
-                        .cornerRadius(35)
-                    
-                    Text("로그아웃")
-                        .font(.system(size: 27, weight:.bold))
-                        .foregroundColor(Color.white)
-                }
-                .tint(Color.black)
-            }
+                      showLogoutConfirmation = true
+                  } label: {
+                      ZStack {
+                          Rectangle()
+                              .frame(width: 338, height: 68)
+                              .background(Color(red: 0.12, green: 0.14, blue: 0.14))
+                              .cornerRadius(20)
+                          
+                          Text("로그아웃")
+                              .font(.system(size: 27, weight:.bold))
+                              .foregroundColor(Color.white)
+                      }
+                      .tint(Color.black)
+                  }
+                  .alert(isPresented: $showLogoutConfirmation) {
+                              Alert(
+                                  title: Text("로그아웃"),
+                                  message: Text("정말 로그아웃 하시겠습니까?"),
+                                  primaryButton: .cancel(Text("취소").foregroundColor(.red).fontWeight(.bold)), // Cancel button text color
+                                  secondaryButton: .default(Text("로그아웃").foregroundColor(.blue).fontWeight(.bold)) {
+                                      do {
+                                          try authViewModel.signOutUser()
+                                      } catch {
+                                          print("DEBUG: Failed to sign out: \(error.localizedDescription)")
+                                      }
+                                  }
+                              )
+                          }
             .task {
                 do {
                     try await authViewModel.fetchUser()
                 } catch {
                     print("DEBUG: Failed to fetch user \(error.localizedDescription)")
                 }
+            }
+            
+            Button {
+                deleteUserConfirmation = true
+            } label: {
+                ZStack {
+                    Rectangle()
+                        .frame(width: 338, height: 38)
+                        .cornerRadius(20)
+
+                    Text("회원탈퇴")
+                        .foregroundColor(Color(red: 1, green: 0.46, blue: 0.45))
+                        .font(.system(size: 18, weight:.semibold))
+                }
+            }
+            .alert(isPresented: $deleteUserConfirmation) {
+                Alert(
+                    title: Text("정말로 회원탈퇴 하시겠습니까? "),
+                    message: Text("계정과 관련된 모든 데이터가 삭제됩니다."),
+                    primaryButton: .cancel(Text("취소").foregroundColor(.red).fontWeight(.bold)), // Cancel button text color
+                    secondaryButton: .default(Text("회원탈퇴").foregroundColor(.blue).fontWeight(.bold)) {
+                        Task {
+                            do {
+                                try await authViewModel.deleteUser()
+                                try authViewModel.signOutUser() // Sign out after deleting the account
+                            } catch {
+                                print("DEBUG: Failed to delete user: \(error.localizedDescription)")
+                            }
+                        }
+                    }
+                )
             }
         }
         .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,

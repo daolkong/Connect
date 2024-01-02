@@ -60,7 +60,7 @@
 		33328D232AB5D4D7001D9676 /* AlarmConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmConnectView.swift; sourceTree = "<group>"; };
 		33391FEE2ACD4FD7004CAB15 /* PostRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRow.swift; sourceTree = "<group>"; };
 		33391FF02ACD5126004CAB15 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
-		3356BC752AA2BEF500B1EF01 /* Link life.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Link life.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3356BC752AA2BEF500B1EF01 /* Linklife.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Linklife.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3356BC782AA2BEF500B1EF01 /* ConnectApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectApp.swift; sourceTree = "<group>"; };
 		3356BC7F2AA2BEF700B1EF01 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		3356BC902AA2C07800B1EF01 /* StartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartView.swift; sourceTree = "<group>"; };
@@ -129,7 +129,7 @@
 		3356BC762AA2BEF500B1EF01 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				3356BC752AA2BEF500B1EF01 /* Link life.app */,
+				3356BC752AA2BEF500B1EF01 /* Linklife.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -258,9 +258,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		3356BC742AA2BEF500B1EF01 /* Link life */ = {
+		3356BC742AA2BEF500B1EF01 /* Linklife */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 3356BC882AA2BEF700B1EF01 /* Build configuration list for PBXNativeTarget "Link life" */;
+			buildConfigurationList = 3356BC882AA2BEF700B1EF01 /* Build configuration list for PBXNativeTarget "Linklife" */;
 			buildPhases = (
 				3356BC712AA2BEF500B1EF01 /* Sources */,
 				3356BC722AA2BEF500B1EF01 /* Frameworks */,
@@ -270,7 +270,7 @@
 			);
 			dependencies = (
 			);
-			name = "Link life";
+			name = Linklife;
 			packageProductDependencies = (
 				338C28242AB03DC0004587CD /* URLImage */,
 				338C28262AB03DC0004587CD /* URLImageStore */,
@@ -292,7 +292,7 @@
 				33A418042B017A1100079E74 /* Algorithms */,
 			);
 			productName = Connect;
-			productReference = 3356BC752AA2BEF500B1EF01 /* Link life.app */;
+			productReference = 3356BC752AA2BEF500B1EF01 /* Linklife.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -310,7 +310,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 3356BC702AA2BEF500B1EF01 /* Build configuration list for PBXProject "Link life" */;
+			buildConfigurationList = 3356BC702AA2BEF500B1EF01 /* Build configuration list for PBXProject "Linklife" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = ko;
 			hasScannedForEncodings = 0;
@@ -330,7 +330,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				3356BC742AA2BEF500B1EF01 /* Link life */,
+				3356BC742AA2BEF500B1EF01 /* Linklife */,
 			);
 		};
 /* End PBXProject section */
@@ -524,13 +524,13 @@
 				INFOPLIST_FILE = "/Users/lenz/lens's project/Dev/Connect/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Link life";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
-				INFOPLIST_KEY_NSCameraUsageDescription = "\"카메라 엑세스 권한을 허용해 주세요\"";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "\"갤러리 접근 권한을 허용해 주세요\"";
+				INFOPLIST_KEY_NSCameraUsageDescription = "“링크 라이프는 사용자의 동의 없이 사진을 저장, 공유하지 않습니다. 접근 권한은 앱 내에서 사진을 촬영하고 업로드하는 데에만 사용됩니다.\"";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "“링크 라이프는 사용자의 동의 없이 사진을 저장, 공유하지 않습니다. 접근 권한은 앱 내에서 사진을 업로드하는 데에만 사용됩니다.\"";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -540,9 +540,12 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "com.G-School.Linklife";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -561,13 +564,13 @@
 				INFOPLIST_FILE = "/Users/lenz/lens's project/Dev/Connect/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Link life";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
-				INFOPLIST_KEY_NSCameraUsageDescription = "\"카메라 엑세스 권한을 허용해 주세요\"";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "\"갤러리 접근 권한을 허용해 주세요\"";
+				INFOPLIST_KEY_NSCameraUsageDescription = "“링크 라이프는 사용자의 동의 없이 사진을 저장, 공유하지 않습니다. 접근 권한은 앱 내에서 사진을 촬영하고 업로드하는 데에만 사용됩니다.\"";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "“링크 라이프는 사용자의 동의 없이 사진을 저장, 공유하지 않습니다. 접근 권한은 앱 내에서 사진을 업로드하는 데에만 사용됩니다.\"";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -576,16 +579,19 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.G-School.Linklife";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		3356BC702AA2BEF500B1EF01 /* Build configuration list for PBXProject "Link life" */ = {
+		3356BC702AA2BEF500B1EF01 /* Build configuration list for PBXProject "Linklife" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3356BC862AA2BEF700B1EF01 /* Debug */,
@@ -594,7 +600,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		3356BC882AA2BEF700B1EF01 /* Build configuration list for PBXNativeTarget "Link life" */ = {
+		3356BC882AA2BEF700B1EF01 /* Build configuration list for PBXNativeTarget "Linklife" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3356BC892AA2BEF700B1EF01 /* Debug */,

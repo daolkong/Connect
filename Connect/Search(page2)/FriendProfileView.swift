@@ -28,6 +28,7 @@ struct FriendProfileView: View {
             case .success():
                 print("Successfully added friend to current user's friends list")
                 userDataModel.getCurrentUser(uid: authViewModel.uid)
+                userDataModel.getCurrentUser(uid: friendUser.uid)
             case .failure(let error):
                 print("Error adding friend to current user's friends list: \(error)")
             }
@@ -116,15 +117,16 @@ struct FriendProfileView: View {
                             .resizable()
                             .frame(width: 34, height: 4)
                         
-                        Text("\(authViewModel.user?.friends.count ?? 0)")
+                        Text("\(userDataModel.user?.friends.count ?? 0)")
                             .font(.system(size: 30, weight:.semibold))
-                        
+                          
                     }
                     
                     // 친구추가 버튼
                     Button(action: {
                         addFriend(user)
                         self.showingAlert = true
+                        self.userDataModel.getCurrentUser(uid: authViewModel.uid)
                     }) {
                         ZStack {
                             Rectangle()

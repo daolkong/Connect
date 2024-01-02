@@ -9,12 +9,17 @@ import SwiftUI
 import Kingfisher
 import FirebaseFirestore
 import FirebaseAuth
+import MessageUI
 
 struct PostRow: View {
     @EnvironmentObject var notificationViewModel : NotificationViewModel
     @State private var profileImageURL: String? = nil
     @State private var likeCount: Int
     @State private var showAlert = false
+    @State private var showingActionSheet = false
+    @State private var showingAlert = false
+    @State private var showingMailView = false
+    
     
     let postData: Post
     let dateFormatter: DateFormatter = {
@@ -74,7 +79,6 @@ struct PostRow: View {
             return "방금"
         }
     }
-    
     // ------------------------------------------------------------------------------------------------------------------
     
     var body: some View {
@@ -89,7 +93,7 @@ struct PostRow: View {
                                height: 65)
                     HStack {
                         Spacer()
-                            .frame(width: 8)
+                            .frame(width: 0)
                         if let urlStr = profileImageURL, let url = URL(string: urlStr) {
                             KFImage(url)
                                 .cacheOriginalImage()
@@ -110,88 +114,167 @@ struct PostRow: View {
                                 .font(.system(size :12, weight: .regular))
                         }
                         Spacer()
-                    }
-                }
-                Group {
-                    if let imageUrl = URL(string: postData.imageUrl) {
-                        KFImage(imageUrl)
-                            .cacheOriginalImage()
-                            .resizable()
-                            .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
-                                   height: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375)
-                            .scaledToFill()
-                            .aspectRatio(contentMode: .fit)
-                    } else {
-                        Text("Invalid URL string.")
-                            .font(.system(size: 20))
-                            .foregroundColor(Color.black)
-                    }
-                }
-            }
-            
-            // 공감과 커넥트 칸
-            ZStack {
-                Rectangle()
-                    .foregroundColor(.clear)
-                    .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
-                           height: 85)
-                    .background(
-                        LinearGradient(
-                            stops: [
-                                Gradient.Stop(color: Color(red: 0.96, green: 0.75, blue: 0.74), location: 0.00),
-                                Gradient.Stop(color: Color(red: 0.6, green: 0.75, blue: 0.98), location: 1.00),
-                            ],
-                            startPoint: UnitPoint(x: 0.41, y: -0.95),
-                            endPoint: UnitPoint(x: 0.94, y: 1.88)
-                        )
-                    )
-                
-                Button(action:{
-                    if let postId = postData.id {
-                        notificationViewModel.sendRequest(imageId: postId)
-                        showAlert = true
-                    } else {
-                        print("Post ID is nil")
-                    }
-                }){
-                    ZStack {
-                        Rectangle()
-                            .foregroundColor(.clear)
-                            .frame(width: 210, height: 50)
-                            .cornerRadius(15)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 15)
-                                    .inset(by: -1.25)
-                                    .stroke(Color(red: 0.96, green: 0.96, blue: 0.96), lineWidth: 2.5)
-                            )
                         
-                        HStack(spacing: 30) {
-                            Image("Connect button")
+                        Button(action: {
+                            self.showingActionSheet = true
+                        }) {
+                            Image("dot")
                                 .resizable()
-                                .frame(width :31,height :31)
-                            
-                            Text("커넥트")
-                                .font(.system(size: 20, weight: .bold))
-                                .foregroundColor(Color.white)
+                                .frame(width: 24, height: 24)
+                        }
+                        .actionSheet(isPresented: $showingActionSheet) {
+                            ActionSheet(title: Text("게시물 신고"), buttons: [
+                                .cancel(Text("취소")),
+                                .default(Text("🚨 이 게시물 신고하기 🚨")) {
+                                    // '이 게시물 신고하기' 버튼을 누를 때만 메일 작성 뷰를 띄우도록 설정
+                                    self.showingMailView = true
+                                }
+                            ])
+                        }
+                        .sheet(isPresented: $showingMailView) {
+                            MailView(isShowing: self.$showingMailView, imageUrl: postData.imageUrl)
                         }
                     }
+                    .frame(width: 375)
+                    
+                    
                 }
-                .alert(isPresented: $showAlert) {
-                    Alert(
-                        title: Text("커넥트 요청이 전송되었습니다"),
-                        message: Text("상대방이 요청을 수락하면 서로의 일상이 연결됩니다."),
-                        dismissButton: .default(
-                            Text("확인")
-                                .foregroundColor(.pink) 
-                        )
-                    )
+                
+            }
+            
+            Group {
+                if let imageUrl = URL(string: postData.imageUrl) {
+                    KFImage(imageUrl)
+                        .cacheOriginalImage()
+                        .resizable()
+                        .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
+                               height: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375)
+                        .scaledToFill()
+                        .aspectRatio(contentMode: .fit)
+                } else {
+                    Text("Invalid URL string.")
+                        .font(.system(size: 20))
+                        .foregroundColor(Color.black)
                 }
             }
-            .onAppear(perform:{
-                loadProfileImageData(postData.userId)
-            })
+        }
+        
+        // 공감과 커넥트 칸
+        ZStack {
+            Rectangle()
+                .foregroundColor(.clear)
+                .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
+                       height: 85)
+                .background(
+                    LinearGradient(
+                        stops: [
+                            Gradient.Stop(color: Color(red: 0.96, green: 0.75, blue: 0.74), location: 0.00),
+                            Gradient.Stop(color: Color(red: 0.6, green: 0.75, blue: 0.98), location: 1.00),
+                        ],
+                        startPoint: UnitPoint(x: 0.41, y: -0.95),
+                        endPoint: UnitPoint(x: 0.94, y: 1.88)
+                    )
+                )
+            
+            Button(action:{
+                if let postId = postData.id {
+                    notificationViewModel.sendRequest(imageId: postId)
+                    showAlert = true
+                } else {
+                    print("Post ID is nil")
+                }
+            }){
+                ZStack {
+                    Rectangle()
+                        .foregroundColor(.clear)
+                        .frame(width: 210, height: 50)
+                        .cornerRadius(15)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 15)
+                                .inset(by: -1.25)
+                                .stroke(Color(red: 0.96, green: 0.96, blue: 0.96), lineWidth: 2.5)
+                        )
+                    
+                    HStack(spacing: 30) {
+                        Image("Connect button")
+                            .resizable()
+                            .frame(width :31,height :31)
+                        
+                        Text("커넥트")
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundColor(Color.white)
+                    }
+                }
+            }
+            .alert(isPresented: $showAlert) {
+                Alert(
+                    title: Text("커넥트 요청이 전송되었습니다"),
+                    message: Text("상대방이 요청을 수락하면 서로의 일상이 연결됩니다."),
+                    dismissButton: .default(
+                        Text("확인")
+                            .foregroundColor(.pink)
+                    )
+                )
+            }
+        }
+        .onAppear(perform:{
+            loadProfileImageData(postData.userId)
+        })
+    }
+}
+
+struct MailView: UIViewControllerRepresentable {
+    @Binding var isShowing: Bool
+    let imageUrl: String // 메일에 첨부할 이미지 URL
+    
+    func makeUIViewController(context: Context) -> MFMailComposeViewController {
+        let vc = MFMailComposeViewController()
+        vc.setToRecipients(["daolkong06@gmail.com"]) // 개발자 이메일 주소
+        vc.setSubject("부적절한 게시물을 신고합니다")
+        vc.setMessageBody("신고할 내용을 작성해주세요", isHTML: false)
+        
+        // 게시물 이미지를 NSData로 변환하여 첨부
+        if let imageData = NSData(contentsOf: URL(string: imageUrl)!) {
+            vc.addAttachmentData(imageData as Data, mimeType: "image/jpeg", fileName: "post_image.jpeg")
+        }
+        
+        vc.mailComposeDelegate = context.coordinator
+        return vc
+    }
+    
+    func updateUIViewController(_ uiViewController: MFMailComposeViewController, context: Context) {}
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(isShowing: $isShowing, imageUrl: imageUrl)
+    }
+    
+    class Coordinator: NSObject, MFMailComposeViewControllerDelegate {
+        @Binding var isShowing: Bool
+        
+        init(isShowing: Binding<Bool>, imageUrl: String) {
+            _isShowing = isShowing
+            super.init()
+        }
+        
+        func mailComposeController(_ controller: MFMailComposeViewController,
+                                   didFinishWith result: MFMailComposeResult,
+                                   error: Error?) {
+            if result == .sent {
+                isShowing = false
+            }
+            
+            controller.dismiss(animated: true)
         }
     }
+
+
+    func showAlert() -> Alert {
+           Alert(
+               title: Text("Mail Sent"),
+               message: Text("Your mail has been sent successfully!"),
+               dismissButton: .default(Text("OK"))
+           )
+       }
 }
 
 struct TempPost: Identifiable {
