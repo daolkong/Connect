@@ -27,7 +27,6 @@ struct AlarmConnectView: View {
             HStack(spacing: 28) {
                 
                 Button(action: {
-                    // Dismiss the view when the button is tapped
                     presentationMode.wrappedValue.dismiss()
                 }) {
                     Image("back1")
@@ -269,6 +268,7 @@ struct AlarmConnectView: View {
                         .padding(.trailing,20)
                     }
                 }
+                .padding(.top, 5)
             }
             .onAppear {
                 Task {
