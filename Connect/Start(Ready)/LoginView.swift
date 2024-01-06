@@ -29,7 +29,7 @@ struct LoginView: View {
                                 Gradient.Stop(color: .white, location: 1.00),
                             ],
                             startPoint: UnitPoint(x: 0.19, y: 0.02),
-                            endPoint: UnitPoint(x: 2.33, y: 2.9) 
+                            endPoint: UnitPoint(x: 2.33, y: 2.9)
                         )
                     )
                 
@@ -58,13 +58,28 @@ struct LoginView: View {
                                 .foregroundColor(.white)
                                 .overlay( Rectangle()
                                     .foregroundColor(.clear)
-                                    .frame(width: UIScreen.main.bounds.width == 430 ? 340 : UIScreen.main.bounds.width == 393 ? 333 : UIScreen.main.bounds.width == 390 ? 360 : UIScreen.main.bounds.width == 375 ? 325 : UIScreen.main.bounds.width == 320 ? 290 : 375,
-                                           height: UIScreen.main.bounds.height == 932 ? 52 : UIScreen.main.bounds.height == 852 ? 48 : UIScreen.main.bounds.height == 844 ? 48 : UIScreen.main.bounds.height == 812 ? 48 : UIScreen.main.bounds.height == 667 ? 48: UIScreen.main.bounds.height)                                    .cornerRadius(50)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 50)
-                                            .inset(by: 0.75)
-                                            .stroke(Color.white)
-                                    )
+                                    .frame(width: UIScreen.main.bounds.width == 430 ? 340 :
+                                            UIScreen.main.bounds.width == 428 ? 330 :
+                                            UIScreen.main.bounds.width == 414 ? 333 :
+                                            UIScreen.main.bounds.width == 393 ? 333 :
+                                            UIScreen.main.bounds.width == 390 ? 340 :
+                                            UIScreen.main.bounds.width == 375 ? 325 :
+                                            UIScreen.main.bounds.width == 320 ? 250 : 375,
+                                           height: UIScreen.main.bounds.height == 932 ? 52 :
+                                            UIScreen.main.bounds.height == 926 ? 50 :
+                                            UIScreen.main.bounds.height == 896 ? 50 :
+                                            UIScreen.main.bounds.height == 852 ? 48 :
+                                            UIScreen.main.bounds.height == 844 ? 48 :
+                                            UIScreen.main.bounds.height == 812 ? 48 :
+                                            UIScreen.main.bounds.height == 667 ? 48: UIScreen.main.bounds.height)
+                                          
+                                        .cornerRadius(50)
+                                          
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 50)
+                                                .inset(by: 0.75)
+                                                .stroke(Color.white)
+                                        )
                                 )
                             
                         }
@@ -79,13 +94,28 @@ struct LoginView: View {
                                 .foregroundColor(.white)
                                 .overlay( Rectangle()
                                     .foregroundColor(.clear)
-                                    .frame(width: UIScreen.main.bounds.width == 430 ? 340 : UIScreen.main.bounds.width == 393 ? 333 : UIScreen.main.bounds.width == 390 ? 340 : UIScreen.main.bounds.width == 375 ? 325 : UIScreen.main.bounds.width == 320 ? 250 : 375,
-                                           height: UIScreen.main.bounds.height == 932 ? 52 : UIScreen.main.bounds.height == 852 ? 48 : UIScreen.main.bounds.height == 844 ? 48 : UIScreen.main.bounds.height == 812 ? 48 : UIScreen.main.bounds.height == 667 ? 48: UIScreen.main.bounds.height)                                    .cornerRadius(50)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 50)
-                                            .inset(by: 0.75)
-                                            .stroke(Color.white)
-                                    )
+                                    .frame(width: UIScreen.main.bounds.width == 430 ? 340 :
+                                            UIScreen.main.bounds.width == 428 ? 330 :
+                                            UIScreen.main.bounds.width == 414 ? 333 :
+                                            UIScreen.main.bounds.width == 393 ? 333 :
+                                            UIScreen.main.bounds.width == 390 ? 340 :
+                                            UIScreen.main.bounds.width == 375 ? 325 :
+                                            UIScreen.main.bounds.width == 320 ? 250 : 375,
+                                           height: UIScreen.main.bounds.height == 932 ? 52 :
+                                            UIScreen.main.bounds.height == 926 ? 50 :
+                                            UIScreen.main.bounds.height == 896 ? 50 :
+                                            UIScreen.main.bounds.height == 852 ? 48 :
+                                            UIScreen.main.bounds.height == 844 ? 48 :
+                                            UIScreen.main.bounds.height == 812 ? 48 :
+                                            UIScreen.main.bounds.height == 667 ? 48: UIScreen.main.bounds.height)
+                                          
+                                        .cornerRadius(50)
+                                          
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 50)
+                                                .inset(by: 0.75)
+                                                .stroke(Color.white)
+                                        )
                                 )
                         }
                         .padding(.horizontal,20)
@@ -123,9 +153,24 @@ struct LoginView: View {
                             ZStack {
                                 Rectangle()
                                     .foregroundColor(.clear)
-                                    .frame(width: UIScreen.main.bounds.width == 430 ? 340 : UIScreen.main.bounds.width == 393 ? 323 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 325 : UIScreen.main.bounds.width == 320 ? 250 : 375,
-                                           height: UIScreen.main.bounds.height == 932 ? 69 : UIScreen.main.bounds.height == 852 ? 69 : UIScreen.main.bounds.height == 844 ? 69 : UIScreen.main.bounds.height == 812 ? 69 : UIScreen.main.bounds.height == 667 ? 69: UIScreen.main.bounds.height)                                    .background(Color(red: 0.1, green: 0.1, blue: 0.1))
+                                    .frame(width: UIScreen.main.bounds.width == 430 ? 340 :
+                                            UIScreen.main.bounds.width == 428 ? 330 :
+                                            UIScreen.main.bounds.width == 414 ? 324 :
+                                            UIScreen.main.bounds.width == 393 ? 323 :
+                                            UIScreen.main.bounds.width == 390 ? 320 :
+                                            UIScreen.main.bounds.width == 375 ? 325 :
+                                            UIScreen.main.bounds.width == 320 ? 250 : 375,
+                                           height: UIScreen.main.bounds.height == 932 ? 69 :
+                                            UIScreen.main.bounds.height == 926 ? 68 :
+                                            UIScreen.main.bounds.height == 896 ? 68 :
+                                            UIScreen.main.bounds.height == 852 ? 69 :
+                                            UIScreen.main.bounds.height == 844 ? 69 :
+                                            UIScreen.main.bounds.height == 812 ? 69 :
+                                            UIScreen.main.bounds.height == 667 ? 69: UIScreen.main.bounds.height)
+                                
+                                    .background(Color(red: 0.1, green: 0.1, blue: 0.1))
                                     .cornerRadius(50)
+                                
                                 
                                 Text("로그인")
                                     .font(.system(size: 27, weight: .bold))
@@ -158,8 +203,10 @@ struct LoginView: View {
                 }
             }
         }
-        .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
-               height: UIScreen.main.bounds.height == 932 ? 932 : UIScreen.main.bounds.height == 852 ? 852 : UIScreen.main.bounds.height == 844 ? 844 : UIScreen.main.bounds.height == 812 ? 812 : UIScreen.main.bounds.height == 667 ? 667: UIScreen.main.bounds.height)
+        .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 428 ? 428 : UIScreen.main.bounds.width == 414 ? 414 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
+               height: UIScreen.main.bounds.height == 932 ? 912 : UIScreen.main.bounds.height == 926 ? 926 : UIScreen.main.bounds.height == 896 ? 876 : UIScreen.main.bounds.height == 852 ? 852 : UIScreen.main.bounds.height == 844 ? 844 : UIScreen.main.bounds.height == 812 ? 812 : UIScreen.main.bounds.height == 667 ? 667: UIScreen.main.bounds.height)
+        
+        
     }
 }
 

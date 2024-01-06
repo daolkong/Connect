@@ -42,7 +42,7 @@ struct HomeView: View {
     
     var body: some View {
         NavigationView {
-            VStack(spacing: 10) {
+            VStack(spacing: 5) {
                 
                 // 상단 탭뷰
                 HStack {
@@ -172,6 +172,7 @@ struct HomeView: View {
                         return
                     }
                     
+                
                     imagesRef.downloadURL { (url, error) in
                         guard let downloadURL = url else {
                             // Uh-oh, an error occurred!

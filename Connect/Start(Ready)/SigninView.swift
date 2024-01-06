@@ -84,8 +84,9 @@ struct SigninView: View {
                                 .foregroundColor(.white)
                                 .overlay( Rectangle()
                                     .foregroundColor(.clear)
-                                    .frame(width: UIScreen.main.bounds.width == 430 ? 360 : UIScreen.main.bounds.width == 393 ? 323 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 305 : UIScreen.main.bounds.width == 320 ? 250 : 375,
-                                           height: UIScreen.main.bounds.height == 932 ? 52 : UIScreen.main.bounds.height == 852 ? 48 : UIScreen.main.bounds.height == 844 ? 844 : UIScreen.main.bounds.height == 812 ? 812 : UIScreen.main.bounds.height == 667 ? 48: UIScreen.main.bounds.height)
+                                    .frame(width: UIScreen.main.bounds.width == 430 ? 360 : UIScreen.main.bounds.width == 428 ? 350 : UIScreen.main.bounds.width == 414 ? 340 : UIScreen.main.bounds.width == 393 ? 323 : UIScreen.main.bounds.width == 390 ? 320 : UIScreen.main.bounds.width == 375 ? 305 : UIScreen.main.bounds.width == 320 ? 250 : 375,
+                                           height: UIScreen.main.bounds.height == 932 ? 52 : UIScreen.main.bounds.height == 926 ? 50 : UIScreen.main.bounds.height == 896 ? 48 : UIScreen.main.bounds.height == 852 ? 48 : UIScreen.main.bounds.height == 844 ? 45 : UIScreen.main.bounds.height == 812 ? 45 : UIScreen.main.bounds.height == 667 ? 45: UIScreen.main.bounds.height)
+                                          
                                         .cornerRadius(50)
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 50)
@@ -105,13 +106,14 @@ struct SigninView: View {
                                 .foregroundColor(.white)
                                 .overlay( Rectangle()
                                     .foregroundColor(.clear)
-                                    .frame(width: UIScreen.main.bounds.width == 430 ? 360 : UIScreen.main.bounds.width == 393 ? 323 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 305 : UIScreen.main.bounds.width == 320 ? 250 : 375,
-                                           height: UIScreen.main.bounds.height == 932 ? 52 : UIScreen.main.bounds.height == 852 ? 48 : UIScreen.main.bounds.height == 844 ? 844 : UIScreen.main.bounds.height == 812 ? 812 : UIScreen.main.bounds.height == 667 ? 48: UIScreen.main.bounds.height)                                        .cornerRadius(50)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 50)
-                                            .inset(by: 0.75)
-                                            .stroke(Color.white)
-                                    )
+                                    .frame(width: UIScreen.main.bounds.width == 430 ? 360 : UIScreen.main.bounds.width == 428 ? 350 : UIScreen.main.bounds.width == 414 ? 340 : UIScreen.main.bounds.width == 393 ? 323 : UIScreen.main.bounds.width == 390 ? 320 : UIScreen.main.bounds.width == 375 ? 305 : UIScreen.main.bounds.width == 320 ? 250 : 375,
+                                           height: UIScreen.main.bounds.height == 932 ? 52 : UIScreen.main.bounds.height == 926 ? 50 : UIScreen.main.bounds.height == 896 ? 48 : UIScreen.main.bounds.height == 852 ? 48 : UIScreen.main.bounds.height == 844 ? 45 : UIScreen.main.bounds.height == 812 ? 45 : UIScreen.main.bounds.height == 667 ? 45: UIScreen.main.bounds.height)
+                                        .cornerRadius(50)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 50)
+                                                .inset(by: 0.75)
+                                                .stroke(Color.white)
+                                        )
                                 )
                         }
                         .padding(.horizontal,50)
@@ -126,13 +128,14 @@ struct SigninView: View {
                                 .foregroundColor(.white)
                                 .overlay( Rectangle()
                                     .foregroundColor(.clear)
-                                    .frame(width: UIScreen.main.bounds.width == 430 ? 360 : UIScreen.main.bounds.width == 393 ? 323 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 305 : UIScreen.main.bounds.width == 320 ? 250 : 375,
-                                           height: UIScreen.main.bounds.height == 932 ? 52 : UIScreen.main.bounds.height == 852 ? 48 : UIScreen.main.bounds.height == 844 ? 844 : UIScreen.main.bounds.height == 812 ? 812 : UIScreen.main.bounds.height == 667 ? 48: UIScreen.main.bounds.height)                                        .cornerRadius(50)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 50)
-                                            .inset(by: 0.75)
-                                            .stroke(Color.white)
-                                    )
+                                    .frame(width: UIScreen.main.bounds.width == 430 ? 360 : UIScreen.main.bounds.width == 428 ? 350 : UIScreen.main.bounds.width == 414 ? 340 : UIScreen.main.bounds.width == 393 ? 323 : UIScreen.main.bounds.width == 390 ? 320 : UIScreen.main.bounds.width == 375 ? 305 : UIScreen.main.bounds.width == 320 ? 250 : 375,
+                                           height: UIScreen.main.bounds.height == 932 ? 52 : UIScreen.main.bounds.height == 926 ? 50 : UIScreen.main.bounds.height == 896 ? 48 : UIScreen.main.bounds.height == 852 ? 48 : UIScreen.main.bounds.height == 844 ? 45 : UIScreen.main.bounds.height == 812 ? 45 : UIScreen.main.bounds.height == 667 ? 45: UIScreen.main.bounds.height)
+                                        .cornerRadius(50)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 50)
+                                                .inset(by: 0.75)
+                                                .stroke(Color.white)
+                                        )
                                 )
                         }
                         .padding(.horizontal,50)
@@ -147,13 +150,14 @@ struct SigninView: View {
                                 .foregroundColor(.white)
                                 .overlay( Rectangle()
                                     .foregroundColor(.clear)
-                                    .frame(width: UIScreen.main.bounds.width == 430 ? 360 : UIScreen.main.bounds.width == 393 ? 323 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 305 : UIScreen.main.bounds.width == 320 ? 250 : 375,
-                                           height: UIScreen.main.bounds.height == 932 ? 52 : UIScreen.main.bounds.height == 852 ? 48 : UIScreen.main.bounds.height == 844 ? 844 : UIScreen.main.bounds.height == 812 ? 812 : UIScreen.main.bounds.height == 667 ? 48: UIScreen.main.bounds.height)                                        .cornerRadius(50)
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 50)
-                                            .inset(by: 0.75)
-                                            .stroke(Color.white)
-                                    )
+                                    .frame(width: UIScreen.main.bounds.width == 430 ? 360 : UIScreen.main.bounds.width == 428 ? 350 : UIScreen.main.bounds.width == 414 ? 340 : UIScreen.main.bounds.width == 393 ? 323 : UIScreen.main.bounds.width == 390 ? 320 : UIScreen.main.bounds.width == 375 ? 305 : UIScreen.main.bounds.width == 320 ? 250 : 375,
+                                           height: UIScreen.main.bounds.height == 932 ? 52 : UIScreen.main.bounds.height == 926 ? 50 : UIScreen.main.bounds.height == 896 ? 48 : UIScreen.main.bounds.height == 852 ? 48 : UIScreen.main.bounds.height == 844 ? 45 : UIScreen.main.bounds.height == 812 ? 45 : UIScreen.main.bounds.height == 667 ? 45: UIScreen.main.bounds.height)
+                                        .cornerRadius(50)
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 50)
+                                                .inset(by: 0.75)
+                                                .stroke(Color.white)
+                                        )
                                 )
                         }
                         .padding(.horizontal,50)
@@ -207,8 +211,22 @@ struct SigninView: View {
                             
                             Rectangle()
                                 .foregroundColor(Color(red: 0.1, green: 0.1, blue: 0.1))
-                                .frame(width: UIScreen.main.bounds.width == 430 ? 360 : UIScreen.main.bounds.width == 393 ? 323 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 305 : UIScreen.main.bounds.width == 320 ? 250 : 375,
-                                       height: UIScreen.main.bounds.height == 932 ? 73 : UIScreen.main.bounds.height == 852 ? 69 : UIScreen.main.bounds.height == 844 ? 844 : UIScreen.main.bounds.height == 812 ? 812 : UIScreen.main.bounds.height == 667 ? 60: UIScreen.main.bounds.height)                                    .cornerRadius(50)
+                                .frame(width: UIScreen.main.bounds.width == 430 ? 360 :
+                                        UIScreen.main.bounds.width == 428 ? 350 :
+                                        UIScreen.main.bounds.width == 414 ? 340 :
+                                        UIScreen.main.bounds.width == 393 ? 323 :
+                                        UIScreen.main.bounds.width == 390 ? 320 :
+                                        UIScreen.main.bounds.width == 375 ? 305 :
+                                        UIScreen.main.bounds.width == 320 ? 250 : 375,
+                                       height: UIScreen.main.bounds.height == 932 ? 73 :
+                                        UIScreen.main.bounds.height == 926 ? 70 :
+                                        UIScreen.main.bounds.height == 896 ? 70 :
+                                        UIScreen.main.bounds.height == 852 ? 69 :
+                                        UIScreen.main.bounds.height == 844 ? 62 :
+                                        UIScreen.main.bounds.height == 812 ? 62 :
+                                        UIScreen.main.bounds.height == 667 ? 60: UIScreen.main.bounds.height)
+                            
+                                .cornerRadius(50)
                             
                             Text("회원가입")
                                 .font(.system(size: 27, weight: .bold))
@@ -217,8 +235,9 @@ struct SigninView: View {
                     }
                     Spacer()
                 }
-                .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
-                       height: UIScreen.main.bounds.height == 932 ? 750 : UIScreen.main.bounds.height == 852 ? 650 : UIScreen.main.bounds.height == 844 ? 844 : UIScreen.main.bounds.height == 812 ? 812 : UIScreen.main.bounds.height == 667 ? 300: UIScreen.main.bounds.height)
+                .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 428 ? 428 : UIScreen.main.bounds.width == 414 ? 414 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
+                       height: UIScreen.main.bounds.height == 932 ? 750 : UIScreen.main.bounds.height == 926 ? 750 : UIScreen.main.bounds.height == 896 ? 630 : UIScreen.main.bounds.height == 852 ? 650 : UIScreen.main.bounds.height == 844 ? 644 : UIScreen.main.bounds.height == 812 ? 612 : UIScreen.main.bounds.height == 667 ? 300: UIScreen.main.bounds.height)
+                
             }
         }
         .alert("회원가입 실패", isPresented: $retrySignUp) {

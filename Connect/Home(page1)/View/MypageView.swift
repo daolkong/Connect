@@ -56,6 +56,27 @@ struct MypageView: View {
             Spacer()
             
             
+            Button {
+                if let url = URL(string: "https://amazing-hedgehog-e3c.notion.site/eb10688753b845dc805cd2a5ed8489e5?pvs=4") {
+                    UIApplication.shared.open(url)
+                }
+            } label: {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 15)
+                        .foregroundColor(.clear)
+                        .frame(width: 338, height: 64)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 20)
+                                .inset(by: 1)
+                                .stroke(Color(red: 0.39, green: 0.63, blue: 1), lineWidth: 2)
+                        )
+                    
+                    Text("앱 이용약관")
+                        .foregroundColor(Color(red: 0.39, green: 0.63, blue: 1))
+                        .font(.system(size: 18, weight:.bold))
+                }
+            }
+            
             // 개인정보 처리방침 링크
             Button {
                 if let url = URL(string: "https://jungbaeck.notion.site/jungbaeck/G-School-42d77688f2f94bc29e519f1efa14170b") {
