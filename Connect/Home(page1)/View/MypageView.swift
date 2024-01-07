@@ -168,8 +168,8 @@ struct MypageView: View {
                 )
             }
         }
-        .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
-               height: UIScreen.main.bounds.height == 932 ? 650 : UIScreen.main.bounds.height == 852 ? 580 : UIScreen.main.bounds.height == 844 ? 600 : UIScreen.main.bounds.height == 812 ? 812 : UIScreen.main.bounds.height == 667 ? 500: UIScreen.main.bounds.height)
+        .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 428 ? 428 : UIScreen.main.bounds.width == 414 ? 414 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : UIScreen.main.bounds.width == 1024 ? 1024 : UIScreen.main.bounds.width == 1112 ? 1112 : UIScreen.main.bounds.width == 1194 ? 1194 : UIScreen.main.bounds.width == 1366 ? 1366 : 375,
+               height: UIScreen.main.bounds.height == 932 ? 732 : UIScreen.main.bounds.height == 926 ? 726 : UIScreen.main.bounds.height == 896 ? 696 : UIScreen.main.bounds.height == 852 ? 652 : UIScreen.main.bounds.height == 834 ? 634 : UIScreen.main.bounds.height == 812 ? 612 : UIScreen.main.bounds.height == 768 ? 568 : UIScreen.main.bounds.height == 736 ? 536 : UIScreen.main.bounds.height == 667 ? 467 : UIScreen.main.bounds.height == 568 ? 368 : 567)
     }
 }
 

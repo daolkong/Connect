@@ -141,9 +141,20 @@ struct MyprofileView: View {
                     }
                 }
             }
-            .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
-                   height: UIScreen.main.bounds.height == 932 ? 600
-                   : UIScreen.main.bounds.height == 852 ? 550 : UIScreen.main.bounds.height == 844 ? 550 : UIScreen.main.bounds.height == 812 ? 812 : UIScreen.main.bounds.height == 667 ? 500: UIScreen.main.bounds.height)
+            .frame(width: UIScreen.main.bounds.width == 430 ? 430 :
+                          UIScreen.main.bounds.width == 393 ? 393 :
+                          UIScreen.main.bounds.width == 390 ? 390 :
+                          UIScreen.main.bounds.width == 375 ? 375 :
+                          UIScreen.main.bounds.width == 320 ? 320 : 375,
+                   height: UIScreen.main.bounds.height == 932 ? 600 :
+                           UIScreen.main.bounds.height == 926 ? 550 :
+                           UIScreen.main.bounds.height == 896 ? 550 :
+                           UIScreen.main.bounds.height == 852 ? 550 :
+                           UIScreen.main.bounds.height == 844 ? 550 :
+                           UIScreen.main.bounds.height == 812 ? 500 :
+                           UIScreen.main.bounds.height == 768 ? 500 :
+                           UIScreen.main.bounds.height == 736 ? 500 :
+                           UIScreen.main.bounds.height == 667 ? 500 : UIScreen.main.bounds.height)
             
             // 총 커넥트 횟수(요청)
         }

@@ -23,14 +23,15 @@ struct FriendSearchView: View {
                     .font(.system(size: 23, weight: .bold))
                 Spacer()
             }
-            .frame(width: UIScreen.main.bounds.width == 430 ? 390 : UIScreen.main.bounds.width == 393 ? 348 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 330 : UIScreen.main.bounds.width == 320 ? 320 : 375,
+            .frame(width: UIScreen.main.bounds.width == 430 ? 385 : UIScreen.main.bounds.width == 428 ? 383 : UIScreen.main.bounds.width == 414 ? 369 : UIScreen.main.bounds.width == 393 ? 348 : UIScreen.main.bounds.width == 390 ? 345 : UIScreen.main.bounds.width == 375 ? 330 : UIScreen.main.bounds.width == 320 ? 275 : UIScreen.main.bounds.width == 1024 ? 979 : UIScreen.main.bounds.width == 1112 ? 1067 : UIScreen.main.bounds.width == 1194 ? 1149 : UIScreen.main.bounds.width == 1366 ? 1321 : 330,
                    height: 17)
+
             // friend search bar
             ZStack {
                 Rectangle()
                     .foregroundColor(.clear)
-                    .frame(width: UIScreen.main.bounds.width == 430 ? 390 : UIScreen.main.bounds.width == 393 ? 355 : UIScreen.main.bounds.width == 390 ? 340 : UIScreen.main.bounds.width == 375 ? 340 : UIScreen.main.bounds.width == 320 ? 250 : 375,
-                           height: UIScreen.main.bounds.height == 932 ? 47 : UIScreen.main.bounds.height == 852 ? 42 : UIScreen.main.bounds.height == 844 ? 47 : UIScreen.main.bounds.height == 812 ? 47 : UIScreen.main.bounds.height == 667 ? 42 : UIScreen.main.bounds.height)
+                    .frame(width: UIScreen.main.bounds.width == 430 ? 390 : UIScreen.main.bounds.width == 428 ? 383 : UIScreen.main.bounds.width == 414 ? 369 : UIScreen.main.bounds.width == 393 ? 348 : UIScreen.main.bounds.width == 390 ? 345 : UIScreen.main.bounds.width == 375 ? 330 : UIScreen.main.bounds.width == 320 ? 275 : UIScreen.main.bounds.width == 1024 ? 979 : UIScreen.main.bounds.width == 1112 ? 1067 : UIScreen.main.bounds.width == 1194 ? 1149 : UIScreen.main.bounds.width == 1366 ? 1321 : 330,
+                           height: UIScreen.main.bounds.height == 932 ? 47 : UIScreen.main.bounds.height == 926 ? 46 : UIScreen.main.bounds.height == 896 ? 45 : UIScreen.main.bounds.height == 852 ? 42 : UIScreen.main.bounds.height == 844 ? 42 : UIScreen.main.bounds.height == 812 ? 40 : UIScreen.main.bounds.height == 736 ? 36 : UIScreen.main.bounds.height == 667 ? 33 : UIScreen.main.bounds.height == 568 ? 28 : UIScreen.main.bounds.height == 768 ? 38 : UIScreen.main.bounds.height == 834 ? 42 : UIScreen.main.bounds.height == 1024 ? 51 : UIScreen.main.bounds.height)
                     .cornerRadius(30)
                     .overlay(
                         RoundedRectangle(cornerRadius: 30)

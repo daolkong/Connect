@@ -127,8 +127,9 @@ struct PostRow: View {
                     ZStack {
                         Rectangle()
                             .foregroundColor(Color(red: 0.85, green: 0.85, blue: 0.85).opacity(0.3))
-                            .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
+                            .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 428 ? 428 : UIScreen.main.bounds.width == 414 ? 414 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : UIScreen.main.bounds.width == 1024 ? 1024 : UIScreen.main.bounds.width == 1112 ? 1112 : UIScreen.main.bounds.width == 1194 ? 1194 : UIScreen.main.bounds.width == 1366 ? 1366 : 375,
                                    height: 65)
+
                         HStack {
                             Spacer()
                                 .frame(width: 0)
@@ -200,8 +201,8 @@ struct PostRow: View {
                             KFImage(imageUrl)
                                 .cacheOriginalImage()
                                 .resizable()
-                                .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
-                                       height: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375)
+                                .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 428 ? 428 : UIScreen.main.bounds.width == 414 ? 414 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : UIScreen.main.bounds.width == 1024 ? 1024 : UIScreen.main.bounds.width == 1112 ? 1112 : UIScreen.main.bounds.width == 1194 ? 1194 : UIScreen.main.bounds.width == 1366 ? 1366 : 375,
+                                       height: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 428 ? 428 : UIScreen.main.bounds.width == 414 ? 414 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : UIScreen.main.bounds.width == 1024 ? 1024 : UIScreen.main.bounds.width == 1112 ? 1112 : UIScreen.main.bounds.width == 1194 ? 1194 : UIScreen.main.bounds.width == 1366 ? 1366 : 375)
                                 .scaledToFill()
                                 .aspectRatio(contentMode: .fit)
                         } else {
@@ -222,7 +223,7 @@ struct PostRow: View {
             ZStack {
                 Rectangle()
                     .foregroundColor(.clear)
-                    .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
+                    .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 428 ? 428 : UIScreen.main.bounds.width == 414 ? 414 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
                            height: 85)
                     .background(
                         LinearGradient(
