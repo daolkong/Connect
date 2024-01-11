@@ -122,7 +122,7 @@ struct LoginView: View {
                         
                     }
                     
-                    VStack(spacing: 30) {
+                    VStack(spacing: 10) {
                         // 로그인 버튼
                         Button {
                             Task {
@@ -178,7 +178,7 @@ struct LoginView: View {
                             }
                         }
                         
-                        NavigationLink(destination: SigninView().navigationBarBackButtonHidden(true), isActive: $isSigninViewActive) {
+                        NavigationLink(destination: AllowView().navigationBarBackButtonHidden(true), isActive: $isSigninViewActive) {
                             EmptyView()
                         }
                         
@@ -202,11 +202,13 @@ struct LoginView: View {
                     Text(errorMessage)
                 }
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(.bottom,10)
+
+//
+//            .frame(width: UIScreen.main.bounds.width == 1024 ? 1024 : UIScreen.main.bounds.width == 820 ? 820 : UIScreen.main.bounds.width == 768 ? 768 : UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 428 ? 428 : UIScreen.main.bounds.width == 414 ? 414 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
+//                   height: UIScreen.main.bounds.height == 164 ? 126 : UIScreen.main.bounds.height == 1194 ? 154 : UIScreen.main.bounds.height == 1024 ? 1024 : UIScreen.main.bounds.height == 932 ? 912 : UIScreen.main.bounds.height == 926 ? 926 : UIScreen.main.bounds.height == 896 ? 876 : UIScreen.main.bounds.height == 852 ? 852 : UIScreen.main.bounds.height == 844 ? 844 : UIScreen.main.bounds.height == 812 ? 812 : UIScreen.main.bounds.height == 667 ? 667 : UIScreen.main.bounds.height)
         }
-        .frame(width: UIScreen.main.bounds.width == 430 ? 430 : UIScreen.main.bounds.width == 428 ? 428 : UIScreen.main.bounds.width == 414 ? 414 : UIScreen.main.bounds.width == 393 ? 393 : UIScreen.main.bounds.width == 390 ? 390 : UIScreen.main.bounds.width == 375 ? 375 : UIScreen.main.bounds.width == 320 ? 320 : 375,
-               height: UIScreen.main.bounds.height == 932 ? 912 : UIScreen.main.bounds.height == 926 ? 926 : UIScreen.main.bounds.height == 896 ? 876 : UIScreen.main.bounds.height == 852 ? 852 : UIScreen.main.bounds.height == 844 ? 844 : UIScreen.main.bounds.height == 812 ? 812 : UIScreen.main.bounds.height == 667 ? 667: UIScreen.main.bounds.height)
-        
-        
     }
 }
 

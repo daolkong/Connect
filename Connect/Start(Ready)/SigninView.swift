@@ -50,7 +50,7 @@ struct SigninView: View {
                                 .resizable()
                                 .frame(width: 7, height: 13)
                             
-                            Text("로그인")
+                            Text("이용약관")
                                 .font(.system(size: 20, weight: .bold))
                                 .foregroundColor(Color.white)
                             

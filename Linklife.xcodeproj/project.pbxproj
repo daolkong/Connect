@@ -29,6 +29,7 @@
 		3356BCD32AA321E100B1EF01 /* LoginState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3356BCD22AA321E100B1EF01 /* LoginState.swift */; };
 		3356BCD52AA3220300B1EF01 /* DBUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3356BCD42AA3220300B1EF01 /* DBUser.swift */; };
 		335985B92AD5238E004ACC17 /* SharedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 335985B82AD5238E004ACC17 /* SharedViewModel.swift */; };
+		336CDC6C2B4C41D000AF7AE6 /* AllowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 336CDC6B2B4C41D000AF7AE6 /* AllowView.swift */; };
 		3374FD1C2AE8F01B00557266 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 3374FD1B2AE8F01B00557266 /* FirebaseAnalytics */; };
 		3374FD1E2AE8F01B00557266 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = 3374FD1D2AE8F01B00557266 /* FirebaseAnalyticsOnDeviceConversion */; };
 		3374FD202AE8F01B00557266 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3374FD1F2AE8F01B00557266 /* FirebaseAnalyticsSwift */; };
@@ -77,6 +78,7 @@
 		3356BCD22AA321E100B1EF01 /* LoginState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginState.swift; sourceTree = "<group>"; };
 		3356BCD42AA3220300B1EF01 /* DBUser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DBUser.swift; sourceTree = "<group>"; };
 		335985B82AD5238E004ACC17 /* SharedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedViewModel.swift; sourceTree = "<group>"; };
+		336CDC6B2B4C41D000AF7AE6 /* AllowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllowView.swift; sourceTree = "<group>"; };
 		3374FD352AE937FD00557266 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		338019422AD15E430030EF86 /* PHPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PHPickerView.swift; sourceTree = "<group>"; };
 		338617832AA45C60008EF610 /* FirstStartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstStartView.swift; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 				3356BC922AA2C08800B1EF01 /* LoginView.swift */,
 				3356BC942AA2C09300B1EF01 /* SigninView.swift */,
 				3356BC902AA2C07800B1EF01 /* StartView.swift */,
+				336CDC6B2B4C41D000AF7AE6 /* AllowView.swift */,
 				3356BCD22AA321E100B1EF01 /* LoginState.swift */,
 			);
 			path = "Start(Ready)";
@@ -369,6 +372,7 @@
 				33971C392AC1324D00418442 /* Notification.swift in Sources */,
 				3356BC912AA2C07800B1EF01 /* StartView.swift in Sources */,
 				3356BCD02AA31FA800B1EF01 /* AuthViewModel.swift in Sources */,
+				336CDC6C2B4C41D000AF7AE6 /* AllowView.swift in Sources */,
 				33328D242AB5D4D7001D9676 /* AlarmConnectView.swift in Sources */,
 				33A0D4332AAAA99D00FEEDBC /* FriendSearchView.swift in Sources */,
 				3356BC932AA2C08800B1EF01 /* LoginView.swift in Sources */,
@@ -523,7 +527,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "/Users/lenz/lens's project/Dev/Connect/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Link life";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSCameraUsageDescription = "“링크 라이프”가 사진을 첨부하여 사용자가 선택한 사진으로 게시물 작성, 프로필 사진을 업로드 하는 기능 사용을 위해 사진 라이브러리에 접근하도록 허용합니다.\n";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "“링크 라이프”가 사진을 촬영하여 사용자가 선택한 사진으로 게시물 작성, 프로필 사진을 업로드 하는 기능 사용을 위해 카메라에 접근하도록 허용합니다.\n";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -531,12 +535,13 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.G-School.Linklife";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -563,7 +568,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "/Users/lenz/lens's project/Dev/Connect/Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Link life";
-				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.photography";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
 				INFOPLIST_KEY_NSCameraUsageDescription = "“링크 라이프”가 사진을 첨부하여 사용자가 선택한 사진으로 게시물 작성, 프로필 사진을 업로드 하는 기능 사용을 위해 사진 라이브러리에 접근하도록 허용합니다.\n";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "“링크 라이프”가 사진을 촬영하여 사용자가 선택한 사진으로 게시물 작성, 프로필 사진을 업로드 하는 기능 사용을 위해 카메라에 접근하도록 허용합니다.\n";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -571,12 +576,13 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.G-School.Linklife";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
